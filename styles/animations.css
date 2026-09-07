@@ -1,0 +1,144 @@
+/* =========================================================================
+   Animations — braises, transitions, canon, fanfare
+   ========================================================================= */
+
+@keyframes lineIn {
+  from { transform: translateY(8px); }
+  to   { transform: translateY(0); }
+}
+
+/* Entrées : uniquement une translation légère — jamais d'opacité animée sur
+   des conteneurs d'écran. Si le navigateur gèle l'animation (onglet non
+   focalisé), le contenu reste parfaitement lisible. */
+@keyframes fadeIn {
+  from { transform: translateY(6px); }
+  to   { transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.4s ease; }
+
+@keyframes riseIn {
+  from { transform: translateY(16px); }
+  to   { transform: translateY(0); }
+}
+.rise-in { animation: riseIn 0.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Titre de phase (Jour 1, Nuit 2…) */
+@keyframes phaseSweep {
+  0%   { opacity: 0; letter-spacing: 0.5em; transform: scale(1.15); }
+  18%  { opacity: 1; }
+  82%  { opacity: 1; letter-spacing: 0.14em; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.phase-sweep { animation: phaseSweep 2.6s ease both; }
+
+/* Flash du coup de canon — bref halo lumineux depuis le haut, non aveuglant */
+#cannon-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: radial-gradient(120% 60% at 50% 0%, rgba(255,235,200,0.55), rgba(200,120,60,0.12) 40%, transparent 72%);
+  opacity: 0;
+  pointer-events: none;
+}
+#cannon-flash.fire { animation: cannonFlash 0.75s ease both; }
+@keyframes cannonFlash {
+  0%   { opacity: 0; }
+  8%   { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+/* Pendant la cérémonie : halo encore plus discret */
+body[data-phase="ceremony"] #cannon-flash {
+  background: radial-gradient(120% 55% at 50% 0%, rgba(200,215,255,0.4), transparent 70%);
+}
+
+.shake { animation: shake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+/* Sceau qui tourne lentement (accueil) */
+@keyframes sealSpin { to { transform: rotate(360deg); } }
+.seal.slow { animation: sealSpin 90s linear infinite; }
+
+/* Cérémonie des disparus : le portrait monte dans le ciel (sans flou).
+   L'opacité n'est jamais nulle : si l'animation gèle, le portrait reste visible. */
+@keyframes fallenRise {
+  0%   { transform: translateY(46px) scale(0.94); }
+  16%  { transform: translateY(0) scale(1); }
+  100% { transform: translateY(0) scale(1); }
+}
+.fallen-rise { animation: fallenRise 1s ease; }
+
+/* étoiles du ciel nocturne */
+.sky .star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #cfe0ff;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.18; }
+  50%      { opacity: 0.75; }
+}
+
+/* Fanfare de victoire : rayons dorés (cercle centré → aucun bord visible) */
+.victor-wrap {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vh, 2.4rem) 0;
+}
+.victor-wrap::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 150%; aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg at 50% 50%,
+    rgba(240,217,138,0.00) 0deg,
+    rgba(240,217,138,0.10) 5deg,
+    rgba(240,217,138,0.00) 12deg,
+    rgba(240,217,138,0.00) 26deg);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 24%, #000 40%, transparent 70%);
+          mask: radial-gradient(circle at 50% 50%, transparent 24%, #000 40%, transparent 70%);
+  animation: rayspin 44s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+@keyframes rayspin { to { transform: rotate(360deg); } }
+
+/* Pulsation d'attente sur le bouton principal */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(240,217,138,0); }
+  50%      { box-shadow: 0 0 26px rgba(240,217,138,0.5); }
+}
+button.primary.await { animation: glowPulse 2.4s ease-in-out infinite; }
+
+/* Défilé des chars */
+@keyframes chariotPass {
+  from { transform: translateX(-120%); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  to   { transform: translateX(120%); opacity: 0; }
+}
+.chariot-pass { animation: chariotPass 3.4s linear both; }
+
+@media (prefers-reduced-motion: reduce) {
+  #ember-field { display: none; }
+  .seal.slow,
+  .victor-wrap::before { animation: none; }
+  .phase-sweep { animation: fadeIn 0.4s ease both; }
+  .fallen-rise { animation: fadeIn 0.5s ease both; opacity: 1; }
+  .chariot-pass { animation: fadeIn 0.4s ease both; }
+  .shake { animation: none; }
+  button.primary.await { animation: none; }
+  #cannon-flash.fire { animation: cannonFlash 0.4s ease both; }
+}

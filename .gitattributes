@@ -1,0 +1,10 @@
+# Normalise les fins de ligne : LF dans le dépôt pour tout le texte
+* text=auto eol=lf
+
+# Fichiers binaires (jamais de conversion, pas de diff textuel)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.mp3  binary
+*.mp4  binary
+*.mov  binary
