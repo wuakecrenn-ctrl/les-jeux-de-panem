@@ -200,47 +200,72 @@
     }
   }
 
-  // ---- Narration d'un affrontement -----------------------------------
-  // {A}/{B} = camps · {wa}/{wb} = arme portée · {na}/{nb} = effectifs.
-  // Aucune phrase n'est rejouée dans la même partie (voir line()/HG.narrPick).
+  // ========================================================================
+  //  NARRATION D'UN AFFRONTEMENT
+  //  Une rencontre = 2 lignes (parfois 3 quand c'est très serré), PUIS l'issue
+  //  (mort / blessure / repli) comme beat SÉPARÉ.
+  //  On privilégie la COHÉRENCE : la 2e ligne est choisie selon le RÉSULTAT,
+  //  jamais au hasard — elle ne contredit donc jamais l'issue.
+  //
+  //  AJOUTER DES PHRASES : respecter le « contrat » de chaque pool (ci-dessous).
+  //  Toute phrase qui respecte le contrat est interchangeable — mettez-en autant
+  //  que vous voulez. Voir TEXTES.md.
+  // ========================================================================
+
+  // APPROACH[kind] — COMMENT la rencontre commence.
+  //   Codes : {A} {B} = les deux camps (nom déjà formaté, 1+ tributs).
+  //   Interdits : nom d'arme, mention d'une issue, verbe qui suppose le nombre.
+  //   Terrain/météo générique OK. Présent.
   var APPROACH = {
     melee: [
       "{A} et {B} débouchent sur la même clairière au même instant. Plus personne ne recule.",
       "Un sentier étroit, deux directions opposées : {A} d'un côté, {B} de l'autre.",
-      "{A} laisse tomber son sac et empoigne {wa}. En face, {B} sort {wb}.",
       "La pluie a effacé les bruits de pas — {A} et {B} se retrouvent nez à nez au détour d'un rocher.",
-      "Aucun des deux ne cherchait la bagarre. Le sentier n'a laissé le choix ni à {A} ni à {B}.",
+      "Aucun des deux ne cherchait la bagarre. Le terrain n'a laissé le choix ni à {A} ni à {B}.",
       "{A} contourne un fourré et tombe pile sur {B}, à trois pas, trop tard pour reculer.",
-      "Le vent tourne : {B} sent la fumée de {A} et se retourne, {wb} déjà en main.",
       "{A} et {B} arrivent chacun de leur côté au même point d'eau. La gourde attendra.",
       "Un craquement de branche, deux têtes qui se lèvent : {A} et {B} se sont trouvés.",
-      "{A} pose le pied dans le campement encore chaud de {B}. {B} n'est pas parti loin.",
+      "{A} pose le pied dans un campement encore chaud. {B} n'est pas parti loin.",
       "Le brouillard se lève d'un coup et découvre {A} face à {B}, à portée de bras.",
-      "{A} traque une piste ; au bout, ce n'est pas du gibier, c'est {B}, arme au poing."
+      "{A} suit une piste ; au bout, ce n'est pas du gibier, c'est {B}.",
+      "{A} et {B} se disputent le même abri sous l'averse. La discussion tourne court.",
+      "Deux ombres se figent de part et d'autre d'un feu mourant. {A}. {B}.",
+      "{A} entend {B} approcher sans le voir, et se plaque contre un tronc. Trop tard, {B} l'a vu aussi.",
+      "Une clairière, deux entrées, deux tributs qui arrivent en même temps. {A} et {B}.",
+      "{A} cherchait de l'eau. {B} cherchait de l'eau. Il n'y en a que pour un.",
+      "{A} et {B} tournent le même rocher, l'un vers la droite, l'autre vers la gauche."
     ],
     ranged: [
-      "{A} repère {B} à découvert dans la plaine et se met à distance de tir.",
-      "Perché plus haut, {A} tient {wa} prêt ; {B} avance sans se savoir vu.",
-      "{A} attend que {B} sorte du couvert, l'arme déjà en joue.",
+      "{A} repère {B} à découvert dans la plaine et prend ses distances.",
+      "Perché plus haut, {A} laisse {B} avancer sans se savoir vu.",
+      "{A} attend que {B} sorte du couvert, déjà en position.",
       "{B} traverse la trouée en courant. {A}, immobile depuis un moment, ajuste.",
-      "{A} laisse {B} s'installer près de l'eau, puis prend tout son temps pour viser.",
+      "{A} laisse {B} s'installer près de l'eau, puis prend tout son temps.",
       "Deux cents mètres de plaine séparent {A} de {B}. {A} n'a pas besoin de plus près.",
-      "{A} suit {B} dans la lunette d'un œil, sans un bruit, en attendant l'angle net.",
-      "{B} allume un feu à découvert. {A}, à distance, sourit et encoche.",
-      "{A} grimpe pendant que {B} cherche encore d'où vient le danger. La hauteur décide.",
-      "{B} croit la crête déserte. {A} y est allongé depuis l'aube."
+      "{B} allume un feu à découvert. {A}, à distance, sourit.",
+      "{A} grimpe pendant que {B} cherche encore d'où vient le danger.",
+      "{B} croit la crête déserte. {A} y est allongé depuis l'aube.",
+      "{A} n'a plus qu'à rester immobile et laisser {B} entrer dans la ligne de mire.",
+      "{B} s'arrête pour reprendre son souffle en terrain découvert. Mauvaise idée : {A} le tient.",
+      "{A} suit {B} du regard depuis un promontoire, sans se presser d'agir.",
+      "{B} traverse le pont de pierre. {A} attend l'autre rive, calé sur un genou.",
+      "{A} a repéré {B} bien avant que {B} ne soupçonne quoi que ce soit."
     ],
     ambush: [
       "{A} a repéré la fumée du feu de {B} et s'en approche sans un bruit.",
       "Tapi dans les ronces depuis une heure, {A} laisse {B} arriver à portée.",
-      "Le piège de {A} s'est refermé au passage de {B} — le reste va vite.",
       "{B} se penche vers la source. {A} sort de l'ombre dans son dos.",
       "{A} n'a rien fait d'autre que rester immobile pendant que {B} fouillait la clairière.",
       "Le sentier de {B} passe juste sous la branche où {A} attend, sans un frisson.",
-      "{A} a recouvert la fosse de feuilles la veille. {B} marche droit dessus.",
-      "{B} suit une piste tracée exprès. Au bout, {A} l'attend, calme.",
       "{A} laisse {B} passer devant, compte jusqu'à trois, et bondit.",
-      "Un fil tendu entre deux troncs, à hauteur de cheville. {B} ne le voit pas ; {A} si."
+      "{B} suit une piste tracée exprès. Au bout, {A} l'attend, calme.",
+      "{A} a préparé cet endroit la veille. {B} arrive pile dedans.",
+      "{B} croit être seul à la source. {A} est là depuis avant lui.",
+      "Un mouvement dans les hautes herbes, et {A} est déjà sur {B}.",
+      "{B} s'assoit pour souffler, dos à un buisson. {A} est dans le buisson.",
+      "{A} a suivi les corbeaux jusqu'au campement de {B}, et attendu la nuit.",
+      "{B} pousse une branche pour passer. {A} tenait l'autre bout depuis un moment.",
+      "{A} laisse tomber une pierre plus loin ; {B} tourne la tête ; {A} bouge."
     ],
     hunt: [
       "{A} pistait {B} depuis l'aube, lisant chaque brindille. La traque touche à sa fin.",
@@ -252,7 +277,10 @@
       "{A} pousse {B} exactement là où il le veut : dos à l'eau, sans issue.",
       "{B} laisse des traces de fuite trop nettes. {A} les lit comme un livre.",
       "La poursuite dure depuis la veille. {A} n'a jamais accéléré, jamais ralenti.",
-      "{A} connaît ce coin de l'arène mieux que {B}. Ça finit toujours pareil."
+      "{A} connaît ce coin de l'arène mieux que {B}. Ça finit toujours pareil.",
+      "{B} croise trois fois la même souche : il tourne en rond, et {A} le sait.",
+      "{A} coupe par la crête pendant que {B} contourne la colline. {A} arrive premier.",
+      "{B} a semé son poursuivant, croit-il. {A} n'a jamais été derrière — il était devant."
     ],
     flight: [
       "{A} et {B} manquent de se percuter en pleine fuite dans le brouillard.",
@@ -265,163 +293,194 @@
       "Fuyant les loups des Juges, {A} et {B} se jettent dans le même abri. Il n'y a de place que pour un."
     ]
   };
-  // Approche quand au moins un camp est une ALLIANCE (phrasé au pluriel).
+  // APPROACH_GROUP — au moins un camp est une alliance. narrateClash oriente
+  //   {A} = le camp le PLUS nombreux (toujours pluriel-safe). {B} = l'autre
+  //   (parlez-en sans verbe qui suppose son nombre). {DEUX} = les deux camps.
   var APPROACH_GROUP = [
-    "{A} et {B} se jaugent dans la clairière — d'un côté un groupe soudé, de l'autre ce qu'il reste.",
-    "Les alliés de {A} arrivent en éventail ; {B} n'a pas assez d'yeux pour tout surveiller.",
-    "{A} avancent groupés, se couvrant mutuellement. {B} cherche déjà par où se dégager.",
-    "La rencontre tourne vite au déséquilibre : {A} sont plus nombreux, et le savent.",
-    "{A} bloquent le sentier à plusieurs. {B} comprend qu'il n'y aura pas de passage en force.",
-    "Deux camps se font face au bord de l'eau. Les nombres ne sont pas les mêmes des deux côtés.",
-    "{A} resserrent les rangs ; {B} recule d'un pas, puis d'un autre.",
-    "{A} se déploient sans un mot — chacun sait déjà quoi faire. {B} improvise.",
-    "L'un des alliés de {A} siffle ; les autres se figent, puis avancent ensemble sur {B}.",
-    "{A} arrivent en marchant, presque tranquilles. À plusieurs, on n'a pas à se presser.",
+    "{DEUX} se jaugent dans la clairière — d'un côté un groupe, de l'autre moins de monde.",
+    "{A} avancent groupés, se couvrant mutuellement. En face, on cherche déjà par où se dégager.",
+    "{A} bloquent le sentier à plusieurs. Pas de passage en force possible pour {B}.",
+    "{DEUX} se font face au bord de l'eau. Les nombres ne sont pas les mêmes des deux côtés.",
+    "{A} se déploient sans un mot — chacun sait déjà quoi faire.",
+    "L'un des alliés de {A} siffle ; les autres se figent, puis avancent ensemble.",
     "{B} tombe sur {A} au détour d'un rocher et compte trop de silhouettes d'un coup.",
-    "{A} encerclent la clairière avant même que {B} ne comprenne qu'il est au centre.",
-    "Face au groupe de {A}, {B} calcule ses chances et n'aime pas le résultat.",
-    "{A} laissent l'un des leurs se montrer pour attirer {B} ; les autres sont déjà en position."
+    "{A} encerclent lentement la clairière. Au centre, {B} met du temps à le comprendre.",
+    "Face au groupe de {A}, {B} calcule ses chances.",
+    "{A} laissent l'un des leurs se montrer comme appât ; les autres sont déjà en position.",
+    "{A} arrivent en marchant, presque tranquilles. À plusieurs, on ne se presse pas.",
+    "{DEUX} s'arrêtent à vingt pas. On compte les silhouettes des deux côtés."
   ];
-  // Camp supérieur en nombre ({BIG}) vs camp inférieur ({SMALL}).
-  var OUTNUMBER = [
+
+  // NUMBERS_WIN — le camp majoritaire {BIG} l'emporte sur {SMALL}.
+  //   Codes : {BIG} {SMALL} = noms · {nbig} {nsmall} = effectifs.
+  //   Ne se joue QUE si le nombre a réellement décidé (voir narrateClash).
+  var NUMBERS_WIN = [
     "{BIG} se répartissent les angles : pendant que l'un fixe {SMALL}, l'autre passe derrière.",
-    "L'alliance paie — {SMALL} doit parer sur deux fronts, et n'y arrive pas.",
+    "{SMALL} doit parer sur deux fronts à la fois, et n'y arrive pas.",
     "{BIG} avancent en tenaille. Chaque pas de recul rapproche {SMALL} d'un autre adversaire.",
     "À {nbig} contre {nsmall}, {BIG} n'ont qu'à garder la pression et laisser {SMALL} s'épuiser.",
     "{BIG} n'ont même pas besoin de bien se battre : il suffit d'être là, tous, en même temps.",
-    "Un des alliés de {BIG} occupe {SMALL} de face ; le combat se décide dans le dos.",
-    "{BIG} se relaient pour harceler {SMALL} : l'un frappe, se retire, un autre prend le relais.",
-    "{SMALL} ne peut viser qu'un adversaire à la fois. {BIG} en profitent, chacun leur tour.",
-    "Le nombre transforme chaque erreur de {SMALL} en faute décisive. {BIG} attendent la première.",
+    "Un des alliés de {BIG} occupe {SMALL} de face ; le reste se décide dans le dos.",
+    "{BIG} se relaient — l'un frappe, se retire, un autre prend le relais. {SMALL} ne souffle jamais.",
+    "{SMALL} ne peut affronter qu'un adversaire à la fois. {BIG} en profitent, chacun leur tour.",
+    "Le nombre transforme la moindre erreur de {SMALL} en faute décisive.",
     "{BIG} forment un demi-cercle. {SMALL} recule jusqu'à l'arbre, et l'arbre l'arrête.",
-    "Deux des alliés de {BIG} bloquent la fuite pendant que les autres avancent sur {SMALL}.",
-    "{SMALL} en met un à terre — et il en reste toujours autant debout en face."
+    "{SMALL} en met un à terre — il en reste toujours autant debout en face.",
+    "{SMALL} se bat pour deux, vise juste, tient bon. À {nbig} contre {nsmall}, ça ne suffit pas.",
+    "{SMALL} fonce sur un seul adversaire pour briser le groupe. Le groupe ne se brise pas.",
+    "Le courage de {SMALL} ne rattrape pas l'arithmétique."
   ];
-  var OUTNUMBERED = [
-    "Seul(e) contre un groupe, {SMALL} n'a personne pour couvrir ses arrières.",
-    "{SMALL} tient tête un moment — puis comprend qu'on ne gagne pas à un contre {nbig}.",
-    "{SMALL} vise juste, encaisse bien, mais il en reste toujours un de plus en face.",
-    "{SMALL} recule vers un tronc pour n'être pris que d'un côté. Ça ne suffit pas longtemps.",
-    "Le courage de {SMALL} ne compense pas l'arithmétique.",
-    "{SMALL} se bat comme pour deux. Il en aurait fallu trois.",
-    "Chaque parade de {SMALL} ouvre une faille ailleurs. Les alliés de {BIG} la trouvent.",
-    "{SMALL} choisit un adversaire et fonce dessus, en espérant briser le groupe. Le groupe ne se brise pas.",
-    "Dos au rocher, {SMALL} ne peut plus reculer — et {BIG} le savent depuis le début.",
-    "{SMALL} garde son sang-froid plus longtemps qu'on ne l'attendait. Pas assez, quand même."
+
+  // WEAPON_WIN / WEAPON_LOSE — une arme a fait la différence.
+  //   Codes : {who} = le tribut · {w} = son arme AU SINGULIER ("l'arc", "la
+  //   lance", "le couteau") · {foe} = l'adversaire.
+  //   WEAPON_WIN : {who} l'emporte grâce à {w}. WEAPON_LOSE : {who} perd parce
+  //   que {w} était le mauvais choix pour la situation.
+  //   IMPORTANT : aucun adjectif/participe accordé sur {w} (il change de genre).
+  var WEAPON_WIN = [
+    "{who} garde {foe} exactement là où {w} porte le mieux. {foe} n'entre jamais dans le sien.",
+    "Avec {w} en main, {who} contrôle ce genre de rencontre du début à la fin.",
+    "{who} a l'arme qu'il faut pour ça. {foe}, non — et toute la suite en découle.",
+    "{foe} ne trouve pas l'ouverture : {w} de {who} l'en empêche à chaque tentative.",
+    "{who} laisse {w} travailler et se contente de tenir la distance. {foe} s'épuise à la combler.",
+    "Dans cette configuration, {w} de {who} vaut un tribut de plus. {foe} l'apprend vite.",
+    "{who} a attendu le bon moment pour que {w} donne son plein effet. {foe} n'a rien à répondre.",
+    "Le terrain va à {w} de {who} comme un gant. {foe} l'a compris une seconde trop tard.",
+    "{who} n'a même pas besoin de bien viser : à cette portée, {w} suffit.",
+    "{foe} sait dès le premier échange que c'est mal engagé face à {w}."
   ];
-  var POSTURE = [
-    "{A} a l'avantage de l'allonge : {wa} contre {wb}, et {B} le sent.",
-    "{A} avance couvert, {wa} en main ; {B} recule, cherchant l'angle mort.",
-    "Chacun jauge l'autre. {A} tient {wa}, {B} tient {wb}.",
-    "{B} tente le premier pas de côté ; {A} verrouille le passage avec {wa}.",
-    "Les deux tournent l'un autour de l'autre. Personne ne veut donner le premier coup.",
-    "{A} garde le soleil dans le dos ; {B} plisse les yeux et attend.",
-    "{B} feint la fatigue pour attirer {A}. {A} ne mord pas.",
-    "Pied contre pied, arme contre arme. La rencontre va se jouer sur une seule faute.",
-    "{A} teste la garde de {B} d'une fausse attaque. {B} ne bronche pas.",
-    "{B} cherche du regard une pierre, une racine, n'importe quoi. {A} l'a remarqué.",
-    "Ils s'arrêtent à deux pas l'un de l'autre. Le premier qui bouge donne l'initiative.",
-    "{A} respire lentement, {wa} basse. {B} tremble un peu, et ça se voit.",
-    "{B} recule vers un terrain qui lui convient mieux. {A} le suit sans se laisser entraîner.",
-    "Le silence dure. Puis {A} avance d'un pas, et tout s'enchaîne.",
-    "{A} et {B} se connaissent du centre d'entraînement. Chacun sait ce que vaut l'autre.",
-    "{B} parle — pour gagner du temps, ou pour de vrai. {A} ne répond pas.",
-    "Ni {A} ni {B} n'a envie de ce combat. Aucun ne peut se permettre de le fuir."
+  var WEAPON_LOSE = [
+    "{w} n'est pas l'arme de cette rencontre, et {who} le paie cher.",
+    "{who} perd un temps à chaque geste, à composer avec {w} dans un espace qui ne s'y prête pas.",
+    "{who} aurait échangé {w} contre n'importe quoi d'autre, là, tout de suite.",
+    "{who} se bat contre le terrain autant que contre {foe} : {w} le gêne plus qu'autre chose.",
+    "{who} tient {w}, et c'est précisément le problème face à {foe} ici.",
+    "{w} aurait fait des merveilles à la rencontre d'hier. Pas à celle-ci — {who} le comprend trop tard.",
+    "{who} n'arrive jamais à mettre {w} à distance utile. {foe} reste toujours du mauvais côté.",
+    "Chaque fois que {who} arme un coup avec {w}, {foe} a déjà bougé.",
+    "{who} lâche {w} en cours de combat pour se battre autrement. Trop tard.",
+    "Mauvaise arme, mauvais endroit : {who} ne peut rien tirer de {w} contre {foe}."
   ];
-  var CLASH = [
-    "Premier assaut de {A} — {wa} contre la garde de {B}.",
-    "{B} encaisse, riposte, mais le terrain joue pour {A}.",
-    "Échange sec : {wa} d'un côté, esquive de l'autre, contre.",
+
+  // EXCHANGE — échange de coups générique. Codes : {A} {B} uniquement.
+  //   Pas d'arme, pas d'issue tranchée (juste « ça penche »). 2e ligne neutre.
+  var EXCHANGE = [
     "{A} presse, {B} recule, un pied glisse sur la mousse.",
-    "{B} tente une feinte ; {A} l'avait vue venir depuis le début.",
-    "Corps-à-corps dans la boue, les deux armes coincées entre eux.",
+    "{B} touche le premier — une entaille, rien de décisif. {A} répond deux fois.",
     "Coup, parade, coup. Ni {A} ni {B} ne cède un pouce de terrain.",
     "{A} force le rythme jusqu'à ce que le bras de {B} tremble.",
-    "{B} touche le premier — une entaille, rien de décisif. {A} répond deux fois.",
-    "Ils roulent au sol, lâchent les armes, se reprennent. {A} se relève une seconde avant {B}.",
+    "{B} tente une feinte ; {A} l'avait vue venir.",
+    "Ils roulent au sol, se reprennent, se relèvent. {A} une seconde avant {B}.",
     "{A} recule vers un arbre pour souffler ; {B} charge dans la foulée.",
-    "Un choc d'armes, une gerbe d'étincelles, et {B} perd {wb} dans les fougères.",
     "{A} bloque, dévie, cherche l'ouverture. {B} la lui donne en voulant en finir trop vite.",
     "{B} prend l'avantage trois secondes — puis {A} change d'angle et tout bascule.",
-    "{A} encaisse un coup qui aurait dû finir la rencontre, et reste debout.",
+    "{A} encaisse un coup qui aurait dû tout finir, et reste debout.",
     "Le combat se déporte vers la pente. Celui qui garde l'équilibre gardera la vie.",
     "{A} vise les jambes, {B} protège le haut. L'un des deux se trompe de priorité.",
-    "{B} met un genou à terre, se redresse d'un bond, repart à l'assaut. {A} attendait ça.",
-    "Deux corps épuisés qui s'accrochent l'un à l'autre. Ça ne tient plus qu'à la volonté.",
-    "{A} sent l'ouverture avant de la voir. La main part toute seule.",
-    "{B} lâche {wb} pour saisir le poignet de {A}. Mauvais échange.",
-    "Un rocher roule sous le pied de {B} au pire moment. {A} ne laisse pas passer.",
-    "{A} recule en cercle, oblige {B} à tourner face au soleil. {B} cligne des yeux une fois de trop.",
-    "Ils se séparent, soufflent, se jaugent — et {A} repart le premier.",
+    "{B} met un genou à terre, se redresse d'un bond, repart. {A} attendait ça.",
     "{A} feinte à droite, frappe à gauche. {B} avait misé sur la droite.",
-    "Les deux tombent dans le ruisseau. Celui qui se relève en premier prend l'avantage : c'est {A}.",
-    "{B} tient bon un échange de plus que prévu. Deux de moins qu'il n'en faudrait.",
     "{A} garde la main haute, économise ses coups. {B} se dépense trop vite.",
-    "Un coup de {wa} fait reculer {B} contre la paroi. Plus de retraite possible.",
-    "{A} encaisse pour se rapprocher, ferme la distance de force. {wb} ne sert plus à rien de si près.",
-    "{B} glisse dans la boue, se rattrape à une branche — qui casse. {A} était déjà lancé.",
-    "Chaque seconde qui passe use {B} un peu plus. {A} l'a compris et ralentit exprès.",
-    "{A} vise le poignet, désarme {B} d'un coup net. {wb} tombe hors de portée.",
-    "{B} tente le tout pour le tout, une dernière charge. {A} s'écarte et laisse l'élan faire.",
-    "Ils s'immobilisent, front contre front, armes croisées. C'est la force qui tranche, et {A} en a plus.",
+    "{B} glisse dans la boue, se rattrape à une branche — qui casse.",
+    "Chaque seconde use {B} un peu plus. {A} l'a compris et ralentit exprès.",
+    "{B} tente une dernière charge. {A} s'écarte et laisse l'élan faire.",
     "{A} prend un coup à l'épaule pour en placer deux au corps. Le calcul est bon.",
-    "{B} recule vers un arbre, croyant se protéger le dos. {A} l'y attendait.",
-    "L'échange se fige : chacun tient l'arme de l'autre. {A} a les jambes plus solides.",
     "{A} laisse {B} croire à l'ouverture, la referme au dernier instant.",
-    "Deux coups pour rien, un troisième qui porte. {B} sent que le rythme n'est plus pour lui.",
-    "{B} appelle à l'aide sans y croire. Personne ne vient. {A} avance.",
-    "{A} combat en reculant vers un terrain qu'il connaît. {B} le suit sans réfléchir.",
-    "Un nuage passe, la lumière change, {B} perd {A} une demi-seconde. C'est assez.",
-    "{A} bloque {wb} du pied, se penche, et n'a plus qu'à finir le geste.",
-    "{B} tient encore debout par habitude plus que par force. {A} le voit dans ses yeux.",
+    "Deux coups pour rien, un troisième qui porte. {B} sent que le rythme lui échappe.",
+    "{A} recule en cercle, oblige {B} à tourner face au soleil.",
     "Le sol en pente donne l'avantage à qui est en haut. {A} y est monté le premier.",
-    "{A} feint l'épuisement, {B} se précipite, {A} n'était pas épuisé."
+    "{A} feint l'épuisement ; {B} se précipite ; {A} n'était pas épuisé.",
+    "{B} vise trop bien, trop tôt. {A} laisse passer et referme.",
+    "{A} recule de trois pas, puis de trois autres. {B} suit — droit dans le piège du terrain.",
+    "{B} touche deux fois, sans profondeur. {A} attend la troisième, qui n'arrivera pas.",
+    "Les gardes se cherchent, se trouvent, se rompent. {A} garde un temps d'avance à chaque échange.",
+    "{A} encaisse le premier assaut sans broncher. {B} comprend que ça va être long.",
+    "{B} multiplie les coups pour finir vite. {A} en laisse passer un sur deux et ne bouge pas.",
+    "Ça se joue au souffle : {A} respire encore, {B} beaucoup moins.",
+    "{A} recule vers l'eau, {B} le pousse — et se retrouve à découvert sur les galets.",
+    "{B} fait tomber {A}, se jette dessus. {A} avait gardé une main libre pour ça.",
+    "Un échange trop rapide pour l'œil. Quand ça ralentit, {A} est encore debout."
   ];
+
+  // GROUP_MID — 2e ligne neutre quand au moins un camp est un GROUPE et que
+  //   rien n'a tranché. {A} = camp le plus nombreux (pluriel). {B} = l'autre.
+  var GROUP_MID = [
+    "{A} avancent en ligne, méthodiques. {B} recule sans trouver d'ouverture.",
+    "{A} se passent {B} de l'un à l'autre : chacun frappe puis se retire.",
+    "{A} gardent la formation ; impossible pour {B} de prendre qui que ce soit à revers.",
+    "{A} ne se pressent pas. Le temps joue contre {B}, pas contre eux.",
+    "{B} touche un des alliés de {A}. Deux autres comblent le trou aussitôt.",
+    "{A} resserrent le cercle d'un pas. {B} le sent se refermer.",
+    "{B} cherche la faille dans le groupe de {A}. Il n'y en a pas encore."
+  ];
+  // GROUP_STANDOFF — fin sans mort, camp = groupe. {A} = plus nombreux.
+  var GROUP_STANDOFF = [
+    "{A} laissent filer {B} : la poursuite coûterait un blessé de trop.",
+    "Un canon ailleurs dans l'arène disperse tout le monde avant l'assaut de {A}.",
+    "{B} se glisse entre deux alliés de {A} et disparaît dans le couvert.",
+    "{A} rompent d'eux-mêmes : pas la peine de risquer un des leurs pour si peu.",
+    "Le brouillard des Juges avale la clairière. {A} et {B} décrochent."
+  ];
+
+  // TIGHT — combat vraiment serré, ajouté en 3e ligne quand res.margin est minuscule.
+  //   Codes : {A} {B} {DEUX}. NE PAS joindre {A} et {B} avec « et » (voir {DEUX}).
+  var TIGHT = [
+    "Deux corps à bout de forces qui s'accrochent l'un à l'autre. Ça ne tient plus qu'à la volonté.",
+    "{DEUX} devraient déjà être à terre. {DEUX} sont pourtant encore debout.",
+    "Chacun a saigné, chacun a manqué le coup décisif. Ça se joue au prochain.",
+    "Le combat dure trop longtemps pour ce que ça vaut. Personne ne lâche.",
+    "{DEUX} se regardent, essoufflés, et repartent quand même.",
+    "Une rencontre qui aurait dû finir en dix secondes en dure cent.",
+    "Le premier à faiblir est mort, et {DEUX} le savent. Aucun ne faiblit — pour l'instant.",
+    "Coup pour coup, chute pour chute. Il faut un rien pour que ça bascule."
+  ];
+
+  // STANDOFF — fin SANS mort. Codes : {A} {B} {DEUX}.
+  //   NE PAS écrire « {A} et {B} » (casse si un camp est un groupe) → « {DEUX} ».
   var STANDOFF = [
-    "{A} et {B} rompent le combat, à bout de souffle, et s'éclipsent chacun de son côté.",
+    "{DEUX} rompent le combat, à bout de souffle, et s'éclipsent chacun de son côté.",
     "Un cri au loin fait décrocher les deux camps avant le coup décisif.",
     "Reculade de {A} ; {B} ne poursuit pas. Personne n'a l'énergie d'en finir.",
-    "Match nul : {A} et {B} se séparent en se surveillant du coin de l'œil.",
-    "Les armes se baissent d'un commun accord — pour cette fois.",
-    "{B} bat en retraite dans les fourrés ; {A} récupère ce qui traîne et disparaît.",
-    "Un canon retentit ailleurs dans l'arène. {A} et {B} en profitent pour rompre.",
-    "Trop de sang perdu des deux côtés pour un dernier échange. Ils se lâchent.",
-    "Le brouillard des Juges roule entre {A} et {B} et met fin à la rencontre pour eux.",
-    "{A} et {B} entendent la meute approcher. L'ennemi commun a la priorité.",
-    "Chacun blessé, chacun méfiant : {A} et {B} reculent en gardant l'autre en joue.",
-    "Un grondement de séisme sépare {A} et {B} d'une crevasse. Le combat est reporté.",
-    "{A} propose un répit d'un geste de la main. {B} accepte, sans lâcher {wb}.",
-    "Ni l'un ni l'autre ne veut mourir pour un combat que personne ne regarde vraiment."
-  ];
-  // Une arme nettement adaptée à la situation ({who} tient {w}, contre {foe}).
-  var WEAPON_FAVOURS = [
-    "À cette distance, {w} de {who} fait la loi : {foe} ne peut pas seulement approcher.",
-    "Le terrain va comme un gant à {w} de {who}. {foe} l'a compris une seconde trop tard.",
-    "{who} n'a qu'à garder {foe} à portée de {w}. Tout le reste en découle.",
-    "{w} de {who} est exactement l'arme qu'il fallait ici. {foe} n'a pas ce luxe.",
-    "{who} laisse {w} travailler ; {foe} passe la rencontre à essayer de combler l'écart.",
-    "{foe} sait déjà que c'est mal engagé : {w} de {who} le tient à distance de tout ce qu'il pourrait tenter.",
-    "Dans ce genre de rencontre, {w} de {who} vaut deux tributs. {foe} l'apprend vite.",
-    "{who} a choisi son moment pour que {w} donne son plein effet. {foe} n'avait rien à répondre."
-  ];
-  // Une arme mal adaptée à la situation ({who} tient {w}).
-  var WEAPON_HAMPERS = [
-    "{w} de {who} ne vaut rien ici — trop lente à ramener, trop encombrante.",
-    "Mauvais outil pour {who} : {w} le gêne plus qu'elle ne l'aide dans cet espace.",
-    "{who} se bat avec {w} comme on se bat avec un handicap. L'arène ne pardonne pas ça.",
-    "{who} aurait tout donné pour autre chose que {w} à cet instant précis.",
-    "{w} entre les mains de {who} est parfaite — pour la rencontre d'hier, pas celle-ci.",
-    "{who} perd une seconde à chaque geste, le temps de composer avec {w}. Une seconde de trop."
+    "Match nul : {DEUX} se séparent en se surveillant du coin de l'œil.",
+    "Les coups s'espacent, puis s'arrêtent d'un commun accord — pour cette fois.",
+    "{B} bat en retraite dans les fourrés ; {A} ramasse ce qui traîne et disparaît.",
+    "Un canon retentit ailleurs dans l'arène. {DEUX} en profitent pour rompre.",
+    "Trop de sang perdu des deux côtés pour un dernier échange. Chacun décroche.",
+    "Le brouillard des Juges recouvre la clairière et met fin à la rencontre.",
+    "{DEUX} entendent la meute approcher. L'ennemi commun passe d'abord.",
+    "Blessés et méfiants, {DEUX} reculent sans se quitter des yeux.",
+    "Un grondement de séisme ouvre une crevasse au milieu du combat. La suite attendra.",
+    "{A} lève une main : trêve. {B} accepte, sans baisser sa garde.",
+    "Ni {A} ni {B} ne veut mourir pour un combat que personne ne regarde vraiment."
   ];
 
   function names(list) { return list.map(who).join(" & "); }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
   // Nom d'un camp : un tribut → son nom ; deux → « X et Y » ; trois et plus →
-  // « X et les siens » (pour éviter que le texte traite le groupe comme UNE personne).
+  // « X et les siens » (pour que le texte ne traite pas le groupe comme UNE personne).
   function unitName(list) {
     if (!list.length) return "?";
     if (list.length === 1) return who(list[0]);
     if (list.length === 2) return who(list[0]) + " et " + who(list[1]);
     return who(list[0]) + " et les siens";
+  }
+  // Remplace {A}/{B}/{na}/{nb}/{DEUX} par les noms de camps, en gérant le cas
+  //   « au moins un camp est un groupe » : « {A} et {B} » comme sujet commun
+  //   deviendrait « X et les siens et Y » (illisible) → on le remplace par
+  //   « les deux camps ». {DEUX} = pareil, à utiliser directement.
+  // À utiliser PARTOUT où une phrase parle des camps.
+  function subCamps(s, a, b) {
+    var grouped = a.length > 1 || b.length > 1;
+    var deux = grouped ? "les deux camps" : "les deux";
+    if (grouped) {
+      s = s.replace(/entre \{A\} et \{B\}/g, "entre " + deux)
+           .replace(/[Nn]i \{A\} ni \{B\}/g, "ni un camp ni l'autre")
+           .replace(/\{A\} et \{B\}/g, deux);
+    }
+    var out = s.replace(/\{A\}/g, unitName(a)).replace(/\{B\}/g, unitName(b))
+               .replace(/\{DEUX\}/g, deux)
+               .replace(/\{na\}/g, String(a.length)).replace(/\{nb\}/g, String(b.length))
+               .replace(/ et les siens et /g, " et les siens, face à ");
+    return out.charAt(0).toUpperCase() + out.slice(1);   // début de phrase
   }
   function wkVal(t, kind) { return HG.weaponKindBonus ? HG.weaponKindBonus(t, kind) : 0; }
   // Tribut « vedette » d'un camp pour parler de son arme : un joueur d'abord.
@@ -429,71 +488,82 @@
     for (var i = 0; i < list.length; i++) if (list[i].isPlayer) return list[i];
     return list[0];
   }
-  function weaponEdgeLine(a, b, kind, rng) {
-    var fa = focusOf(a), fb = focusOf(b);
-    var va = wkVal(fa, kind), vb = wkVal(fb, kind);
-    function say(pool, holder, foe) {
-      return line(rng, pool)
-        .replace(/\{who\}/g, who(holder))
-        .replace(/\{w\}/g, HG.deaths.weaponThe(holder))
-        .replace(/\{foe\}/g, who(foe));
+  // « à/de » + article : au/aux/du/des (« face à le couteau » → « face au couteau »).
+  function prep(p, w) {
+    if (p === "à") {
+      if (w.indexOf("le ") === 0) return "au " + w.slice(3);
+      if (w.indexOf("les ") === 0) return "aux " + w.slice(4);
+    } else if (p === "de") {
+      if (w.indexOf("le ") === 0) return "du " + w.slice(3);
+      if (w.indexOf("les ") === 0) return "des " + w.slice(4);
     }
-    var okA = fa.weapon && fa.weapon !== "none" && HG.WEAPONS[fa.weapon];
-    var okB = fb.weapon && fb.weapon !== "none" && HG.WEAPONS[fb.weapon];
-    if (okA && va - vb >= 3) return say(WEAPON_FAVOURS, fa, fb);
-    if (okB && vb - va >= 3) return say(WEAPON_FAVOURS, fb, fa);
-    if (okA && va <= -2) return say(WEAPON_HAMPERS, fa, fb);
-    if (okB && vb <= -2) return say(WEAPON_HAMPERS, fb, fa);
-    return null;
+    return p + " " + w;
+  }
+  function weaponSay(pool, holder, foe, rng) {
+    var w = HG.deaths.weaponThe(holder);   // "l'arc" | "la lance" | "le couteau" | "le trident"
+    // \b ne marche pas devant « à » (hors [A-Za-z]) : on capture l'espace.
+    return cap(line(rng, pool)
+      .replace(/ à \{w\}/g, " " + prep("à", w))
+      .replace(/ de \{w\}/g, " " + prep("de", w))
+      .replace(/\{w\}/g, w)
+      .replace(/\{who\}/g, who(holder))
+      .replace(/\{foe\}/g, who(foe)));
   }
 
-  // Un affrontement = UNE seule fenêtre (mêmes portraits) où les phrases
-  // s'accumulent une à une. Le dénouement (mort / blessure / repli) est
-  // poussé APRÈS, comme beat distinct.
+  // Un affrontement = UNE fenêtre où les phrases s'accumulent. L'issue (mort /
+  // blessure / repli) est poussée APRÈS, comme beat distinct.
   function narrateClash(a, b, kind, res, rng) {
-    var A = unitName(a), B = unitName(b);
-    var wa = HG.deaths.weaponOf(focusOf(a));
-    var wb = HG.deaths.weaponOf(focusOf(b));
     var na = a.length, nb = b.length;
+    var winIds = res.winners || [];
+    function won(t) { return winIds.indexOf(t.id) !== -1; }
+    var aWon = a.some(won);
+    // « décisif » = quelqu'un meurt dans cette rencontre. Sinon (repli, simple
+    // blessure), on reste sur du neutre : le nombre / l'arme n'ont rien tranché.
+    var decisive = (res.outcomes || []).some(function (o) { return o.result === "death"; });
     var ppl = a.slice(0, 2).map(function (t) { return port(t); })
              .concat(b.slice(0, 2).map(function (t) { return port(t); }));
-    function f(s) {
-      return s.replace(/\{A\}/g, A).replace(/\{B\}/g, B)
-              .replace(/\{wa\}/g, wa).replace(/\{wb\}/g, wb)
-              .replace(/\{na\}/g, String(na)).replace(/\{nb\}/g, String(nb))
-              // « X et les siens et Y » → « X et les siens, face à Y »
-              .replace(/ et les siens et /g, " et les siens, face à ");
-    }
     var grouped = na > 1 || nb > 1;
-    var out = [];
+    // Pour APPROACH_GROUP, {A} doit être le camp le plus nombreux (pluriel-safe).
+    var ga = a, gb = b;
+    if (grouped && nb > na) { ga = b; gb = a; }
+    var lines = [ grouped
+      ? subCamps(line(rng, APPROACH_GROUP), ga, gb)
+      : subCamps(line(rng, APPROACH[kind] || APPROACH.melee), a, b) ];
 
-    out.push(f(line(rng, grouped ? APPROACH_GROUP : (APPROACH[kind] || APPROACH.melee))));
+    // --- UNE seule ligne de « développement », cohérente avec l'issue ---
+    var mid = null;
 
-    // Avantage d'alliance / infériorité numérique (l'alliance compte).
-    if (na !== nb) {
-      var bigName = na > nb ? A : B, smallName = na > nb ? B : A;
-      var nbig = Math.max(na, nb), nsmall = Math.min(na, nb);
-      var chosen = line(rng, rng.chance(0.5) ? OUTNUMBER : OUTNUMBERED);
-      out.push(chosen
-        .replace(/\{BIG\}/g, bigName).replace(/\{SMALL\}/g, smallName)
-        .replace(/\{nbig\}/g, String(nbig)).replace(/\{nsmall\}/g, String(nsmall)));
+    // 1) Le nombre a tranché ? (écart net + le camp majoritaire l'emporte + mort)
+    if (decisive && Math.abs(na - nb) >= 2) {
+      var bigIsA = na > nb;
+      if ((bigIsA && aWon) || (!bigIsA && !aWon)) {
+        mid = line(rng, NUMBERS_WIN)
+          .replace(/\{BIG\}/g, bigIsA ? unitName(a) : unitName(b))
+          .replace(/\{SMALL\}/g, bigIsA ? unitName(b) : unitName(a))
+          .replace(/\{nbig\}/g, String(Math.max(na, nb))).replace(/\{nsmall\}/g, String(Math.min(na, nb)));
+      }
     }
 
-    // Avantage d'arme selon la situation.
-    var we = weaponEdgeLine(a, b, kind, rng);
-    if (we) out.push(f(we));
-
-    // Posture : seulement quand le combat est serré et qu'on n'a pas déjà
-    // accumulé des lignes (on ménage les pools et le rythme).
-    if (out.length < 2 && (res.margin < 0.4 || rng.chance(0.18))) {
-      out.push(f(line(rng, POSTURE)));
+    // 2) L'arme a tranché ? (avantage/désavantage net, du bon côté de l'issue, + mort)
+    if (!mid && decisive) {
+      var fa = focusOf(a), fb = focusOf(b);
+      var va = wkVal(fa, kind), vb = wkVal(fb, kind);
+      var realA = fa.weapon && fa.weapon !== "none" && HG.WEAPONS[fa.weapon];
+      var realB = fb.weapon && fb.weapon !== "none" && HG.WEAPONS[fb.weapon];
+      if (realA && va - vb >= 3 && won(fa)) mid = weaponSay(WEAPON_WIN, fa, fb, rng);
+      else if (realB && vb - va >= 3 && won(fb)) mid = weaponSay(WEAPON_WIN, fb, fa, rng);
+      else if (realA && va - vb <= -3 && !won(fa)) mid = weaponSay(WEAPON_LOSE, fa, fb, rng);
+      else if (realB && vb - va <= -3 && !won(fb)) mid = weaponSay(WEAPON_LOSE, fb, fa, rng);
     }
 
-    // 1 échange en général, 2 seulement quand c'est très disputé.
-    var exchanges = res.margin < 0.3 ? 2 : 1;
-    for (var e = 0; e < exchanges; e++) out.push(f(line(rng, CLASH)));
+    // 3) Sinon : un échange neutre (repli ou petite victoire).
+    if (!mid) mid = subCamps(line(rng, grouped ? GROUP_MID : EXCHANGE), grouped ? ga : a, grouped ? gb : b);
+    lines.push(mid);
 
-    return [{ portraits: ppl, cls: "", lines: out }];
+    // Combat serré ET tranché : une ligne de tension en plus (rare).
+    if (decisive && res.margin < 0.18) lines.push(subCamps(line(rng, TIGHT), a, b));
+
+    return [{ portraits: ppl, cls: "", lines: lines }];
   }
 
   // ---- Environnement d'une manche -------------------------------
@@ -655,6 +725,7 @@
       if (enc.pack) {
         var packLead = names(a.slice(0, 3));
         var preyN = unitName(b);
+        var packWon = a.some(function (t) { return (res.winners || []).indexOf(t.id) !== -1; });
         var pk = [
           line(rng, [
             "La meute des Carrières a rattrapé " + preyN + ".",
@@ -664,10 +735,16 @@
             packLead + " et le reste de la meute prennent " + preyN + " en étau."
           ])
         ];
-        // avantage du nombre : c'est tout l'intérêt de la meute
-        pk.push(line(rng, OUTNUMBER)
-          .replace(/\{BIG\}/g, "les Carrières").replace(/\{SMALL\}/g, preyN)
-          .replace(/\{nbig\}/g, String(a.length)).replace(/\{nsmall\}/g, String(b.length)));
+        // avantage du nombre — seulement si la meute l'emporte
+        pk.push(packWon
+          ? cap(line(rng, NUMBERS_WIN)
+              .replace(/\{BIG\}/g, "les Carrières").replace(/\{SMALL\}/g, preyN)
+              .replace(/\{nbig\}/g, String(a.length)).replace(/\{nsmall\}/g, String(b.length)))
+          : line(rng, [
+              preyN + " s'arrache de l'étau et disparaît dans le noir. La meute a perdu du temps.",
+              preyN + " renverse un des Carrières et file par la brèche avant qu'elle ne se referme.",
+              "La meute était trop sûre d'elle. " + preyN + " passe entre deux torches et s'évanouit."
+            ]));
         clashBeat = {
           portraits: a.slice(0, 3).map(function (t) { return port(t); }).concat(b.slice(0, 2).map(function (t) { return port(t); })),
           cls: "", lines: pk
@@ -684,11 +761,23 @@
         var kb = applyOutcome(o, null);
         if (kb) { beats.push(kb); anyDeath = true; }
       });
-      if (!anyDeath) {
-        // pas de mort : le repli rejoint la même fenêtre que l'affrontement
-        var so = line(rng, STANDOFF).replace(/\{A\}/g, unitName(a)).replace(/\{B\}/g, unitName(b));
-        if (clashBeat && clashBeat.lines) clashBeat.lines.push(so);
-        else beats.push({ text: so, cls: "" });
+      if (!anyDeath && !enc.pack) {
+        // pas de mort : le repli rejoint la même fenêtre — 3 lignes max.
+        var grpEnc = a.length > 1 || b.length > 1;
+        var big = grpEnc && b.length > a.length ? b : a;
+        var small = big === a ? b : a;
+        var so = subCamps(line(rng, grpEnc ? GROUP_STANDOFF : STANDOFF), grpEnc ? big : a, grpEnc ? small : b);
+        if (clashBeat && clashBeat.lines && clashBeat.lines.length < 3) clashBeat.lines.push(so);
+        else beats.push({ portraits: clashBeat ? clashBeat.portraits : undefined, text: so, cls: "" });
+      } else if (!anyDeath && enc.pack) {
+        var preyN2 = unitName(b);
+        if (clashBeat && clashBeat.lines && clashBeat.lines.length < 3) {
+          clashBeat.lines.push(line(rng, [
+            "Le canon ne vient pas : " + preyN2 + " a réussi à rompre le cercle.",
+            preyN2 + " s'échappe, blessé mais vivant. La meute rentre bredouille.",
+            "La meute se disperse sans avoir eu " + preyN2 + ". Pour cette fois."
+          ]));
+        }
       }
     });
   }
@@ -988,8 +1077,8 @@
       var aliveBefore = HG.living().length;
       var deathsBefore = st.deaths.length;
 
-      // Cap à 10 jours : la pression monte à l'approche, blocus total le dernier jour.
-      var maxDays = st.maxDays || 10;
+      // Cap de durée (7 jours) : la pression monte à l'approche, blocus total le dernier jour.
+      var maxDays = st.maxDays || 7;
       var daysLeft = maxDays - st.day;
       var lastDay = st.day >= maxDays;
       var stale = st.roundsSinceDeath;
@@ -1025,10 +1114,18 @@
         cls: "announce", voice: { who: "claudius" }, hold: 1.25
       });
       if (lastDay) {
-        beats.push({ text: "Dixième jour. Les Juges l'ont annoncé : ces Jeux se terminent aujourd'hui, d'une manière ou d'une autre.",
-          cls: "event", voice: { who: "claudius" } });
-      } else if (daysLeft <= 2 && aliveBefore > 3) {
-        beats.push({ text: "L'arène se referme jour après jour. Il ne reste que peu de temps avant le dénouement.", cls: "event" });
+        beats.push({ text: line(rng, [
+          "Dernier jour. Les Juges l'ont annoncé : ces Jeux se terminent aujourd'hui, d'une manière ou d'une autre.",
+          "Les Juges ont fixé la fin à aujourd'hui. Il y aura un vainqueur avant la nuit.",
+          "Plus de lendemain dans l'arène. Ce qui doit se régler se règle maintenant."
+        ]), cls: "event", voice: { who: "claudius" } });
+      } else if (daysLeft <= 2 && aliveBefore > 3 && !st._closingSaid) {
+        st._closingSaid = true;
+        beats.push({ text: line(rng, [
+          "L'arène se referme jour après jour. Il ne reste que peu de temps avant le dénouement.",
+          "Les murs de l'arène avancent. Le territoire jouable fond à vue d'œil.",
+          "Les Juges resserrent les Jeux. Bientôt, il n'y aura plus où se cacher."
+        ]), cls: "event" });
       }
       if (forceConverge && !lastDay) {
         beats.push({ text: HG.commentary.claudius.convergence, cls: "event", voice: { who: "claudius" } });
@@ -1178,11 +1275,11 @@
     if (!a.length || !b.length) return;
     beats.push({
       portraits: a.slice(0, 2).map(function (t) { return port(t); }).concat(b.slice(0, 2).map(function (t) { return port(t); })),
-      text: line(rng, [
-        "Les Juges resserrent l'arène : " + unitName(a) + " et " + unitName(b) + " n'ont plus nulle part où se cacher.",
-        "Le territoire jouable vient de fondre de moitié. " + unitName(a) + " et " + unitName(b) + " se retrouvent forcément.",
-        "Plus de forêt, plus de crêtes : les Juges rabattent " + unitName(a) + " et " + unitName(b) + " sur la même trouée."
-      ]),
+      text: subCamps(line(rng, [
+        "Les Juges resserrent l'arène : {A} et {B} n'ont plus nulle part où se cacher.",
+        "Le territoire jouable vient de fondre de moitié. {A} et {B} se retrouvent forcément.",
+        "Plus de forêt, plus de crêtes : les Juges rabattent {DEUX} sur la même trouée."
+      ]), a, b),
       cls: "event"
     });
     var res = HG.resolveEncounter(a, b, "melee", rng, { powerMul: 1.4 });

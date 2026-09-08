@@ -520,6 +520,58 @@
 
     function clearTimer() { if (timer) { clearTimeout(timer); timer = null; } }
     function paintProgress() { setStageProgress(beats.length ? (i + 1) / beats.length : 1); }
+
+    // Défilement automatique : on lit sans toucher à la molette. Quand un beat
+    // grandit (phrases qui s'accumulent, texte long), on fait glisser la page
+    // juste ce qu'il faut pour garder le contenu visible au-dessus des barres.
+    // (Animation maison : le `behavior:"smooth"` natif ne marche pas partout.)
+    var scrollRAF = null, scrollSnap = null;
+    function stopScrollAnim() {
+      if (scrollRAF) { cancelAnimationFrame(scrollRAF); scrollRAF = null; }
+      if (scrollSnap) { clearTimeout(scrollSnap); scrollSnap = null; }
+    }
+    function smoothScrollBy(dy) {
+      stopScrollAnim();
+      var startY = window.scrollY || window.pageYOffset || 0;
+      var targetY = startY + dy;
+      if (prefersReducedMotion()) { window.scrollTo(0, targetY); return; }
+      var t0 = null, dur = Math.min(440, 130 + Math.abs(dy) * 1.5);
+      function step(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        window.scrollTo(0, Math.round(startY + dy * e));
+        scrollRAF = p < 1 ? requestAnimationFrame(step) : null;
+      }
+      scrollRAF = requestAnimationFrame(step);
+      // filet : si requestAnimationFrame est gelé (onglet non focalisé), on force la cible
+      scrollSnap = setTimeout(function () { stopScrollAnim(); window.scrollTo(0, targetY); }, 550);
+    }
+    function bottomBarsHeight() {
+      var h = 0;
+      var pb = document.getElementById("playbar"); if (pb && !pb.hidden) h += pb.offsetHeight || 0;
+      var ac = document.getElementById("actions"); if (ac && !ac.hidden) h += ac.offsetHeight || 0;
+      return h;
+    }
+    function keepInView(node, preferTop) {
+      if (!node) return;
+      var vh = window.innerHeight || 0;
+      if (vh < 240) return;        // fenêtre minuscule / masquée : pas de scroll auto
+      var m = 20;
+      var topEdge = m;
+      var botEdge = vh - bottomBarsHeight() - m;
+      var r = node.getBoundingClientRect();
+      var dy = 0;
+      if (preferTop) {
+        // amener le haut de `node` en vue sans perdre plus que nécessaire vers le bas
+        if (r.top < topEdge || r.top > botEdge - 60) dy = r.top - topEdge;
+      } else {
+        if (r.bottom > botEdge) dy = r.bottom - botEdge;
+        else if (r.top < topEdge) dy = r.top - topEdge;
+      }
+      if (Math.abs(dy) < 6) return;
+      smoothScrollBy(dy);
+    }
     function paintHint() {
       if (paused) { setStageHint("En pause — ▶ pour reprendre"); return; }
       if (i >= beats.length - 1 && !moreLines()) { setStageHint(""); return; }
@@ -584,6 +636,7 @@
 
       paintProgress();
       paintHint();
+      keepInView(stageEl, true);   // nouveau beat : on remonte pour laisser la place
 
       voiceWait = false;
       if (b.voice && HG.voice && HG.voice.isEnabled()) {
@@ -604,6 +657,7 @@
       if (ln) { ln.hidden = false; ln.classList.remove("rise-in"); void ln.offsetWidth; ln.classList.add("rise-in"); }
       lineShown++;
       paintHint();
+      keepInView(ln || textEl);   // suit la phrase qui vient d'apparaître
       voiceWait = false;
       if (b.voice && HG.voice && HG.voice.isEnabled() && ln) {
         voiceWait = true;
@@ -679,7 +733,7 @@
         if (opts.onDone) opts.onDone();
       },
       destroy: function () {
-        destroyed = true; clearTimer();
+        destroyed = true; clearTimer(); stopScrollAnim();
         document.removeEventListener("keydown", onKey);
         document.removeEventListener("click", onDocClick);
         if (HG.voice) HG.voice.cancel();

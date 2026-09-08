@@ -919,6 +919,12 @@ hr.rule {
 body.has-actions #app  { padding-bottom: calc(var(--h-actions) + 20px); }
 body.has-actions.has-playbar #app { padding-bottom: calc(var(--h-actions) + var(--h-playbar) + 20px); }
 body.has-playbar:not(.has-actions) #app { padding-bottom: calc(var(--h-playbar) + 20px); }
+/* Pendant un déroulé (barre de lecture visible) : marge basse généreuse pour
+   que le défilement automatique ait toujours de quoi remonter un texte long
+   au-dessus des barres. L'espace vide en dessous n'est jamais vu (on revient
+   en haut au beat suivant). */
+body.has-playbar.has-actions #app,
+body.has-playbar:not(.has-actions) #app { padding-bottom: 62vh; }
 
 #playbar {
   bottom: 0;

@@ -26,7 +26,7 @@
         phase: "prelude",
         day: 0,
         timeOfDay: "day",
-        maxDays: 10,                          // une partie ne dépasse pas 10 jours
+        maxDays: 7,                           // une partie ne dépasse pas 7 jours
         roundIndex: 0,                        // nombre de manches jouées
         roundsSinceDeath: 0,
         loversRuleActive: false,

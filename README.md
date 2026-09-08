@@ -20,8 +20,8 @@ Le jeu est 100 % local, sans build ni installation.
 
   puis ouvrez `http://localhost:4202`. (Configuration déjà prête dans `.claude/launch.json`.)
 
-> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "13"`) et les
-> `?v=13` des feuilles de style, pour forcer le navigateur à recharger.
+> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "21"`) et les
+> `?v=21` des feuilles de style, pour forcer le navigateur à recharger.
 >
 > Pour **ajouter vos propres répliques** (Caesar, annonceur, événements, morts) :
 > voir [`TEXTES.md`](TEXTES.md).
@@ -61,10 +61,12 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
    lâche les tributs, et le bain de sang commence.
 7. **Les manches d'arène** — l'action défile **message par message**. Chaque manche : un
    événement des Juges parmi ~30, des **incidents** (chute de falaise, baies empoisonnées,
-   noyade, morsure venimeuse, infection, épuisement…), des rencontres détaillées — les
-   phrases d'un même affrontement **s'accumulent dans la même fenêtre**, puis le dénouement
-   (mort, blessure) arrive comme temps fort séparé. **Aucune phrase n'est répétée dans la
-   partie.** Chaque tribut porte **une arme** (montrée à la Moisson et à la Corne, joueurs
+   noyade, morsure venimeuse, infection, épuisement…), des rencontres — 2 phrases (une
+   ouverture, puis un développement **choisi selon l'issue** pour rester cohérent),
+   accumulées dans la même fenêtre ; le dénouement (mort, blessure) arrive comme temps
+   fort **séparé**. **Aucune phrase n'est répétée dans la partie.** La page défile toute
+   seule pour suivre le texte. Chaque tribut porte **une arme** (montrée à la Moisson et
+   à la Corne, joueurs
    d'abord) qui le suit toute la partie et qui **compte selon la situation** : un arc écrase
    à distance et ne vaut rien au corps-à-corps, une lance tient l'ennemi à distance, des
    pièges ne servent qu'en embuscade… Les **alliances sont un vrai avantage** — le texte le
@@ -81,8 +83,9 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
 9. **Le dénouement** — dernier tribut, ou **double victoire des amants maudits** (une paire
    de joueurs ou du District 12, du même district, alliée — la règle est annoncée en cours
    de partie et se joue si les deux sont les derniers). **Une partie ne dépasse jamais
-   10 jours** : les Juges resserrent l'arène à l'approche. Récapitulatif : chronologie,
-   éliminations, chouchou du salon, graine d'arène pour rejouer.
+   7 jours** : les Juges resserrent l'arène à l'approche (le plus souvent, ça se termine
+   au jour 5 ou 6). Récapitulatif : chronologie, éliminations, chouchou du salon, graine
+   d'arène pour rejouer.
 
 ## Lecture (barre du bas, pendant la présentation)
 
@@ -93,6 +96,8 @@ bouton du bas.
 - **Cliquer n'importe où sur l'écran** (sauf la barre du bas) = passer au message suivant
   (ou révéler la phrase suivante dans une fenêtre à plusieurs lignes). Espace / → au
   clavier aussi. ⏮ pour revoir le passage précédent.
+- La page **défile toute seule** pour garder le texte visible quand les phrases
+  s'accumulent : pas besoin de toucher à la molette.
 - **⏸ Pause / ▶ Reprendre** — fige le déroulé sur n'importe quelle page. Touche **P**.
 - **Vitesse** — 7 crans, de *Très lent* (~10 s par message) à *Rapide* (~2 s). Règle aussi
   le débit des voix. Le curseur et son libellé ne bougent plus quand on change de cran.
@@ -139,7 +144,7 @@ src/
   audio.js                  sons synthétisés + lecture des fichiers son / musique
   voice.js                  synthèse vocale (Caesar / annonceur)
   storage.js                localStorage + compression photo + export/import fichier
-  state.js                  état de partie (mode, cap 10 jours) + anti-répétition + helpers
+  state.js                  état de partie (mode, cap 7 jours) + anti-répétition + helpers
   ui.js                     routeur d'écrans, scène « beat par beat », barre de lecture,
                             barre d'actions (retour / continuer), transitions de phase
   engine/

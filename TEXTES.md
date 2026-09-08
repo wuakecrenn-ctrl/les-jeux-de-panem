@@ -70,18 +70,29 @@ spear: [
 
 ## 4. Narration des affrontements & manches calmes — [`src/engine/simulation.js`](src/engine/simulation.js)
 
-- `DRY_LINES` : ce qu'il se passe quand une manche se termine sans mort.
-- `APPROACH` (par type) / `POSTURE` / `CLASH` / `STANDOFF` : les étapes narrées
-  d'un duel.
-- `APPROACH_GROUP` / `OUTNUMBER` / `OUTNUMBERED` : quand un camp est une
-  **alliance** (l'avantage du nombre est mis en avant).
-- `WEAPON_FAVOURS` / `WEAPON_HAMPERS` : quand l'arme d'un tribut est
-  particulièrement adaptée — ou pas — à la situation.
+Une rencontre = **2 lignes** (parfois 3), puis l'issue (mort / blessure) comme
+message **séparé**. La 2e ligne est choisie **selon le résultat** — elle ne
+contredit jamais l'issue. Ajoutez autant de phrases que vous voulez, tant que
+vous respectez le **contrat** du pool (indiqué en commentaire dans le fichier).
 
-Codes : `{A}` / `{B}` = les deux camps · `{wa}` / `{wb}` = arme portée ·
-`{na}` / `{nb}` = effectifs · `{BIG}` / `{SMALL}` = camp majoritaire /
-minoritaire · `{nbig}` / `{nsmall}` = leurs effectifs · `{who}` / `{w}` /
-`{foe}` (armes) = tribut vedette / son arme / son adversaire.
+| Pool | Rôle | Codes autorisés |
+|---|---|---|
+| `APPROACH.{melee,ranged,ambush,hunt,flight}` | comment ça commence (pas d'arme, pas d'issue) | `{A}` `{B}` |
+| `APPROACH_GROUP` | idem, un camp est un groupe. `{A}` = le plus nombreux (pluriel) | `{A}` `{B}` `{DEUX}` |
+| `NUMBERS_WIN` | le nombre a tranché (le camp majoritaire l'emporte + il y a une mort) | `{BIG}` `{SMALL}` `{nbig}` `{nsmall}` |
+| `WEAPON_WIN` / `WEAPON_LOSE` | l'arme a tranché. **Jamais d'adjectif accordé sur `{w}`** | `{who}` `{w}` `{foe}` |
+| `EXCHANGE` / `GROUP_MID` | échange neutre (repli ou petite victoire) | `{A}` `{B}` |
+| `TIGHT` | combat très serré (3e ligne, rare) | `{A}` `{B}` `{DEUX}` |
+| `STANDOFF` / `GROUP_STANDOFF` | fin sans mort | `{A}` `{B}` `{DEUX}` |
+| `DRY_LINES` | manche qui se termine sans un canon | — |
+
+Codes : `{A}` / `{B}` = les deux camps (nom déjà mis en forme) · `{DEUX}` =
+« les deux (camps) » (à utiliser au lieu de « {A} et {B} » — sinon ça casse
+quand un camp est un groupe) · `{na}` / `{nb}` = effectifs · `{BIG}` /
+`{SMALL}` / `{nbig}` / `{nsmall}` = camp majoritaire / minoritaire et leurs
+effectifs · `{who}` / `{w}` (arme au **singulier** : « l'arc », « la lance ») /
+`{foe}`. La 1re lettre est mise en majuscule automatiquement ; « à/de le/les »
+deviennent « au/aux/du/des » automatiquement dans les phrases d'arme.
 
 ## 5. Armes — [`src/engine/weapons.js`](src/engine/weapons.js)
 

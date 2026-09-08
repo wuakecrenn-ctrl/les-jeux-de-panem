@@ -21,7 +21,7 @@
       tag: "mortel à distance, presque inutile au contact"
     },
     knives: {
-      name: "des couteaux de lancer", the: "les couteaux", cat: "knife",
+      name: "des couteaux de lancer", the: "le couteau", cat: "knife",
       kinds: { ranged: 3, ambush: 4, melee: 1, hunt: 1 },
       tag: "vif de près comme de loin"
     },
@@ -66,7 +66,7 @@
       tag: "de loin seulement, mais discrète"
     },
     snares: {
-      name: "des collets et des fils tendus", the: "les pièges", cat: "trap",
+      name: "des collets et des fils tendus", the: "le piège", cat: "trap",
       kinds: { ambush: 6, hunt: 2, melee: -3, flight: -1 },
       tag: "dévastateurs tendus d'avance, rien dans un face-à-face"
     },
