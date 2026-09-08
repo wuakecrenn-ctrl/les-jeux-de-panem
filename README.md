@@ -20,8 +20,8 @@ Le jeu est 100 % local, sans build ni installation.
 
   puis ouvrez `http://localhost:4202`. (Configuration déjà prête dans `.claude/launch.json`.)
 
-> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "21"`) et les
-> `?v=21` des feuilles de style, pour forcer le navigateur à recharger.
+> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "22"`) et les
+> `?v=22` des feuilles de style, pour forcer le navigateur à recharger.
 >
 > Pour **ajouter vos propres répliques** (Caesar, annonceur, événements, morts) :
 > voir [`TEXTES.md`](TEXTES.md).

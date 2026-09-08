@@ -553,24 +553,30 @@
       var ac = document.getElementById("actions"); if (ac && !ac.hidden) h += ac.offsetHeight || 0;
       return h;
     }
-    function keepInView(node, preferTop) {
-      if (!node) return;
+    function edges() {
       var vh = window.innerHeight || 0;
-      if (vh < 240) return;        // fenêtre minuscule / masquée : pas de scroll auto
-      var m = 20;
-      var topEdge = m;
-      var botEdge = vh - bottomBarsHeight() - m;
+      return { vh: vh, top: 20, bot: vh - bottomBarsHeight() - 20 };
+    }
+    // Suit une phrase qui vient d'apparaître : la garder visible au-dessus des barres.
+    function keepInView(node) {
+      if (!node) return;
+      var e = edges(); if (e.vh < 240) return;
       var r = node.getBoundingClientRect();
       var dy = 0;
-      if (preferTop) {
-        // amener le haut de `node` en vue sans perdre plus que nécessaire vers le bas
-        if (r.top < topEdge || r.top > botEdge - 60) dy = r.top - topEdge;
-      } else {
-        if (r.bottom > botEdge) dy = r.bottom - botEdge;
-        else if (r.top < topEdge) dy = r.top - topEdge;
-      }
-      if (Math.abs(dy) < 6) return;
-      smoothScrollBy(dy);
+      if (r.bottom > e.bot) dy = r.bottom - e.bot;
+      else if (r.top < e.top) dy = r.top - e.top;
+      if (Math.abs(dy) > 6) smoothScrollBy(dy);
+    }
+    // Nouveau beat : montrer le haut ; si le beat est trop grand pour l'écran,
+    // descendre juste assez pour garder le bas (issue / cause) en vue.
+    function scrollBeatIntoView(kill) {
+      var e = edges(); if (e.vh < 240) return;
+      var sr = stageEl.getBoundingClientRect();
+      var payoff = ((kill && !causeEl.hidden) ? causeEl : textEl).getBoundingClientRect();
+      var dy = 0;
+      if (payoff.bottom > e.bot) dy = payoff.bottom - e.bot;   // trop grand → priorité au bas
+      else if (sr.top < e.top || sr.top > e.bot - 60) dy = sr.top - e.top;
+      if (Math.abs(dy) > 6) smoothScrollBy(dy);
     }
     function paintHint() {
       if (paused) { setStageHint("En pause — ▶ pour reprendre"); return; }
@@ -636,7 +642,7 @@
 
       paintProgress();
       paintHint();
-      keepInView(stageEl, true);   // nouveau beat : on remonte pour laisser la place
+      scrollBeatIntoView(kill);
 
       voiceWait = false;
       if (b.voice && HG.voice && HG.voice.isEnabled()) {
