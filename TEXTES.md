@@ -4,7 +4,7 @@ Tous les textes sont dans des **tableaux de chaînes** en clair, dans 5 fichiers
 Aucun outil : on ouvre le fichier, on ajoute une ligne, on recharge la page.
 
 > Après chaque modif, incrémente `V` dans [`index.html`](index.html)
-> (`var V = "24"` → `"25"`…) pour forcer le navigateur à recharger.
+> (`var V = "25"` → `"26"`…) pour forcer le navigateur à recharger.
 
 **Aucune phrase n'est répétée dans une même partie** : le jeu pioche sans
 remise (`HG.narrPick`). Plus un tableau contient de phrases, moins on risque

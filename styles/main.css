@@ -364,12 +364,6 @@ h1.home-title {
   0%, 100% { background-position: 0% 50%; }
   50%      { background-position: 100% 50%; }
 }
-.home-sub {
-  max-width: 56ch;
-  margin: 0 auto;
-  color: var(--ink-dim);
-  font-size: 0.98rem;
-}
 /* le déroulé de la soirée, en jalons plutôt qu'en paragraphe */
 .home-steps {
   display: flex; flex-wrap: wrap; justify-content: center;

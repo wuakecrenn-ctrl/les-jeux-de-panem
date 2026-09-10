@@ -20,13 +20,13 @@ Le jeu est 100 % local, sans build ni installation.
 
   puis ouvrez `http://localhost:4202`. (Configuration déjà prête dans `.claude/launch.json`.)
 
-> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "23"`) et les
-> `?v=22` des feuilles de style, pour forcer le navigateur à recharger.
+> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "25"`) et les
+> `?v=25` des feuilles de style, pour forcer le navigateur à recharger.
 >
 > Pour **ajouter vos propres répliques** (Caesar, annonceur, événements, morts) :
 > voir [`TEXTES.md`](TEXTES.md).
 
-Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
+Plein écran (bouton 🗖 en bas à droite, ou F11) pour l'affichage sur une TV.
 
 ## Modes de jeu (choix sur l'accueil)
 
@@ -117,8 +117,8 @@ bouton du bas.
   le débit des voix. Le curseur et son libellé ne bougent plus quand on change de cran.
 - Une fine **barre de progression** (fil d'Ariane) court sur le haut de la barre du bas —
   elle ne se décale jamais avec le texte.
-- Le bouton **plein écran** (en bas à droite) change de sens selon l'état : ⤢ pour
-  entrer, ⤡ pour sortir.
+- Le bouton **plein écran** (en bas à droite) change de sens selon l'état : 🗖 pour
+  entrer, 🗗 pour sortir.
 
 ## L'accueil
 
@@ -127,8 +127,9 @@ retrouve nulle part ailleurs dans le jeu : projecteurs du Capitole qui balayent
 lentement le fond, grain de retransmission, vignette, poussière d'or qui monte,
 point rouge « en direct » et reflet qui passe sur le titre. La mise en page va
 droit au but : sceau + titre, les **deux façons de lancer** côte à côte (créer ses
-tributs / jouer avec ceux du film), les reprises et archives sur une ligne
-discrète, puis l'aide et la note de vie privée en pied de page. Tout se coupe si
+tributs / jouer avec ceux du film), un **bouton large « Charger un groupe »** quand
+il y a des groupes enregistrés, l'import et le palmarès sur une ligne discrète,
+puis l'aide et la note de vie privée en pied de page. Tout se coupe si
 le système demande moins d'animations (`prefers-reduced-motion`).
 
 ## Identité visuelle par phase
@@ -149,7 +150,7 @@ s'effacent pour ne pas casser l'ambiance.
   fichier manque (le compte à rebours devient un décompte animé).
 - **🗣 Voix** — synthèse vocale du navigateur (voix françaises de Windows) pour Caesar et
   l'annonceur. Se coupe d'un clic.
-- **⤢ Plein écran.** `prefers-reduced-motion` est respecté.
+- **🗖 Plein écran.** `prefers-reduced-motion` est respecté.
 
 Le jeu est **fidèle à l'esprit du film** (PG-13) — pas de réglage de ton.
 

@@ -377,14 +377,15 @@
       if (HG.voice) { HG.voice.resume(); var on = HG.voice.toggle(); if (on) HG.voice.speak("Bonjour à tous.", "caesar"); }
       paintVoice();
     });
-    // L'icône doit dire dans quel sens on va : ⤢ pour entrer, ⤡ pour sortir.
+    // L'icône doit dire dans quel sens on va : 🗖 pour agrandir, 🗗 pour réduire
+    // (les diagonales ⤢/⤡ se ressemblaient trop et disaient toutes « agrandir »).
     function isFull() {
       return !!(document.fullscreenElement || document.webkitFullscreenElement ||
                 document.mozFullScreenElement || document.msFullscreenElement);
     }
     function paintFull() {
       var on = isFull();
-      fb.textContent = on ? "⤡" : "⤢";
+      fb.textContent = on ? "🗗" : "🗖";
       fb.classList.toggle("on", on);
       fb.title = on ? "Quitter le plein écran" : "Plein écran";
       fb.setAttribute("aria-label", fb.title);

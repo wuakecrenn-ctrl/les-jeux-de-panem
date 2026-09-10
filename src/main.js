@@ -163,10 +163,14 @@
 
   // ---- Amorçage ----
   function boot() {
-    HG.ui.boot();
+    // Appliquer les réglages son / voix AVANT de peindre la barre d'outils :
+    // sinon l'icône du son affiche « actif » alors qu'il est coupé (audio.js
+    // se charge avant storage.js et ne peut pas relire le réglage lui-même),
+    // et le bouton fait alors l'inverse de ce qu'il annonce.
     var s = HG.storage.getSettings();
     HG.audio.setEnabled(s.sound !== false);
     if (HG.voice) HG.voice.setEnabled(s.voice !== false);
+    HG.ui.boot();
     if (!HG.storage.available) {
       console.warn("localStorage indisponible : sauvegardes désactivées pour cette session.");
     }

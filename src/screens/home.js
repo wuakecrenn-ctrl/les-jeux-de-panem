@@ -103,9 +103,6 @@
         el("div", { class: "capitol-seal", role: "img", "aria-label": "Sceau du Capitole" }),
         el("p", { class: "kicker live", text: "Retransmission officielle du Capitole" }),
         el("h1", { class: "home-title", text: "Hunger Games" }),
-        el("p", { class: "home-sub", text:
-          "Un jeu de soirée pour le salon, en hommage au film. Créez vos tributs, " +
-          "lancez la Moisson, et suivez les 74ᵉ Hunger Games manche après manche." }),
         el("p", { class: "home-steps", html:
           "<span>Présentation</span><span>Défilé</span><span>Plateau de Caesar</span>" +
           "<span>L'arène</span><span>Les disparus</span><span>Un vainqueur</span>" })
