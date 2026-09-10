@@ -110,8 +110,7 @@
       pill("Tributs tombés", st.deaths.length),
       tiePill("Plus d'éliminations", st.tributes, function (t) { return t.kills.length; },
         function (n) { return " (" + n + ")"; }),
-      tiePill("Chouchou du salon", st.tributes, function (t) { return t.roomFavor; }, null),
-      pill("Graine d'arène", st.seed)
+      tiePill("Chouchou du salon", st.tributes, function (t) { return t.roomFavor; }, null)
     ]));
 
     // --- Chronologie ---
@@ -158,8 +157,6 @@
       el("button", { class: "", onclick: function () { HG.flow.newGame(); } }, ["Nouveau groupe"]),
       el("button", { class: "ghost", onclick: function () { HG.flow.home(); } }, ["Accueil"])
     ]));
-    root.appendChild(el("p", { class: "tiny muted", style: { marginTop: "0.6rem" },
-      text: "Graine d'arène « " + st.seed + " » — pour retrouver la même partie." }));
 
     HG.ui.setActions({
       back: { label: "Accueil", onClick: function () { HG.flow.home(); } },
@@ -174,7 +171,6 @@
         name: t.name,
         canonName: t.canonName,
         district: t.district,
-        arena: st.seed,
         days: st.day,
         kills: t.kills.length,
         dual: dual,

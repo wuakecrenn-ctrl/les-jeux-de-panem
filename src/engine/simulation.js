@@ -480,7 +480,18 @@
   ];
 
   function names(list) { return list.map(who).join(" & "); }
+  // Énumération simple, séparée par des virgules (« X, Y, Z »).
+  function nameList(list) { return list.map(who).join(", "); }
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  // Étiquette courte d'une arme (« une épée courte » → « Épée courte » ;
+  // « des collets et des fils tendus » → « Collets et fils tendus »).
+  function weaponLabel(wk) {
+    var w = HG.WEAPONS[wk];
+    var n = (w ? w.name : "arme de fortune")
+      .replace(/^(un |une |des |le |la |l')/, "")
+      .replace(/ et des /g, " et ");
+    return cap(n);
+  }
   // Nom d'un camp : un tribut → son nom ; deux → « X et Y » ; trois et plus →
   // « X et les siens » (pour que le texte ne traite pas le groupe comme UNE personne).
   function unitName(list) {
@@ -1093,26 +1104,33 @@
           (fleers.length > 4 ? "…" : "") + " disparaissent dans les bois sans demander leur reste.", cls: "" });
       }
 
-      // --- Qui repart avec quoi : joueurs d'abord, puis Carrières, puis 2 autres.
+      // --- Qui repart avec quoi. On PART DE L'ARME et on liste ses porteurs
+      //     (« Épée courte : Cato, Peeta. ») — bien plus court qu'une ligne
+      //     par tribut. Joueurs d'abord, puis Carrières, puis quelques autres.
       var armedShow = HG.living().filter(function (t) { return t.weapon && t.weapon !== "none"; });
       armedShow.sort(function (x, y) {
         return (y.isPlayer ? 1 : 0) - (x.isPlayer ? 1 : 0) ||
                (y.career ? 1 : 0) - (x.career ? 1 : 0) ||
                (y.supplies - x.supplies);
       });
-      var players = armedShow.filter(function (t) { return t.isPlayer; });
-      var others = armedShow.filter(function (t) { return !t.isPlayer; }).slice(0, players.length ? 3 : 5);
-      var toShow = players.concat(others);
+      var toShow = armedShow.slice(0, 10);
       if (toShow.length) {
-        var wl = ["À la Corne, chacun s'arme comme il peut — et devra faire avec pour la suite."];
+        var byWeapon = {}, order = [];
         toShow.forEach(function (t) {
           t.weaponShown = true;
-          wl.push(who(t) + " repart avec " + HG.WEAPONS[t.weapon].name + " (" + HG.WEAPONS[t.weapon].tag + ").");
+          if (!byWeapon[t.weapon]) { byWeapon[t.weapon] = []; order.push(t.weapon); }
+          byWeapon[t.weapon].push(t);
+        });
+        var wl = ["À la Corne, chacun s'arme comme il peut — et devra faire avec pour la suite."];
+        order.forEach(function (wk) {
+          wl.push(weaponLabel(wk) + " : " + nameList(byWeapon[wk]) + ".");
         });
         var barehanded = HG.living().filter(function (t) { return (!t.weapon || t.weapon === "none"); });
         if (barehanded.length) {
-          wl.push(names(barehanded.slice(0, 3)) + (barehanded.length > 3 ? " et d'autres" : "") +
-            " filent les mains vides : il leur faudra trouver une arme, ou s'en passer.");
+          var bhMany = barehanded.length > 1;
+          wl.push(nameList(barehanded.slice(0, 3)) + (barehanded.length > 3 ? ", entre autres," : "") +
+            (bhMany ? " filent" : " file") + " les mains vides : il " + (bhMany ? "leur" : "lui") +
+            " faudra trouver une arme, ou s'en passer.");
         }
         beats.push({ portraits: toShow.slice(0, 5).map(function (t) { return port(t); }), cls: "event", lines: wl });
       }

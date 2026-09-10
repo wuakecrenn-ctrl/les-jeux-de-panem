@@ -49,9 +49,9 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
 2. **Présentation des tributs** — l'annonceur ouvre les Jeux, puis chaque district défile
    (portraits + noms).
 3. **Défilé des chars** — réactions de la foule → premiers points de sponsor.
-4. **Séances privées** — notes des Juges. Le barème va jusqu'à 12, mais **personne
-   n'obtient 12** : la meilleure note possible est **11**, et elle est exceptionnelle
-   (~1 % des tributs). Un 11 est mis en évidence sur la carte.
+4. **Séances privées** — notes des Juges : de 0 à 10, parfois au-dessus en cas de
+   performance exceptionnelle (une note de 11, ~1 % des tributs, mise en évidence sur
+   la carte ; le 12 n'est jamais donné).
 5. **Plateau de Caesar Flickerman** — interviews, district par district (celui des joueurs
    d'abord), avec la voix de Caesar et sa musique de thème pour les joueurs.
 6. **Le bain de sang** — phase interactive : chaque joueur choisit foncer / attraper-fuir /
@@ -75,16 +75,18 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
    Une **trahison** (nuit dans une alliance, meute des Carrières qui se déchire,
    Carrière qui plante la meute au bain de sang) s'annonce par un grand bandeau
    rouge d'**un seul mot** — TRAHISON, DÉFECTION — avec le traître encadré en rouge ;
-   la mort qui suit est étiquetée « ◆ TRAHI ». Chaque tribut porte **une arme** (montrée à la Moisson et
-   à la Corne, joueurs
-   d'abord) qui le suit toute la partie et qui **compte selon la situation** : un arc écrase
+   la mort qui suit est étiquetée « ◆ TRAHI ». Chaque tribut porte **une arme** qui le suit
+   toute la partie et qui **compte selon la situation** : un arc écrase
    à distance et ne vaut rien au corps-à-corps, une lance tient l'ennemi à distance, des
-   pièges ne servent qu'en embuscade… Les **alliances sont un vrai avantage** — le texte le
+   pièges ne servent qu'en embuscade… À la Corne, un récap **arme par arme** (« Épée
+   courte : Cato, Peeta. ») dit qui repart avec quoi ; les mains vides aussi. Les **alliances sont un vrai avantage** — le texte le
    dit (tenaille, arrières couverts, un contre trois). La meute des Carrières, des trahisons.
    À chaque mort : gros plan du tribut **en noir et blanc**, tampon rouge **◆ ÉLIMINÉ ·
    par X**, la **façon dont il tombe** (transpercé par une lance, coup de couteau, hache,
    faucille, flèche, piège à contrepoids…) et la **cause exacte**. Aucun son de canon
-   pendant les manches — seulement un bref halo. Après chaque manche, le salon vote (à main
+   pendant les manches — seulement un bref halo. L'un des événements des Juges est la
+   **Pluie de sang** : une averse écarlate qui ne tue pas mais brise le moral et pousse les
+   tributs les uns vers les autres. Après chaque manche, le salon vote (à main
    levée) pour envoyer un **parachute** à un tribut : un clic sur sa carte, un parachute
    descend, et **l'avantage du cadeau** (soin, +Force, +Survie…) s'affiche en clair.
 8. **Ceux qui sont tombés** — chaque nuit, portraits des disparus dans le ciel nocturne, un
@@ -94,8 +96,8 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
    de joueurs ou du District 12, du même district, alliée — la règle est annoncée en cours
    de partie et se joue si les deux sont les derniers). **Une partie ne dépasse jamais
    7 jours** : les Juges resserrent l'arène à l'approche (le plus souvent, ça se termine
-   au jour 5 ou 6). Récapitulatif : chronologie, éliminations, chouchou du salon, graine
-   d'arène pour rejouer. Les records (« plus d'éliminations », « chouchou du salon »)
+   au jour 5 ou 6). Récapitulatif : chronologie, éliminations, chouchou du salon.
+   Les records (« plus d'éliminations », « chouchou du salon »)
    acceptent les **ex æquo** : tous les tributs à égalité sont cités, jamais un seul
    tiré au hasard.
 

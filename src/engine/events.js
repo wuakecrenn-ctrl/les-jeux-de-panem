@@ -45,11 +45,12 @@
       ]
     },
     {
-      id: "sponsor_rain", title: "Pluie de parachutes", phase: "any", weight: 4,
-      giftDrop: true, giftCount: 2, quiet: true,
+      id: "blood_rain", title: "Pluie de sang", phase: "any", weight: 4,
+      exposure: 0.3, envWound: 0.12, encounterMul: 1.2, kind: "flight",
       announce: [
-        "Le Capitole se montre généreux ce soir. Plusieurs parachutes argentés descendent en silence vers leurs favoris.",
-        "Les sponsors ouvrent leur bourse : des présents tombent du ciel pour les tributs les plus suivis."
+        "Les Juges ouvrent les vannes : une pluie tiède et rouge s'abat sur l'arène. Ce n'est pas de l'eau, et chacun le comprend vite.",
+        "Le ciel de l'arène vire au rouge et se met à pleuvoir du sang. On cherche un abri en glissant sur les feuilles poisseuses.",
+        "Une averse écarlate tambourine sur la canopée. Le Capitole veut voir les nerfs lâcher — et les tributs se rapprocher."
       ]
     },
     {

@@ -79,11 +79,16 @@
         function () { start(HG.flow.quickGame); })
     ]);
 
-    // --- Reprises et archives : discret, sur une ligne ---
+    // --- Charger un groupe déjà enregistré : bouton large et bien visible ---
+    var loadRow = rosters.length
+      ? el("button", { class: "load-btn big", onclick: function () { openLoadDialog(rosters); } },
+          ["Charger un groupe enregistré (" + rosters.length + ")"])
+      : null;
+
+    // --- Autres archives : discret, sur une ligne ---
     var libRow = el("div", { class: "lib-row" }, [
-      el("button", { class: "ghost", disabled: rosters.length === 0,
-        onclick: function () { openLoadDialog(rosters); } },
-        [rosters.length ? "Charger un groupe (" + rosters.length + ")" : "Aucun groupe enregistré"]),
+      rosters.length ? null
+        : el("button", { class: "ghost", disabled: true }, ["Aucun groupe enregistré"]),
       el("button", { class: "ghost", onclick: function () { importInput.click(); } }, ["Importer un fichier…"]),
       el("button", { class: "ghost", disabled: history.length === 0,
         onclick: function () { openHistoryDialog(history); } },
@@ -106,7 +111,7 @@
           "<span>L'arène</span><span>Les disparus</span><span>Un vainqueur</span>" })
       ]),
 
-      el("div", { class: "home-panel fade-in" }, [ modeBox, startRow, libRow ]),
+      el("div", { class: "home-panel fade-in" }, [ modeBox, startRow, loadRow, libRow ]),
 
       el("div", { class: "home-foot" }, [
         el("div", { class: "hf-col" }, [
@@ -158,7 +163,7 @@
           el("span", { class: "rd", text: "D" + h.district }),
           el("span", { html: "<b>" + HG.ui.escapeHtml(h.name) + "</b>" +
             (h.dual ? " &amp; " + HG.ui.escapeHtml(h.coName || "?") : "") +
-            " — " + HG.ui.escapeHtml(h.arena || "") + " · " + (h.days || "?") + " j · " + (h.kills || 0) + " élim." })
+            " — " + (h.days || "?") + " j · " + (h.kills || 0) + " élim." })
         ]);
       })),
       el("button", { class: "ghost", onclick: HG.ui.closeModal }, ["Fermer"])

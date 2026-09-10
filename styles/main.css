@@ -433,6 +433,23 @@ h1.home-title {
 .btn-card.primary .bc-sub { color: rgba(18,16,10,0.75); }
 .btn-card.primary:hover .bc-sub { color: rgba(18,16,10,0.85); }
 
+/* Charger un groupe enregistré : bouton large, pleine largeur du panneau */
+.load-btn {
+  width: 100%;
+  font-family: var(--serif-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.85em 1.2em;
+  border-color: var(--gold-dim);
+  color: var(--gold-hi);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
+}
+.load-btn:hover {
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+}
+
 .lib-row { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center; }
 .lib-row button { font-size: 0.74rem; padding: 0.5em 0.9em; }
 
@@ -924,7 +941,7 @@ hr.rule {
 }
 .stage .portraits figure { margin: 0; }
 .stage .portraits .p {
-  width: clamp(88px, 12vw, 150px);
+  width: clamp(112px, 15vw, 196px);
   aspect-ratio: 3 / 4;
   object-fit: cover;
   border: 1px solid color-mix(in srgb, var(--accent) 55%, #000);
@@ -932,7 +949,7 @@ hr.rule {
   display: block;
   transition: filter 0.4s ease;
 }
-.stage .portraits .p.big { width: clamp(120px, 17vw, 210px); border-width: 2px; }
+.stage .portraits .p.big { width: clamp(128px, 18vw, 224px); border-width: 2px; }
 .stage .portraits .p.dead {
   filter: grayscale(1) brightness(0.55) contrast(1.1);
   border-color: var(--red);
