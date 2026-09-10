@@ -49,7 +49,7 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
 2. **Présentation des tributs** — l'annonceur ouvre les Jeux, puis chaque district défile
    (portraits + noms).
 3. **Défilé des chars** — réactions de la foule → premiers points de sponsor.
-4. **Séances privées** — notes des Juges (1 à 12).
+4. **Séances privées** — notes des Juges (1 à 11).
 5. **Plateau de Caesar Flickerman** — interviews, district par district (celui des joueurs
    d'abord), avec la voix de Caesar et sa musique de thème pour les joueurs.
 6. **Le bain de sang** — phase interactive : chaque joueur choisit foncer / attraper-fuir /
