@@ -377,12 +377,33 @@
       if (HG.voice) { HG.voice.resume(); var on = HG.voice.toggle(); if (on) HG.voice.speak("Bonjour à tous.", "caesar"); }
       paintVoice();
     });
+    // L'icône doit dire dans quel sens on va : ⤢ pour entrer, ⤡ pour sortir.
+    function isFull() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement ||
+                document.mozFullScreenElement || document.msFullscreenElement);
+    }
+    function paintFull() {
+      var on = isFull();
+      fb.textContent = on ? "⤡" : "⤢";
+      fb.classList.toggle("on", on);
+      fb.title = on ? "Quitter le plein écran" : "Plein écran";
+      fb.setAttribute("aria-label", fb.title);
+    }
+    ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"]
+      .forEach(function (ev) { document.addEventListener(ev, paintFull); });
     fb.addEventListener("click", function () {
-      var d = document;
-      if (!d.fullscreenElement) (d.documentElement.requestFullscreen || function () {}).call(d.documentElement);
-      else (d.exitFullscreen || function () {}).call(d);
+      var d = document, e = d.documentElement;
+      var fn = isFull()
+        ? (d.exitFullscreen || d.webkitExitFullscreen || d.msExitFullscreen || function () {}).bind(d)
+        : (e.requestFullscreen || e.webkitRequestFullscreen || e.msRequestFullscreen || function () {}).bind(e);
+      var r;
+      try { r = fn(); } catch (err) { r = null; }
+      if (r && r.catch) r.catch(function () {});
+      // Filet : certains navigateurs (et les fenêtres embarquées qui refusent
+      // le plein écran) n'émettent pas l'événement — on repeint quand même.
+      setTimeout(paintFull, 160);
     });
-    paintSound(); paintVoice();
+    paintSound(); paintVoice(); paintFull();
   }
 
   // ---- Barre d'actions d'écran (#actions) --------------------
@@ -486,12 +507,19 @@
   // =========================================================
   //  SCÈNE DE PRÉSENTATION — un « beat » à la fois
   // =========================================================
-  // beat : { kicker, portraits:[{id,dead,cap,big}], text | lines:[...], cls,
-  //          cause, killer, cannon, ceremonyCannon, voice:{who}, hold, music,
-  //          stopMusic }
+  // beat : { kicker, portraits:[{id,dead,cap,big,camp,campLabel,more}], camps,
+  //          text | lines:[...], cls, cause, killer, betray,
+  //          stamp:{text,kind}, cannon, ceremonyCannon, voice:{who}, hold,
+  //          music, stopMusic }
+  //   camps + portraits[].camp : chaque camp est encadré à l'écran — on voit
+  //   qui se bat AVEC qui (alliances) et qui trahit qui.
+  //   stamp : gros bandeau d'un mot (« Trahison ») posé au-dessus du texte.
   //   lines[] : plusieurs phrases sur le même « plan » (mêmes portraits) qui
   //   s'accumulent une à une dans la même fenêtre. Un dénouement (mort /
   //   blessure) reste un beat distinct poussé APRÈS.
+  // Libellés de camp affichés au-dessus des cadres groupés.
+  var CAMP_LABEL = { traitor: "Traître", victim: "Trahi(e)" };
+
   function stage(host, beats, opts) {
     opts = opts || {};
     beats = beats.filter(Boolean);
@@ -500,11 +528,13 @@
     var stageEl = el("div", { class: "stage" });
     var kicker = el("div", { class: "beat-kicker" });
     var portraits = el("div", { class: "portraits" });
+    var stampEl = el("div", { class: "beat-stamp", hidden: true });
     var killTag = el("div", { class: "kill-tag", hidden: true });
     var textEl = el("div", { class: "beat-text" });
     var causeEl = el("div", { class: "beat-cause", hidden: true });
     stageEl.appendChild(kicker);
     stageEl.appendChild(portraits);
+    stageEl.appendChild(stampEl);
     stageEl.appendChild(killTag);
     stageEl.appendChild(textEl);
     stageEl.appendChild(causeEl);
@@ -605,26 +635,64 @@
 
       clear(portraits);
       var pics = b.portraits || [];
+      // Camps : on encadre chaque groupe pour visualiser les alliances.
+      var useCamps = !!b.camps && pics.some(function (pp) { return !!pp.camp; });
+      var groups = [];
       pics.forEach(function (pp) {
-        var t = pp.tribute || (pp.id ? HG.byId(pp.id) : null) || pp;
-        if (!t || !t.district) return;
-        var bg = portraitBg(t);
-        var cls = "p" + (pp.dead ? " dead" : "") + ((kill || pp.big) ? " big" : "");
-        var pic = bg
-          ? el("div", { class: cls, style: { backgroundImage: 'url("' + bg + '")', backgroundSize: "cover", backgroundPosition: "center" } })
-          : el("div", { class: cls, style: { display: "grid", placeItems: "center", fontSize: "3rem" }, text: t.emoji || "?" });
-        portraits.appendChild(el("figure", {}, [
-          pic,
-          el("figcaption", { class: "pcap", html:
-            "<b>" + escapeHtml(t.name) + "</b> · D" + t.district +
-            (pp.cap ? " · " + escapeHtml(pp.cap) : "") })
-        ]));
+        var key = useCamps ? (pp.camp || "solo") : "_";
+        var g = groups.length && groups[groups.length - 1].key === key ? groups[groups.length - 1] : null;
+        if (!g) { g = { key: key, items: [], label: null }; groups.push(g); }
+        g.items.push(pp);
+        if (pp.campLabel) g.label = pp.campLabel;
       });
+      groups.forEach(function (g) {
+        var box = portraits;
+        if (useCamps) {
+          var n = g.items.reduce(function (acc, pp) { return acc + (pp.more || 1); }, 0);
+          box = el("div", { class: "camp camp-" + g.key + (n > 1 ? " multi" : "") });
+          var lab = g.label || CAMP_LABEL[g.key] || (n > 1 ? "Alliance" : "");
+          if (lab) box.appendChild(el("span", { class: "camp-tag", text: lab }));
+          portraits.appendChild(box);
+        }
+        var row = useCamps ? el("div", { class: "camp-row" }) : box;
+        if (useCamps) box.appendChild(row);
+        g.items.forEach(function (pp) {
+          if (pp.more) { row.appendChild(el("div", { class: "camp-more", text: "+" + pp.more })); return; }
+          var t = pp.tribute || (pp.id ? HG.byId(pp.id) : null) || pp;
+          if (!t || !t.district) return;
+          var bg = portraitBg(t);
+          var cls = "p" + (pp.dead ? " dead" : "") + ((kill || pp.big) ? " big" : "");
+          var pic = bg
+            ? el("div", { class: cls, style: { backgroundImage: 'url("' + bg + '")', backgroundSize: "cover", backgroundPosition: "center" } })
+            : el("div", { class: cls, style: { display: "grid", placeItems: "center", fontSize: "3rem" }, text: t.emoji || "?" });
+          row.appendChild(el("figure", {}, [
+            pic,
+            el("figcaption", { class: "pcap", html:
+              "<b>" + escapeHtml(t.name) + "</b> · D" + t.district +
+              (pp.cap ? " · " + escapeHtml(pp.cap) : "") })
+          ]));
+        });
+      });
+      portraits.className = "portraits" + (useCamps ? " has-camps" : "");
       portraits.style.display = pics.length ? "flex" : "none";
+
+      // Bandeau d'un mot (trahison, défection…) : visible sans rien lire.
+      var betrayBeat = !!b.betray || !!(b.stamp && b.stamp.kind === "betray");
+      stageEl.classList.toggle("is-betray-beat", betrayBeat);
+      stampEl.hidden = !b.stamp;
+      if (b.stamp) {
+        stampEl.className = "beat-stamp " + (b.stamp.kind || "");
+        stampEl.textContent = b.stamp.text;
+        stampEl.classList.remove("stamp-in");
+        void stampEl.offsetWidth;          // relance l'animation à chaque beat
+        stampEl.classList.add("stamp-in");
+      }
 
       killTag.hidden = !kill;
       if (kill) {
-        killTag.innerHTML = "◆ ÉLIMINÉ" + (b.killer ? " &nbsp;·&nbsp; par <b>" + escapeHtml(b.killer) + "</b>" : "");
+        killTag.classList.toggle("betray", !!b.betray);
+        killTag.innerHTML = (b.betray ? "◆ TRAHI" : "◆ ÉLIMINÉ") +
+          (b.killer ? " &nbsp;·&nbsp; par <b>" + escapeHtml(b.killer) + "</b>" : "");
       }
       causeEl.hidden = !(kill && b.cause);
       if (kill && b.cause) causeEl.textContent = b.cause;

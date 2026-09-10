@@ -20,7 +20,7 @@ Le jeu est 100 % local, sans build ni installation.
 
   puis ouvrez `http://localhost:4202`. (Configuration déjà prête dans `.claude/launch.json`.)
 
-> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "22"`) et les
+> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "23"`) et les
 > `?v=22` des feuilles de style, pour forcer le navigateur à recharger.
 >
 > Pour **ajouter vos propres répliques** (Caesar, annonceur, événements, morts) :
@@ -49,7 +49,9 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
 2. **Présentation des tributs** — l'annonceur ouvre les Jeux, puis chaque district défile
    (portraits + noms).
 3. **Défilé des chars** — réactions de la foule → premiers points de sponsor.
-4. **Séances privées** — notes des Juges (1 à 11).
+4. **Séances privées** — notes des Juges. Le barème va jusqu'à 12, mais **personne
+   n'obtient 12** : la meilleure note possible est **11**, et elle est exceptionnelle
+   (~1 % des tributs). Un 11 est mis en évidence sur la carte.
 5. **Plateau de Caesar Flickerman** — interviews, district par district (celui des joueurs
    d'abord), avec la voix de Caesar et sa musique de thème pour les joueurs.
 6. **Le bain de sang** — phase interactive : chaque joueur choisit foncer / attraper-fuir /
@@ -61,11 +63,19 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
    lâche les tributs, et le bain de sang commence.
 7. **Les manches d'arène** — l'action défile **message par message**. Chaque manche : un
    événement des Juges parmi ~30, des **incidents** (chute de falaise, baies empoisonnées,
-   noyade, morsure venimeuse, infection, épuisement…), des rencontres — 2 phrases (une
+   noyade, morsure venimeuse, infection, épuisement, **déshydratation**— on ne meurt
+   jamais **de faim** dans l'arène, seulement de soif), des rencontres — 2 phrases (une
    ouverture, puis un développement **choisi selon l'issue** pour rester cohérent),
    accumulées dans la même fenêtre ; le dénouement (mort, blessure) arrive comme temps
    fort **séparé**. **Aucune phrase n'est répétée dans la partie.** La page défile toute
-   seule pour suivre le texte. Chaque tribut porte **une arme** (montrée à la Moisson et
+   seule pour suivre le texte (et **la barre de défilement est masquée** — rien ne vient
+   casser la mise en scène sur l'écran du salon).
+   Quand plusieurs tributs se battent ensemble, **chaque camp est encadré à l'écran**
+   avec la mention « Alliance » : on voit d'un coup d'œil qui est avec qui.
+   Une **trahison** (nuit dans une alliance, meute des Carrières qui se déchire,
+   Carrière qui plante la meute au bain de sang) s'annonce par un grand bandeau
+   rouge d'**un seul mot** — TRAHISON, DÉFECTION — avec le traître encadré en rouge ;
+   la mort qui suit est étiquetée « ◆ TRAHI ». Chaque tribut porte **une arme** (montrée à la Moisson et
    à la Corne, joueurs
    d'abord) qui le suit toute la partie et qui **compte selon la situation** : un arc écrase
    à distance et ne vaut rien au corps-à-corps, une lance tient l'ennemi à distance, des
@@ -85,7 +95,9 @@ Plein écran (bouton ⤢ en bas à droite, ou F11) pour l'affichage sur une TV.
    de partie et se joue si les deux sont les derniers). **Une partie ne dépasse jamais
    7 jours** : les Juges resserrent l'arène à l'approche (le plus souvent, ça se termine
    au jour 5 ou 6). Récapitulatif : chronologie, éliminations, chouchou du salon, graine
-   d'arène pour rejouer.
+   d'arène pour rejouer. Les records (« plus d'éliminations », « chouchou du salon »)
+   acceptent les **ex æquo** : tous les tributs à égalité sont cités, jamais un seul
+   tiré au hasard.
 
 ## Lecture (barre du bas, pendant la présentation)
 
@@ -103,6 +115,19 @@ bouton du bas.
   le débit des voix. Le curseur et son libellé ne bougent plus quand on change de cran.
 - Une fine **barre de progression** (fil d'Ariane) court sur le haut de la barre du bas —
   elle ne se décale jamais avec le texte.
+- Le bouton **plein écran** (en bas à droite) change de sens selon l'état : ⤢ pour
+  entrer, ⤡ pour sortir.
+
+## L'accueil
+
+L'écran d'accueil s'appelle **Hunger Games** et porte sa propre ambiance, qu'on ne
+retrouve nulle part ailleurs dans le jeu : projecteurs du Capitole qui balayent
+lentement le fond, grain de retransmission, vignette, poussière d'or qui monte,
+point rouge « en direct » et reflet qui passe sur le titre. La mise en page va
+droit au but : sceau + titre, les **deux façons de lancer** côte à côte (créer ses
+tributs / jouer avec ceux du film), les reprises et archives sur une ligne
+discrète, puis l'aide et la note de vie privée en pied de page. Tout se coupe si
+le système demande moins d'animations (`prefers-reduced-motion`).
 
 ## Identité visuelle par phase
 

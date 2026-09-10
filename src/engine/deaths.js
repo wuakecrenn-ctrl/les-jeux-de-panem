@@ -8,7 +8,7 @@
      • ENCOUNTER ..... par type de rencontre (melee, ranged, ambush, hunt,
                        betrayal, pack_turn, duel) — { line, cause }
      • INCIDENTS ..... morts solo sans tueur (fall, berries, drown, snake,
-                       infection, exhaustion, starvation, quicksand)
+                       infection, exhaustion, dehydration, quicksand)
      • ENVIRON ....... morts dues à un grand événement des Juges (clé = id
                        de l'événement dans events.js)
    {k} = tueur, {v} = victime (mis en surbrillance automatiquement).
@@ -202,11 +202,11 @@
               "{v} saute d'un rocher à l'autre au-dessus du torrent. Le deuxième était trop loin.",
               "La branche sur laquelle {v} s'était hissé(e) pour voir venir craque d'un coup."] },
     { type: "berries", cause: "baies empoisonnées",
-      lines: ["Affamé(e), {v} avale une poignée de baies sombres et sucrées. Une seule aurait suffi.",
+      lines: ["Assoiffé(e), {v} avale une poignée de baies sombres et gorgées d'eau. Une seule aurait suffi.",
               "{v} confond deux buissons presque identiques. L'erreur ne pardonne pas.",
               "Les baies étaient belles, luisantes de rosée. {v} n'a pas tenu jusqu'au matin.",
               "{v} teste une baie sur la langue, attend, en mange trois. C'était trois de trop.",
-              "Un champignon pâle au pied d'un arbre. {v} avait trop faim pour se méfier."] },
+              "Un champignon pâle au pied d'un arbre. {v} n'a pas pris le temps de se méfier."] },
     { type: "drown", cause: "noyade",
       lines: ["Le courant du gué est plus fort qu'il n'en a l'air. {v} est emporté(e) sous les yeux des caméras.",
               "{v} traverse le lac à la nage pour semer un poursuivant. Le milieu est loin, très loin.",
@@ -226,14 +226,18 @@
               "{v} n'a pas nettoyé la coupure. L'eau croupie de l'arène s'en est chargée."] },
     { type: "exhaustion", cause: "épuisement",
       lines: ["{v} n'a pas dormi depuis deux nuits. Le corps décide seul de s'arrêter.",
-              "À force de fuir sans manger, {v} s'effondre au milieu d'une clairière et ne se relève pas.",
+              "À force de fuir sans boire, {v} s'effondre au milieu d'une clairière et ne se relève pas.",
               "Le cœur de {v} lâche dans la montée. L'arène ne laisse pas de répit.",
               "{v} s'assoit « juste une minute » contre un arbre. La minute ne finit pas."] },
-    { type: "starvation", cause: "faim et froid",
-      lines: ["{v} n'a rien trouvé à manger depuis le premier jour. Le froid finit le travail.",
-              "Recroquevillé(e) sans feu, {v} s'endort une dernière fois.",
-              "La faim rend {v} imprudent(e) ; l'imprudence, immobile.",
-              "{v} a partagé sa dernière ration deux jours plus tôt. Le compte est venu."] },
+    { type: "dehydration", cause: "déshydratation",
+      lines: ["{v} n'a plus rien bu depuis deux jours. La gorge d'abord, la tête ensuite, puis plus rien.",
+              "Le dernier point d'eau de {v} était à sec. Le suivant était trop loin.",
+              "{v} boit l'eau croupie d'une flaque faute de mieux. Le corps refuse les deux.",
+              "La soif rend {v} imprudent(e) ; l'imprudence, immobile.",
+              "{v} a partagé sa dernière gourde deux jours plus tôt. Le compte est venu.",
+              "{v} marche vers un ruisseau qui n'existe que dans sa tête, et ne va pas plus loin.",
+              "Les lèvres fendues, {v} s'assoit à l'ombre pour attendre la fraîcheur. Elle vient trop tard.",
+              "{v} n'avait plus la force de descendre jusqu'à la rivière. Elle coulait à trois cents mètres."] },
     { type: "quicksand", cause: "enlisement",
       lines: ["Le sol devient mou sous les bottes de {v}. Plus on se débat, plus on s'enfonce.",
               "{v} s'engage dans la tourbière pour couper au plus court. Mauvais calcul.",
@@ -241,6 +245,9 @@
   ];
   var INCIDENT_BY_TYPE = {};
   INCIDENTS.forEach(function (x) { INCIDENT_BY_TYPE[x.type] = x; });
+  // On ne meurt pas de faim dans l'arène — seulement de soif. Tout ancien
+  // identifiant « starvation » retombe donc sur la déshydratation.
+  INCIDENT_BY_TYPE.starvation = INCIDENT_BY_TYPE.dehydration;
 
   // --- Environnement (grands événements des Juges) -----------------
   var ENVIRON = {
@@ -257,8 +264,8 @@
       "{v} porte un allié blessé et perd la course contre la nappe jaune.",
       "Le brouillard rattrape {v} à trois pas de la crête."],
     nightlock: [
-      "Affamé(e), {v} goûte les baies noires des Juges. Une bouchée suffit.",
-      "Les Juges ont semé le nightlock sur le sentier de {v}. La faim a fait le reste."],
+      "Assoiffé(e), {v} goûte les baies noires des Juges. Une bouchée suffit.",
+      "Les Juges ont semé le nightlock sur le sentier de {v}. La soif a fait le reste."],
     quake: [
       "Un ravin s'ouvre sous les pas de {v}. Le sol se referme.",
       "L'arbre-refuge de {v} bascule quand la faille traverse ses racines."],

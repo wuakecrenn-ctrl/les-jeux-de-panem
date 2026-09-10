@@ -11,25 +11,52 @@
   }
   function setMode(m) { try { HG.storage.saveSettings({ mode: m }); } catch (e) {} }
 
+  // Couche d'ambiance — UNIQUEMENT sur l'accueil : projecteurs du Capitole,
+  // grain de retransmission, poussière d'or. Tout est décoratif (aria-hidden)
+  // et se coupe si le système demande moins d'animations.
+  function atmosphere() {
+    var motes = el("div", { class: "fx-motes" });
+    for (var i = 0; i < 14; i++) {
+      motes.appendChild(el("i", { style: {
+        left: (3 + i * 7 + (i % 3) * 2) + "%",
+        animationDelay: (-i * 1.7).toFixed(1) + "s",
+        animationDuration: (13 + (i % 5) * 3.5).toFixed(1) + "s"
+      }}));
+    }
+    return el("div", { class: "home-fx", "aria-hidden": "true" }, [
+      el("div", { class: "fx-beams" }),
+      el("div", { class: "fx-vignette" }),
+      el("div", { class: "fx-scan" }),
+      motes
+    ]);
+  }
+
+  function btnCard(cls, label, sub, onClick) {
+    return el("button", { class: "btn-card " + cls, onclick: onClick }, [
+      el("span", { class: "bc-label", text: label }),
+      el("span", { class: "bc-sub", text: sub })
+    ]);
+  }
+
   HG.ui.register("home", function () {
     HG.ui.setPhase("home", { wipe: false });
     var rosters = HG.storage.listRosters();
     var history = HG.storage.listHistory();
     var mode = currentMode();
 
-    // --- Sélecteur de mode ---
-    var modeBox = el("div", { class: "frame tight stack-s", style: { maxWidth: "560px", margin: "0 auto" } });
-    modeBox.appendChild(el("p", { class: "kicker", style: { margin: 0 }, text: "Mode de jeu" }));
-    var modeRow = el("div", { class: "btn-group", style: { justifyContent: "center" } });
+    // --- Sélecteur de mode : segmenté, compact ---
+    var modeRow = el("div", { class: "seg", role: "group", "aria-label": "Mode de jeu" });
     ["simple", "advanced"].forEach(function (m) {
       var info = HG.GAME_MODES[m];
-      var b = el("button", { class: mode === m ? "primary" : "", onclick: function () {
+      modeRow.appendChild(el("button", { class: mode === m ? "on" : "", onclick: function () {
         setMode(m); HG.ui.go("home");
-      }}, [info.label]);
-      modeRow.appendChild(b);
+      }}, [info.label]));
     });
-    modeBox.appendChild(modeRow);
-    modeBox.appendChild(el("p", { class: "tiny muted", style: { margin: 0 }, text: HG.GAME_MODES[mode].blurb }));
+    var modeBox = el("div", { class: "mode-box" }, [
+      el("p", { class: "kicker", style: { margin: 0 }, text: "Mode de jeu" }),
+      modeRow,
+      el("p", { class: "tiny muted", style: { margin: 0 }, text: HG.GAME_MODES[mode].blurb })
+    ]);
 
     var importInput = el("input", { type: "file", accept: ".json,application/json", style: { display: "none" } });
     importInput.addEventListener("change", function () {
@@ -40,51 +67,64 @@
       });
     });
 
-    var loadBtn = el("button", { class: "big", disabled: rosters.length === 0,
-      onclick: function () { openLoadDialog(rosters); } },
-      [rosters.length ? "Charger un groupe (" + rosters.length + ")" : "Aucun groupe enregistré"]);
-    var histBtn = el("button", { class: "ghost", disabled: history.length === 0,
-      onclick: function () { openHistoryDialog(history); } },
-      ["Palmarès des vainqueurs" + (history.length ? " (" + history.length + ")" : "")]);
+    function start(fn) {
+      HG.audio.unlock(); if (HG.voice) HG.voice.resume(); HG.audio.confirm(); fn();
+    }
 
-    return el("div", { class: "stack center fade-in" }, [
-      el("div", { class: "capitol-seal", role: "img", "aria-label": "Sceau du Capitole" }),
-      el("p", { class: "kicker", text: "Retransmission officielle du Capitole" }),
-      el("h1", { text: "Les Jeux de Panem" }),
-      el("p", { class: "muted", style: { maxWidth: "60ch", margin: "0 auto" }, text:
-        "Un jeu de soirée pour le salon, en hommage au film. Créez vos tributs, lancez la " +
-        "Moisson, et suivez les 74ᵉ Hunger Games manche après manche : présentation, défilé, " +
-        "plateau de Caesar, puis l'arène — événements des Juges, cérémonie des disparus, un vainqueur." }),
+    // --- Deux façons de lancer : mises en avant à égalité ---
+    var startRow = el("div", { class: "start-row" }, [
+      btnCard("primary", "Créer les tributs", "Le salon entre dans l'arène : un nom, une photo, un district.",
+        function () { start(HG.flow.newGame); }),
+      btnCard("", "Jouer avec les tributs du film", "Les 24 tributs d'origine, directement à la Moisson.",
+        function () { start(HG.flow.quickGame); })
+    ]);
 
-      modeBox,
+    // --- Reprises et archives : discret, sur une ligne ---
+    var libRow = el("div", { class: "lib-row" }, [
+      el("button", { class: "ghost", disabled: rosters.length === 0,
+        onclick: function () { openLoadDialog(rosters); } },
+        [rosters.length ? "Charger un groupe (" + rosters.length + ")" : "Aucun groupe enregistré"]),
+      el("button", { class: "ghost", onclick: function () { importInput.click(); } }, ["Importer un fichier…"]),
+      el("button", { class: "ghost", disabled: history.length === 0,
+        onclick: function () { openHistoryDialog(history); } },
+        ["Palmarès" + (history.length ? " (" + history.length + ")" : "")]),
+      importInput
+    ]);
 
-      el("div", { class: "btn-group", style: { justifyContent: "center", marginTop: "1.4rem" } }, [
-        el("button", { class: "primary big", onclick: function () {
-          HG.audio.unlock(); if (HG.voice) HG.voice.resume(); HG.audio.confirm();
-          HG.flow.newGame();
-        }}, ["Créer les tributs"]),
-        el("button", { class: "big", onclick: function () {
-          HG.audio.unlock(); if (HG.voice) HG.voice.resume(); HG.audio.confirm();
-          HG.flow.quickGame();
-        }}, ["Jouer avec les tributs du film"]),
-        loadBtn,
-        el("button", { class: "ghost", onclick: function () { importInput.click(); } }, ["Importer un fichier de groupe"]),
-        histBtn,
-        importInput
+    return el("div", { class: "home" }, [
+      atmosphere(),
+
+      el("div", { class: "home-hero fade-in" }, [
+        el("div", { class: "capitol-seal", role: "img", "aria-label": "Sceau du Capitole" }),
+        el("p", { class: "kicker live", text: "Retransmission officielle du Capitole" }),
+        el("h1", { class: "home-title", text: "Hunger Games" }),
+        el("p", { class: "home-sub", text:
+          "Un jeu de soirée pour le salon, en hommage au film. Créez vos tributs, " +
+          "lancez la Moisson, et suivez les 74ᵉ Hunger Games manche après manche." }),
+        el("p", { class: "home-steps", html:
+          "<span>Présentation</span><span>Défilé</span><span>Plateau de Caesar</span>" +
+          "<span>L'arène</span><span>Les disparus</span><span>Un vainqueur</span>" })
       ]),
 
-      el("p", { class: "tiny muted", style: { maxWidth: "62ch", margin: "1.2rem auto 0" }, text:
-        "Pendant la partie, les messages défilent tout seuls : cliquez n'importe où sur " +
-        "l'écran pour avancer, ⏸ pour mettre en pause (touche P). La barre du bas règle " +
-        "la vitesse de lecture. Son / voix / plein écran : en bas à droite." }),
+      el("div", { class: "home-panel fade-in" }, [ modeBox, startRow, libRow ]),
 
-      el("hr", { class: "rule" }),
-      el("p", { class: "tiny muted", style: { maxWidth: "58ch", margin: "0 auto" }, html:
-        "<b>Vie privée —</b> tout se passe sur cet ordinateur. Les tributs, photos et " +
-        "résultats sont enregistrés dans le navigateur (stockage local) et ne sont jamais " +
-        "envoyés sur Internet." }),
-      el("button", { class: "ghost tiny", style: { marginTop: "0.6rem" }, onclick: openWipeDialog },
-        ["Effacer mes données locales"])
+      el("div", { class: "home-foot" }, [
+        el("div", { class: "hf-col" }, [
+          el("p", { class: "hf-title", text: "Pendant la partie" }),
+          el("p", { class: "tiny muted", text:
+            "Les messages défilent tout seuls : cliquez n'importe où pour avancer, " +
+            "⏸ ou la touche P pour mettre en pause. La barre du bas règle la vitesse ; " +
+            "son, voix et plein écran sont en bas à droite." })
+        ]),
+        el("div", { class: "hf-col" }, [
+          el("p", { class: "hf-title", text: "Vie privée" }),
+          el("p", { class: "tiny muted", text:
+            "Tout se passe sur cet ordinateur. Les tributs, photos et résultats sont " +
+            "enregistrés dans le navigateur (stockage local) et ne sont jamais envoyés " +
+            "sur Internet." }),
+          el("button", { class: "ghost tiny", onclick: openWipeDialog }, ["Effacer mes données locales"])
+        ])
+      ])
     ]);
   });
 

@@ -103,13 +103,14 @@
       : HG.commentary.claudius.victor(victors[0].name) }));
 
     // --- Chiffres clés ---
-    var topKiller = st.tributes.slice().sort(function (a, b) { return b.kills.length - a.kills.length; })[0];
-    var topFavor = st.tributes.slice().sort(function (a, b) { return b.roomFavor - a.roomFavor; })[0];
+    // Ex æquo : plusieurs tributs peuvent partager le record d'éliminations
+    // (ou la faveur du salon) — on les cite tous, jamais un seul au hasard.
     root.appendChild(el("div", { class: "row", style: { justifyContent: "center", marginTop: "1rem" } }, [
       pill("Jours de Jeux", st.day),
       pill("Tributs tombés", st.deaths.length),
-      pill("Plus d'éliminations", topKiller && topKiller.kills.length ? topKiller.name + " (" + topKiller.kills.length + ")" : "—"),
-      pill("Chouchou du salon", topFavor && topFavor.roomFavor ? topFavor.name : "—"),
+      tiePill("Plus d'éliminations", st.tributes, function (t) { return t.kills.length; },
+        function (n) { return " (" + n + ")"; }),
+      tiePill("Chouchou du salon", st.tributes, function (t) { return t.roomFavor; }, null),
       pill("Graine d'arène", st.seed)
     ]));
 
@@ -186,6 +187,20 @@
 
   function pill(label, value) {
     return el("span", { class: "count-pill", html: label + " <b>" + HG.escapeHtml(String(value)) + "</b>" });
+  }
+  // Pastille « record » qui accepte les égalités : tous les ex æquo sont cités.
+  function tiePill(label, tributes, valueOf, suffixOf) {
+    var best = 0;
+    tributes.forEach(function (t) { best = Math.max(best, valueOf(t) || 0); });
+    if (!best) return pill(label, "—");
+    var tied = tributes.filter(function (t) { return (valueOf(t) || 0) === best; });
+    // Un ex æquo à rallonge ne tient pas dans la pastille : on en cite trois.
+    var names = tied.slice(0, 3).map(function (t) { return t.name; }).join(" · ") +
+      (tied.length > 3 ? " +" + (tied.length - 3) : "");
+    var txt = names + (suffixOf ? suffixOf(best) : "");
+    var node = el("span", { class: "count-pill" + (tied.length > 1 ? " tie" : ""), html:
+      label + (tied.length > 1 ? " <i>ex æquo</i>" : "") + " <b>" + HG.escapeHtml(txt) + "</b>" });
+    return node;
   }
   function th(t) { return el("th", { text: t }); }
   function td(t) { return el("td", { text: String(t) }); }

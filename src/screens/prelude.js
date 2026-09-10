@@ -35,7 +35,12 @@
       var base = (s.str + s.agi + s.cun + s.sur) / 4 + s.cha * 0.15;
       base += (t.career ? 1.5 : 0) + rng.f() * 2.4 - 0.8;
       if (t.skills) base += t.skills.length * 0.6;
-      t.trainingScore = HG._clamp(Math.round(base), 1, 12);
+      // Barème officiel : 1 à 12. Mais 12 n'a jamais été donné, et 11 est
+      // déjà exceptionnel — on plafonne donc à 10, et le 11 ne tombe que sur
+      // une prestation hors norme (et pas systématiquement).
+      var note = HG._clamp(Math.round(base), 1, 10);
+      if (base >= 10.6 && rng.chance(0.45)) note = 11;
+      t.trainingScore = note;
     });
 
     // --- 1. Présentation des tributs ---
@@ -130,14 +135,17 @@
     }
 
     if (S.grid) {
-      root.appendChild(el("p", { class: "muted", text: "Les Juges notent chaque tribut de 1 à 12. Le Capitole entier retient son souffle." }));
+      root.appendChild(el("p", { class: "muted", text:
+        "Les Juges notent chaque tribut sur 12. Personne n'a jamais obtenu 12 : " +
+        "un 11 est déjà exceptionnel, et c'est la meilleure note que l'on voie dans ces Jeux." }));
       var grid = el("div", { class: "grid tributes" });
       HG.state.get().tributes.forEach(function (t) {
         var card = HG.ui.tributeCard(t, { showSkills: HG.state.get().mode === "advanced", showWeapon: true });
+        var top = t.trainingScore >= 11;
         card.appendChild(el("div", { class: "body", style: { paddingTop: 0 } }, [
           el("div", { class: "row between" }, [
-            el("span", { class: "tiny muted", text: "Note des Juges" }),
-            el("span", { style: { color: "var(--accent-hi)", fontFamily: "var(--serif-display)", fontSize: "1.35rem" }, text: t.trainingScore })
+            el("span", { class: "tiny muted", text: top ? "Note des Juges · exceptionnel" : "Note des Juges" }),
+            el("span", { class: "judge-note" + (top ? " top" : ""), text: t.trainingScore })
           ])
         ]));
         grid.appendChild(card);

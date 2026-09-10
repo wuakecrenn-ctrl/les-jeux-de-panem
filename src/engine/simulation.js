@@ -23,6 +23,18 @@
     if (extra) for (var k in extra) o[k] = extra[k];
     return o;
   }
+  // Portraits d'un CAMP : la clé `camp` fait dessiner un cadre autour du
+  // groupe à l'écran (voir ui.js) — on voit d'un coup d'œil qui se bat avec
+  // qui. Au-delà de 3 portraits, une pastille « +N » complète le camp.
+  function campPorts(list, key, extra) {
+    var out = list.slice(0, 3).map(function (t) {
+      var o = port(t, extra);
+      if (key) o.camp = key;
+      return o;
+    });
+    if (list.length > 3 && key) out.push({ more: list.length - 3, camp: key });
+    return out;
+  }
 
   // ---- Application d'une issue de combat --------------------------
   // Renvoie un beat "kill", un beat "blessure", ou null.
@@ -87,6 +99,8 @@
         text: phrase.text,
         cause: phrase.cause,
         killer: hasKiller ? killer.name : null,
+        // trahison : l'étiquette de mort le dit en un mot (voir ui.js)
+        betray: o.kind === "betrayal" || o.kind === "pack_turn",
         cls: "kill", cannon: true
       };
     }
@@ -126,7 +140,7 @@
   }
 
   // ---- Incidents solo (chutes, poison, noyade, infection…) --------
-  var DEFAULT_INCIDENTS = ["fall", "berries", "snake", "infection", "exhaustion"];
+  var DEFAULT_INCIDENTS = ["fall", "berries", "snake", "infection", "exhaustion", "dehydration"];
   function runIncidents(ev, beats) {
     var st = S();
     var rng = st.rng;
@@ -155,7 +169,7 @@
       if (t.career) p *= 0.8;
       // compétences (mode avancé)
       p *= HG.skillResist(t, type);
-      if (t.allies.length && (type === "infection" || type === "starvation" || type === "exhaustion")) p *= 0.7;
+      if (t.allies.length && (type === "infection" || type === "dehydration" || type === "exhaustion")) p *= 0.7;
 
       if (rng.chance(HG._clamp(p, 0, 0.55))) {
         hits++;
@@ -190,7 +204,7 @@
     if (healed.length) {
       var uniq = healed.filter(function (t, i, a) { return a.indexOf(t) === i; });
       var plural = uniq.length > 1;
-      beats.push({ portraits: uniq.slice(0, 3).map(function (t) { return port(t); }), cls: "",
+      beats.push({ portraits: campPorts(uniq, "a", { campLabel: "Alliance" }), camps: true, cls: "",
         text: line(rng, [
           "Un guérisseur s'active : " + names(uniq.slice(0, 3)) + " repart" + (plural ? "ent" : "") + " en meilleure forme.",
           names(uniq.slice(0, 3)) + " met" + (plural ? "tent" : "") + " à profit la nuit pour nettoyer et recoudre les plaies.",
@@ -303,9 +317,9 @@
     "{DEUX} se font face au bord de l'eau. Les nombres ne sont pas les mêmes des deux côtés.",
     "{A} se déploient sans un mot — chacun sait déjà quoi faire.",
     "L'un des alliés de {A} siffle ; les autres se figent, puis avancent ensemble.",
-    "{B} tombe sur {A} au détour d'un rocher et compte trop de silhouettes d'un coup.",
-    "{A} encerclent lentement la clairière. Au centre, {B} met du temps à le comprendre.",
-    "Face au groupe de {A}, {B} calcule ses chances.",
+    "{B} tombe{tB} sur {A} au détour d'un rocher et compte{tB} trop de silhouettes d'un coup.",
+    "{A} encerclent lentement la clairière. Au centre, {B} tarde{tB} à comprendre ce qui se referme.",
+    "Face au groupe de {A}, {B} calcule{tB} ses chances.",
     "{A} laissent l'un des leurs se montrer comme appât ; les autres sont déjà en position.",
     "{A} arrivent en marchant, presque tranquilles. À plusieurs, on ne se presse pas.",
     "{DEUX} s'arrêtent à vingt pas. On compte les silhouettes des deux côtés."
@@ -329,6 +343,18 @@
     "{SMALL} se bat pour deux, vise juste, tient bon. À {nbig} contre {nsmall}, ça ne suffit pas.",
     "{SMALL} fonce sur un seul adversaire pour briser le groupe. Le groupe ne se brise pas.",
     "Le courage de {SMALL} ne rattrape pas l'arithmétique."
+  ];
+
+  // NUMBERS_WIN_MANY — même idée, mais les DEUX camps sont des groupes :
+  //   aucune phrase ne pose de verbe sur {SMALL} (son nombre varie).
+  var NUMBERS_WIN_MANY = [
+    "Le compte est simple : {nbig} contre {nsmall}. À chaque échange, il reste un adversaire de trop en face.",
+    "{BIG} avancent en tenaille ; il n'y a pas assez de bras en face pour tenir les deux côtés.",
+    "{BIG} se relaient — l'un frappe, se retire, un autre prend le relais. En face, personne ne souffle.",
+    "Chaque erreur coûte double quand on est moins nombreux, et il en vient une du côté de {SMALL}.",
+    "{BIG} gardent la formation. En face, la ligne se troue, puis cède d'un coup.",
+    "À {nbig} contre {nsmall}, {BIG} n'ont qu'à garder la pression et laisser le temps faire le reste.",
+    "Le surnombre de {BIG} finit par ouvrir une brèche que rien, en face, ne vient refermer."
   ];
 
   // WEAPON_WIN / WEAPON_LOSE — une arme a fait la différence.
@@ -404,19 +430,19 @@
   // GROUP_MID — 2e ligne neutre quand au moins un camp est un GROUPE et que
   //   rien n'a tranché. {A} = camp le plus nombreux (pluriel). {B} = l'autre.
   var GROUP_MID = [
-    "{A} avancent en ligne, méthodiques. {B} recule sans trouver d'ouverture.",
+    "{A} avancent en ligne, méthodiques. {B} recule{tB} sans trouver d'ouverture.",
     "{A} se passent {B} de l'un à l'autre : chacun frappe puis se retire.",
     "{A} gardent la formation ; impossible pour {B} de prendre qui que ce soit à revers.",
     "{A} ne se pressent pas. Le temps joue contre {B}, pas contre eux.",
-    "{B} touche un des alliés de {A}. Deux autres comblent le trou aussitôt.",
-    "{A} resserrent le cercle d'un pas. {B} le sent se refermer.",
-    "{B} cherche la faille dans le groupe de {A}. Il n'y en a pas encore."
+    "{B} touche{tB} un des alliés de {A}. Deux autres comblent le trou aussitôt.",
+    "{A} resserrent le cercle d'un pas. En face, on le sent se refermer.",
+    "{B} cherche{tB} la faille dans le groupe de {A}. Il n'y en a pas encore."
   ];
   // GROUP_STANDOFF — fin sans mort, camp = groupe. {A} = plus nombreux.
   var GROUP_STANDOFF = [
     "{A} laissent filer {B} : la poursuite coûterait un blessé de trop.",
     "Un canon ailleurs dans l'arène disperse tout le monde avant l'assaut de {A}.",
-    "{B} se glisse entre deux alliés de {A} et disparaît dans le couvert.",
+    "{B} se glisse{tB} entre deux alliés de {A} et file{tB} dans le couvert.",
     "{A} rompent d'eux-mêmes : pas la peine de risquer un des leurs pour si peu.",
     "Le brouillard des Juges avale la clairière. {A} et {B} décrochent."
   ];
@@ -427,10 +453,10 @@
     "Deux corps à bout de forces qui s'accrochent l'un à l'autre. Ça ne tient plus qu'à la volonté.",
     "{DEUX} devraient déjà être à terre. {DEUX} sont pourtant encore debout.",
     "Chacun a saigné, chacun a manqué le coup décisif. Ça se joue au prochain.",
-    "Le combat dure trop longtemps pour ce que ça vaut. Personne ne lâche.",
+    "Le combat dure trop longtemps pour ce que ça vaut. Il faudra bien que l'un des deux lâche.",
     "{DEUX} se regardent, essoufflés, et repartent quand même.",
     "Une rencontre qui aurait dû finir en dix secondes en dure cent.",
-    "Le premier à faiblir est mort, et {DEUX} le savent. Aucun ne faiblit — pour l'instant.",
+    "Le premier à faiblir est mort, et {DEUX} le savent. L'un des deux va faiblir.",
     "Coup pour coup, chute pour chute. Il faut un rien pour que ça bascule."
   ];
 
@@ -439,7 +465,7 @@
   var STANDOFF = [
     "{DEUX} rompent le combat, à bout de souffle, et s'éclipsent chacun de son côté.",
     "Un cri au loin fait décrocher les deux camps avant le coup décisif.",
-    "Reculade de {A} ; {B} ne poursuit pas. Personne n'a l'énergie d'en finir.",
+    "Reculade de {B} ; {A} ne poursuit pas. Personne n'a l'énergie d'en finir.",
     "Match nul : {DEUX} se séparent en se surveillant du coin de l'œil.",
     "Les coups s'espacent, puis s'arrêtent d'un commun accord — pour cette fois.",
     "{B} bat en retraite dans les fourrés ; {A} ramasse ce qui traîne et disparaît.",
@@ -476,11 +502,22 @@
            .replace(/[Nn]i \{A\} ni \{B\}/g, "ni un camp ni l'autre")
            .replace(/\{A\} et \{B\}/g, deux);
     }
-    var out = s.replace(/\{A\}/g, unitName(a)).replace(/\{B\}/g, unitName(b))
+    // {tB} : terminaison du verbe qui porte sur {B} (rien au singulier, "nt"
+    // au pluriel). N'employer QUE des verbes du 1er groupe sur {B}.
+    var out = s.replace(/\{tB\}/g, b.length > 1 ? "nt" : "")
+               .replace(/\{A\}/g, unitName(a)).replace(/\{B\}/g, unitName(b))
                .replace(/\{DEUX\}/g, deux)
                .replace(/\{na\}/g, String(a.length)).replace(/\{nb\}/g, String(b.length))
                .replace(/ et les siens et /g, " et les siens, face à ");
     return out.charAt(0).toUpperCase() + out.slice(1);   // début de phrase
+  }
+  // Remplit un modèle NUMBERS_WIN. prep() évite « de les Carrières ».
+  function fillNumbers(tpl, big, small, nbig, nsmall) {
+    return cap(tpl
+      .replace(/ de \{BIG\}/g, " " + prep("de", big)).replace(/ à \{BIG\}/g, " " + prep("à", big))
+      .replace(/ de \{SMALL\}/g, " " + prep("de", small)).replace(/ à \{SMALL\}/g, " " + prep("à", small))
+      .replace(/\{BIG\}/g, big).replace(/\{SMALL\}/g, small)
+      .replace(/\{nbig\}/g, String(nbig)).replace(/\{nsmall\}/g, String(nsmall)));
   }
   function wkVal(t, kind) { return HG.weaponKindBonus ? HG.weaponKindBonus(t, kind) : 0; }
   // Tribut « vedette » d'un camp pour parler de son arme : un joueur d'abord.
@@ -513,19 +550,31 @@
   // Un affrontement = UNE fenêtre où les phrases s'accumulent. L'issue (mort /
   // blessure / repli) est poussée APRÈS, comme beat distinct.
   function narrateClash(a, b, kind, res, rng) {
-    var na = a.length, nb = b.length;
     var winIds = res.winners || [];
     function won(t) { return winIds.indexOf(t.id) !== -1; }
-    var aWon = a.some(won);
+
+    // COHÉRENCE — {A} désigne TOUJOURS le camp qui prend l'ascendant.
+    // Les pools d'approche (traque, embuscade, tir) racontent {A} en train de
+    // mener la rencontre : si {A} était le perdant, la scène disait l'inverse
+    // de son dénouement (« {A} tient {B} en joue » puis {A} meurt).
+    if (!a.some(won) && b.some(won)) { var swap = a; a = b; b = swap; }
+
+    var na = a.length, nb = b.length;
     // « décisif » = quelqu'un meurt dans cette rencontre. Sinon (repli, simple
     // blessure), on reste sur du neutre : le nombre / l'arme n'ont rien tranché.
     var decisive = (res.outcomes || []).some(function (o) { return o.result === "death"; });
-    var ppl = a.slice(0, 2).map(function (t) { return port(t); })
-             .concat(b.slice(0, 2).map(function (t) { return port(t); }));
     var grouped = na > 1 || nb > 1;
-    // Pour APPROACH_GROUP, {A} doit être le camp le plus nombreux (pluriel-safe).
+
+    // Pour APPROACH_GROUP / GROUP_MID, {A} doit être le camp le plus NOMBREUX
+    // (contrainte de grammaire : ces phrases mettent {A} au pluriel).
     var ga = a, gb = b;
     if (grouped && nb > na) { ga = b; gb = a; }
+
+    // Portraits : quand une alliance est en jeu, chaque camp est encadré.
+    var ppl = grouped
+      ? campPorts(a, "a").concat(campPorts(b, "b"))
+      : [port(a[0]), port(b[0])];
+
     var lines = [ grouped
       ? subCamps(line(rng, APPROACH_GROUP), ga, gb)
       : subCamps(line(rng, APPROACH[kind] || APPROACH.melee), a, b) ];
@@ -533,37 +582,40 @@
     // --- UNE seule ligne de « développement », cohérente avec l'issue ---
     var mid = null;
 
-    // 1) Le nombre a tranché ? (écart net + le camp majoritaire l'emporte + mort)
-    if (decisive && Math.abs(na - nb) >= 2) {
-      var bigIsA = na > nb;
-      if ((bigIsA && aWon) || (!bigIsA && !aWon)) {
-        mid = line(rng, NUMBERS_WIN)
-          .replace(/\{BIG\}/g, bigIsA ? unitName(a) : unitName(b))
-          .replace(/\{SMALL\}/g, bigIsA ? unitName(b) : unitName(a))
-          .replace(/\{nbig\}/g, String(Math.max(na, nb))).replace(/\{nsmall\}/g, String(Math.min(na, nb)));
-      }
-    }
+    // 1) Le nombre a tranché ? Le camp vainqueur est une alliance ET il est le
+    //    plus nombreux : c'est l'avantage de l'alliance, on le montre.
+    var numbers = decisive && na >= 2 && na > nb ? function () {
+      // NUMBERS_WIN parle de {SMALL} au singulier ; à plusieurs contre
+      // plusieurs, on bascule sur le pool qui ne l'accorde jamais.
+      return fillNumbers(line(rng, nb > 1 ? NUMBERS_WIN_MANY : NUMBERS_WIN),
+        unitName(a), unitName(b), na, nb);
+    } : null;
 
-    // 2) L'arme a tranché ? (avantage/désavantage net, du bon côté de l'issue, + mort)
-    if (!mid && decisive) {
+    // 2) L'arme a tranché ? (avantage/désavantage net pour la situation)
+    var weapon = null;
+    if (decisive) {
       var fa = focusOf(a), fb = focusOf(b);
       var va = wkVal(fa, kind), vb = wkVal(fb, kind);
       var realA = fa.weapon && fa.weapon !== "none" && HG.WEAPONS[fa.weapon];
       var realB = fb.weapon && fb.weapon !== "none" && HG.WEAPONS[fb.weapon];
-      if (realA && va - vb >= 3 && won(fa)) mid = weaponSay(WEAPON_WIN, fa, fb, rng);
-      else if (realB && vb - va >= 3 && won(fb)) mid = weaponSay(WEAPON_WIN, fb, fa, rng);
-      else if (realA && va - vb <= -3 && !won(fa)) mid = weaponSay(WEAPON_LOSE, fa, fb, rng);
-      else if (realB && vb - va <= -3 && !won(fb)) mid = weaponSay(WEAPON_LOSE, fb, fa, rng);
+      if (realA && va - vb >= 3) weapon = function () { return weaponSay(WEAPON_WIN, fa, fb, rng); };
+      else if (realB && vb - va <= -3) weapon = function () { return weaponSay(WEAPON_LOSE, fb, fa, rng); };
     }
 
-    // 3) Sinon : un échange neutre (repli ou petite victoire).
+    if (numbers && weapon) mid = rng.chance(0.5) ? numbers() : weapon();
+    else if (numbers) mid = numbers();
+    else if (weapon) mid = weapon();
+
+    // 3) Sinon : un échange neutre (repli ou victoire sans explication).
     if (!mid) mid = subCamps(line(rng, grouped ? GROUP_MID : EXCHANGE), grouped ? ga : a, grouped ? gb : b);
     lines.push(mid);
 
     // Combat serré ET tranché : une ligne de tension en plus (rare).
-    if (decisive && res.margin < 0.18) lines.push(subCamps(line(rng, TIGHT), a, b));
+    if (decisive && res.margin < 0.18) {
+      lines.push(subCamps(line(rng, TIGHT), grouped ? ga : a, grouped ? gb : b));
+    }
 
-    return [{ portraits: ppl, cls: "", lines: lines }];
+    return [{ portraits: ppl, cls: "", lines: lines, camps: grouped }];
   }
 
   // ---- Environnement d'une manche -------------------------------
@@ -725,29 +777,34 @@
       if (enc.pack) {
         var packLead = names(a.slice(0, 3));
         var preyN = unitName(b);
+        var preyS = b.length > 1 ? "s" : "";           // accord de la proie
         var packWon = a.some(function (t) { return (res.winners || []).indexOf(t.id) !== -1; });
         var pk = [
-          line(rng, [
+          cap(line(rng, [
             "La meute des Carrières a rattrapé " + preyN + ".",
-            preyN + " se retrouve encerclé — " + packLead + " en tête de meute.",
+            preyN + " se retrouve" + (preyS ? "nt" : "") + " encerclé" + preyS + " — " + packLead + " en tête de meute.",
             "Les torches de la meute se referment sur " + preyN + ".",
             "À " + a.length + " chasseurs contre " + b.length + ", la meute ne se presse même pas.",
-            packLead + " et le reste de la meute prennent " + preyN + " en étau."
-          ])
+            packLead + " et le reste de la meute prennent " + preyN + " en étau.",
+            "La meute chasse en ligne, sans un mot : " + preyN + " n'a plus que la falaise devant " +
+              (preyS ? "eux" : "lui") + ".",
+            "Ce que l'alliance des Carrières fait le mieux, elle le fait maintenant, sur " + preyN + "."
+          ]))
         ];
         // avantage du nombre — seulement si la meute l'emporte
         pk.push(packWon
-          ? cap(line(rng, NUMBERS_WIN)
-              .replace(/\{BIG\}/g, "les Carrières").replace(/\{SMALL\}/g, preyN)
-              .replace(/\{nbig\}/g, String(a.length)).replace(/\{nsmall\}/g, String(b.length)))
-          : line(rng, [
-              preyN + " s'arrache de l'étau et disparaît dans le noir. La meute a perdu du temps.",
-              preyN + " renverse un des Carrières et file par la brèche avant qu'elle ne se referme.",
-              "La meute était trop sûre d'elle. " + preyN + " passe entre deux torches et s'évanouit."
-            ]));
+          ? fillNumbers(line(rng, b.length > 1 ? NUMBERS_WIN_MANY : NUMBERS_WIN),
+              "les Carrières", preyN, a.length, b.length)
+          : cap(line(rng, [
+              preyN + " s'arrache" + (preyS ? "nt" : "") + " de l'étau et disparaî" + (preyS ? "ssent" : "t") +
+                " dans le noir. La meute a perdu du temps.",
+              preyN + " renverse" + (preyS ? "nt" : "") + " un des Carrières et file" + (preyS ? "nt" : "") +
+                " par la brèche avant qu'elle ne se referme.",
+              "La meute était trop sûre d'elle : elle a laissé une brèche, et " + preyN + " l'a prise."
+            ])));
         clashBeat = {
-          portraits: a.slice(0, 3).map(function (t) { return port(t); }).concat(b.slice(0, 2).map(function (t) { return port(t); })),
-          cls: "", lines: pk
+          portraits: campPorts(a, "a").concat(campPorts(b, "b")),
+          cls: "", lines: pk, camps: true
         };
         beats.push(clashBeat);
       } else {
@@ -764,19 +821,26 @@
       if (!anyDeath && !enc.pack) {
         // pas de mort : le repli rejoint la même fenêtre — 3 lignes max.
         var grpEnc = a.length > 1 || b.length > 1;
+        // {A} = celui qui a pris l'ascendant (STANDOFF), ou le plus nombreux
+        // quand un camp est un groupe (GROUP_STANDOFF met {A} au pluriel).
+        var upper = a.some(function (t) { return (res.winners || []).indexOf(t.id) !== -1; }) ? a : b;
+        var lower = upper === a ? b : a;
         var big = grpEnc && b.length > a.length ? b : a;
         var small = big === a ? b : a;
-        var so = subCamps(line(rng, grpEnc ? GROUP_STANDOFF : STANDOFF), grpEnc ? big : a, grpEnc ? small : b);
+        var so = grpEnc ? subCamps(line(rng, GROUP_STANDOFF), big, small)
+                        : subCamps(line(rng, STANDOFF), upper, lower);
         if (clashBeat && clashBeat.lines && clashBeat.lines.length < 3) clashBeat.lines.push(so);
         else beats.push({ portraits: clashBeat ? clashBeat.portraits : undefined, text: so, cls: "" });
       } else if (!anyDeath && enc.pack) {
         var preyN2 = unitName(b);
         if (clashBeat && clashBeat.lines && clashBeat.lines.length < 3) {
-          clashBeat.lines.push(line(rng, [
+          var pl2 = b.length > 1;
+          clashBeat.lines.push(cap(line(rng, [
             "Le canon ne vient pas : " + preyN2 + " a réussi à rompre le cercle.",
-            preyN2 + " s'échappe, blessé mais vivant. La meute rentre bredouille.",
+            preyN2 + " s'échappe" + (pl2 ? "nt" : "") + ", blessé" + (pl2 ? "s" : "") + " mais vivant" +
+              (pl2 ? "s" : "") + ". La meute rentre bredouille.",
             "La meute se disperse sans avoir eu " + preyN2 + ". Pour cette fois."
-          ]));
+          ])));
         }
       }
     });
@@ -807,7 +871,9 @@
     victim.inPack = false;
 
     beats.push({
-      portraits: [port(killer), port(victim)],
+      stamp: { text: "Trahison", kind: "betray" },
+      portraits: [port(killer, { camp: "traitor" }), port(victim, { camp: "victim" })],
+      camps: true,
       lines: [line(rng, [
         "La meute des Carrières se déchire : " + who(killer) + " se retourne contre " + who(victim) + ".",
         "Les vivres manquent. " + who(killer) + " décide qu'il y a une bouche de trop : " + who(victim) + ".",
@@ -844,7 +910,9 @@
       var traitor = sorted[0], victim = pick(rng, sorted.slice(1));
       HG.breakAlliance(traitor, victim);
       var setup = {
-        portraits: [port(traitor), port(victim)],
+        stamp: { text: "Trahison", kind: "betray" },
+        portraits: [port(traitor, { camp: "traitor" }), port(victim, { camp: "victim" })],
+        camps: true,
         lines: [line(rng, [
           "L'alliance de " + who(traitor) + " et " + who(victim) + " se fissure dans la nuit.",
           who(traitor) + " attend que le feu baisse et que " + who(victim) + " ferme les yeux.",
@@ -945,12 +1013,15 @@
       var packNow = careers.filter(function (t) { return t.inPack; });
 
       beats.push({
-        portraits: packNow.slice(0, 6).map(function (t) { return port(t); }),
+        portraits: campPorts(packNow, "a", { campLabel: "Meute des Carrières" }),
+        camps: true,
         text: "Les Carrières se regroupent à la Corne et prennent le contrôle des vivres.", cls: "event"
       });
       if (defectors.length) {
         beats.push({
-          portraits: defectors.map(function (t) { return port(t); }),
+          stamp: { text: "Défection", kind: "betray" },
+          portraits: defectors.map(function (t) { return port(t, { camp: "traitor" }); }),
+          camps: true,
           text: names(defectors) + " refuse" + (defectors.length > 1 ? "nt" : "") +
             " la meute et file" + (defectors.length > 1 ? "nt" : "") + " droit vers les bois. Les Carrières n'oublient jamais ça.",
           cls: "event"
@@ -1246,7 +1317,8 @@
       var victim = (nonLovers.length ? nonLovers : grp)[0];
       var killer = grp.filter(function (t) { return t.id !== victim.id; })[0];
       grp.forEach(function (t) { HG.breakAlliance(t, victim); });
-      beats.push({ portraits: [port(killer), port(victim)],
+      beats.push({ stamp: { text: "Trahison", kind: "betray" }, camps: true,
+        portraits: [port(killer, { camp: "traitor" }), port(victim, { camp: "victim" })],
         text: line(rng, [
           "Acculés au même rocher, les alliés se regardent enfin en face. " + who(killer) + " frappe le premier.",
           "L'alliance a tenu jusqu'ici parce qu'elle servait tout le monde. Elle ne sert plus personne. " + who(killer) + " tranche.",
@@ -1262,7 +1334,8 @@
       var odd = living.filter(function (t) { return !loversHas(t); })[0];
       var pairMate = living.filter(function (t) { return loversHas(t); });
       if (odd && pairMate.length) {
-        beats.push({ portraits: pairMate.slice(0, 2).map(function (t) { return port(t); }).concat([port(odd)]),
+        beats.push({ camps: true,
+          portraits: campPorts(pairMate, "a", { campLabel: "Alliance" }).concat(campPorts([odd], "b")),
           text: "Les Juges rabattent les trois derniers. " + names(pairMate) + " font front ensemble contre " + who(odd) + ".",
           cls: "event" });
         var lk = applyOutcome({ tribute: odd, result: "death", killerId: pick(rng, pairMate).id, kind: "melee" }, null);
@@ -1274,7 +1347,10 @@
     var b = units[1].filter(function (t) { return t.alive; });
     if (!a.length || !b.length) return;
     beats.push({
-      portraits: a.slice(0, 2).map(function (t) { return port(t); }).concat(b.slice(0, 2).map(function (t) { return port(t); })),
+      portraits: (a.length > 1 || b.length > 1)
+        ? campPorts(a, "a").concat(campPorts(b, "b"))
+        : [port(a[0]), port(b[0])],
+      camps: a.length > 1 || b.length > 1,
       text: subCamps(line(rng, [
         "Les Juges resserrent l'arène : {A} et {B} n'ont plus nulle part où se cacher.",
         "Le territoire jouable vient de fondre de moitié. {A} et {B} se retrouvent forcément.",
@@ -1293,7 +1369,7 @@
   }
 
   var DRY_LINES = [
-    "La faim tenaille les survivants ; on fouille les buissons, on mâche des racines.",
+    "La soif tenaille les survivants ; on gratte la rosée sur les feuilles, on suit le moindre filet d'eau.",
     "Une averse froide tombe sur l'arène. Chacun cherche un abri, seul.",
     "Deux tributs se croisent à distance, se jaugent… et repartent chacun de son côté.",
     "Un piège se referme dans le vide. La proie visée est déjà loin.",

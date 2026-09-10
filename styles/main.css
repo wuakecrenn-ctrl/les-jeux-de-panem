@@ -35,6 +35,14 @@
 
 * { box-sizing: border-box; }
 
+/* Barre de défilement invisible : la page (et les panneaux internes) défilent
+   toujours — à la molette, au clavier et via le défilement automatique — mais
+   aucune barre ne vient casser la mise en scène sur l'écran du salon. */
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+* { scrollbar-width: none; }
+*::-webkit-scrollbar { width: 0; height: 0; }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -250,6 +258,206 @@ button.big     { font-size: 1.05rem; padding: 0.95em 2em; }
 }
 @media (prefers-reduced-motion: reduce) {
   .capitol-seal { animation: none; }
+}
+
+/* =========================================================================
+   ACCUEIL — ambiance et mise en page (tout ici est propre à l'accueil)
+   ========================================================================= */
+
+.home { position: relative; }
+.home > * + * { margin-top: clamp(1.4rem, 4vh, 2.6rem); }
+.home > .home-fx + * { margin-top: 0; }   /* l'ambiance est hors flux */
+
+/* ---- Couche d'ambiance (décorative, accueil uniquement) ---- */
+.home-fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;            /* derrière le contenu de l'accueil */
+  pointer-events: none;
+  overflow: hidden;
+}
+/* projecteurs du Capitole : deux faisceaux qui balayent lentement */
+.home-fx .fx-beams {
+  position: absolute;
+  left: 50%; top: -28vh;
+  width: 160vmax; aspect-ratio: 1;
+  translate: -50% 0;
+  background:
+    conic-gradient(from 200deg at 50% 0%,
+      transparent 0deg, rgba(240,217,138,0.075) 7deg, transparent 15deg,
+      transparent 34deg, rgba(226,58,78,0.055) 41deg, transparent 49deg,
+      transparent 118deg, rgba(240,217,138,0.05) 124deg, transparent 131deg);
+  animation: beamSweep 26s ease-in-out infinite alternate;
+  transform-origin: 50% 0%;
+}
+@keyframes beamSweep {
+  from { transform: rotate(-13deg); }
+  to   { transform: rotate(13deg); }
+}
+/* vignette : on resserre le regard au centre */
+.home-fx .fx-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(115% 85% at 50% 32%, transparent 38%, rgba(0,0,0,0.55) 100%);
+}
+/* grain de retransmission : fines lignes de balayage qui descendent */
+.home-fx .fx-scan {
+  position: absolute; inset: -100% 0;
+  background: repeating-linear-gradient(180deg,
+    rgba(255,255,255,0.030) 0 1px, transparent 1px 4px);
+  animation: scanRoll 9s linear infinite;
+  opacity: 0.5;
+}
+@keyframes scanRoll { to { transform: translateY(25%); } }
+/* poussière d'or qui monte */
+.home-fx .fx-motes { position: absolute; inset: 0; }
+.home-fx .fx-motes i {
+  position: absolute;
+  bottom: -6vh;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: var(--gold-hi);
+  box-shadow: 0 0 7px 2px rgba(240,217,138,0.45);
+  opacity: 0;
+  animation-name: moteRise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes moteRise {
+  0%   { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  12%  { opacity: 0.85; }
+  80%  { opacity: 0.5; }
+  100% { transform: translate(5vw, -108vh) scale(1.25); opacity: 0; }
+}
+
+/* ---- En-tête ---- */
+.home-hero { text-align: center; }
+/* sur l'accueil le sceau reste un emblème, pas un mur : les deux boutons de
+   lancement doivent rester visibles sans défiler sur un écran de portable */
+.home-hero .capitol-seal { width: clamp(112px, 15vw, 186px); }
+.home-hero > * + * { margin-top: 0.85rem; }
+
+.kicker.live { display: inline-flex; align-items: center; gap: 0.55rem; }
+.kicker.live::before {
+  content: "";
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--red-hi);
+  box-shadow: 0 0 9px 2px rgba(226,58,78,0.7);
+  animation: livePulse 1.9s ease-in-out infinite;
+}
+@keyframes livePulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+/* titre gravé, avec un reflet d'or qui passe lentement */
+h1.home-title {
+  font-size: clamp(2.6rem, 9vw, 6rem);
+  letter-spacing: 0.06em;
+  line-height: 0.95;
+  margin: 0;
+  background: linear-gradient(100deg,
+    var(--gold-dim) 0%, var(--gold) 28%, #fff6d8 44%, var(--gold-hi) 56%, var(--gold) 74%, var(--gold-dim) 100%);
+  background-size: 280% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,0.65)) drop-shadow(0 0 26px rgba(201,162,39,0.28));
+  animation: titleSheen 11s ease-in-out infinite;
+}
+@keyframes titleSheen {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.home-sub {
+  max-width: 56ch;
+  margin: 0 auto;
+  color: var(--ink-dim);
+  font-size: 0.98rem;
+}
+/* le déroulé de la soirée, en jalons plutôt qu'en paragraphe */
+.home-steps {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 0.3rem 0.75rem;
+  margin: 0.4rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.home-steps span { display: inline-flex; align-items: center; gap: 0.75rem; }
+.home-steps span + span::before {
+  content: "◆";
+  font-size: 0.5em;
+  color: var(--gold-dim);
+}
+
+/* ---- Panneau de lancement ---- */
+.home-panel {
+  max-width: 860px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(22,21,26,0.82), rgba(12,11,15,0.82));
+  backdrop-filter: blur(2px);
+  padding: clamp(16px, 2.6vw, 26px);
+  display: flex; flex-direction: column; gap: 1.15rem;
+}
+.home-panel > * { margin: 0; }
+
+.mode-box { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.mode-box .tiny { flex: 1 1 20ch; min-width: 0; }
+/* contrôle segmenté : deux modes, une seule barre */
+.seg { display: inline-flex; border: 1px solid var(--line); }
+.seg button {
+  border: none; background: transparent;
+  padding: 0.5em 1.1em; font-size: 0.78rem;
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on {
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  color: var(--gold-hi);
+}
+
+/* deux grandes entrées en jeu, à égalité */
+.start-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+.btn-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem;
+  text-align: left;
+  padding: 0.95em 1.1em;
+  letter-spacing: 0;
+  text-transform: none;
+  min-height: 5.4em;
+}
+.btn-card .bc-label {
+  font-family: var(--serif-display);
+  font-size: 1.12rem; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.btn-card .bc-sub {
+  font-family: var(--serif-body);
+  font-size: 0.76rem; line-height: 1.35; color: var(--ink-dim);
+}
+.btn-card.primary .bc-sub { color: rgba(18,16,10,0.75); }
+.btn-card.primary:hover .bc-sub { color: rgba(18,16,10,0.85); }
+
+.lib-row { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center; }
+.lib-row button { font-size: 0.74rem; padding: 0.5em 0.9em; }
+
+/* ---- Pied d'accueil : aide + vie privée, côte à côte ---- */
+.home-foot {
+  max-width: 860px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.8rem, 2vw, 1.6rem);
+  border-top: 1px solid var(--line);
+  padding-top: 1.1rem;
+}
+.home-foot .hf-col > * + * { margin-top: 0.45rem; }
+.home-foot .hf-title {
+  font-family: var(--sans);
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin: 0;
+}
+.home-foot p { margin: 0; }
+
+@media (max-width: 680px) {
+  .start-row, .home-foot { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-fx .fx-beams, .home-fx .fx-scan, .home-fx .fx-motes i,
+  h1.home-title, .kicker.live::before { animation: none; }
+  .home-fx .fx-motes { display: none; }
 }
 
 /* ---------- Barre d'outils ---------- */
@@ -657,6 +865,22 @@ hr.rule {
   padding: 0.3rem 0.7rem;
 }
 .count-pill b { font-size: 1.05rem; color: var(--gold-hi); }
+.count-pill i { font-style: italic; text-transform: none; letter-spacing: 0.04em; opacity: 0.8; }
+.count-pill.tie { border-color: var(--gold-dim); }
+
+/* Note des Juges (séances privées) — 11 = exceptionnel, on le signale */
+.judge-note {
+  font-family: var(--serif-display);
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--accent-hi);
+}
+.judge-note.top {
+  color: #12100a;
+  background: var(--gold-hi);
+  padding: 0.06em 0.4em;
+  box-shadow: 0 0 14px rgba(240,217,138,0.55);
+}
 
 /* =========================================================================
    Scène de présentation (déroulement « petit à petit »)
@@ -746,6 +970,104 @@ hr.rule {
   font-size: clamp(1.35rem, 3vw, 2.2rem);
   color: var(--accent-hi);
 }
+
+/* --- Camps : on encadre chaque groupe pour VOIR les alliances --- */
+.stage .portraits.has-camps {
+  align-items: stretch;
+  gap: clamp(0.8rem, 3vw, 2.2rem);
+  flex-wrap: wrap;
+}
+.stage .portraits .camp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  padding: 1.15rem 0.7rem 0.6rem;
+  border: 1px dashed color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+/* un camp d'un seul tribut : cadre à peine suggéré (pas une alliance) */
+.stage .portraits .camp:not(.multi) {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
+  background: none;
+}
+/* une vraie alliance : cadre net, liseré de couleur */
+.stage .portraits .camp.multi {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--accent) 62%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent),
+              0 0 18px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+.stage .portraits .camp-row {
+  display: flex;
+  gap: clamp(0.4rem, 1.4vw, 0.9rem);
+  align-items: flex-end;
+  justify-content: center;
+}
+.stage .portraits .camp-tag {
+  position: absolute;
+  top: -0.62em;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--sans);
+  font-size: clamp(0.54rem, 0.95vw, 0.68rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-hi);
+  background: var(--bg);
+  padding: 0 0.5rem;
+}
+.stage .portraits .camp-more {
+  align-self: flex-end;
+  min-width: 2.4rem;
+  padding: 0.5rem 0.3rem;
+  font-family: var(--serif-display);
+  font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+  color: var(--accent-hi);
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+  text-align: center;
+  margin-bottom: 1.3rem;
+}
+/* Trahison : le camp du traître passe au rouge, la cible reste neutre */
+.stage .portraits .camp-traitor { border-color: var(--red) !important; background: rgba(179,18,43,0.10); }
+.stage .portraits .camp-traitor .camp-tag { color: var(--red-hi); }
+.stage .portraits .camp-victim  { border-color: color-mix(in srgb, var(--ink-dim) 50%, transparent) !important; }
+
+/* --- Bandeau d'un mot (TRAHISON, DÉFECTION…) --- */
+.beat-stamp {
+  font-family: var(--serif-display);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: clamp(1.05rem, 2.6vw, 1.9rem);
+  line-height: 1;
+  padding: 0.38em 1em 0.32em;
+  margin-bottom: 0.9rem;
+  align-self: center;
+  color: #fff;
+  background: linear-gradient(180deg, var(--red), #6d0a1b);
+  border-top: 1px solid rgba(255,255,255,0.35);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+  box-shadow: 0 6px 22px rgba(179,18,43,0.45);
+  transform: rotate(-1.4deg);
+}
+.beat-stamp[hidden] { display: none; }
+.beat-stamp.stamp-in { animation: stampSlam 0.5s cubic-bezier(0.2, 0.9, 0.25, 1.3) both; }
+@keyframes stampSlam {
+  0%   { transform: rotate(-8deg) scale(1.9); opacity: 0; letter-spacing: 0.7em; }
+  55%  { opacity: 1; }
+  100% { transform: rotate(-1.4deg) scale(1); opacity: 1; letter-spacing: 0.3em; }
+}
+.stage.is-betray-beat { animation: betrayPulse 1s ease both; }
+@keyframes betrayPulse {
+  0%   { background: rgba(179,18,43,0); }
+  14%  { background: rgba(179,18,43,0.12); }
+  100% { background: rgba(179,18,43,0); }
+}
+.kill-tag.betray { background: #6d0a1b; box-shadow: 0 0 0 2px rgba(226,58,78,0.35); }
 
 /* --- Beat « mort d'un tribut » : mise en scène forte --- */
 .stage.is-kill-beat {

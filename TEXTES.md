@@ -4,7 +4,7 @@ Tous les textes sont dans des **tableaux de chaînes** en clair, dans 5 fichiers
 Aucun outil : on ouvre le fichier, on ajoute une ligne, on recharge la page.
 
 > Après chaque modif, incrémente `V` dans [`index.html`](index.html)
-> (`var V = "13"` → `"14"`…) pour forcer le navigateur à recharger.
+> (`var V = "23"` → `"24"`…) pour forcer le navigateur à recharger.
 
 **Aucune phrase n'est répétée dans une même partie** : le jeu pioche sans
 remise (`HG.narrPick`). Plus un tableau contient de phrases, moins on risque
@@ -55,8 +55,13 @@ tu veux. Pour un nouvel événement, copie un bloc entier et change `id` / `titl
 |---|---|
 | `BY_WEAPON.<arme>` | mort par arme : `blade`, `knife`, `spear`, `axe`, `arrow`, `mace`, `trident`, `sickle`, `sling`, `trap`, `hands` |
 | `ENCOUNTER.<type>` | par type de rencontre : `melee`, `ranged`, `ambush`, `hunt`, `betrayal`, `pack_turn`, `duel` |
-| `INCIDENTS` | morts solo : chute, baies, noyade, serpent, infection, épuisement, faim, sables |
+| `INCIDENTS` | morts solo : chute, baies, noyade, serpent, infection, épuisement, **déshydratation**, sables |
 | `ENVIRON` | morts dues à un grand événement (la clé = l'`id` de l'événement) |
+
+> **On ne meurt jamais de faim dans l'arène** — les Jeux durent quelques jours,
+> pas des semaines. La mort par privation, c'est la **déshydratation**
+> (`INCIDENTS` → `dehydration`). Évite donc « affamé » / « la faim » comme
+> cause de mort ; « assoiffé » / « la soif », oui.
 
 Chaque entrée = `{ line: "...", cause: "..." }`. `{k}` = tueur, `{v}` = victime.
 `cause` s'affiche sous le portrait (ex. `"transpercé(e) par une lance"`).
@@ -75,13 +80,22 @@ message **séparé**. La 2e ligne est choisie **selon le résultat** — elle ne
 contredit jamais l'issue. Ajoutez autant de phrases que vous voulez, tant que
 vous respectez le **contrat** du pool (indiqué en commentaire dans le fichier).
 
+> **Règle d'orientation — `{A}` est toujours le camp qui prend l'ascendant.**
+> Les phrases de traque, d'embûche et de tir supposent que `{A}` mène la
+> rencontre ; `narrateClash()` échange donc les deux camps si besoin avant de
+> remplir le modèle. Écris tes phrases dans ce sens-là.
+> **Exception :** quand un camp est un groupe (`APPROACH_GROUP`, `GROUP_MID`,
+> `GROUP_STANDOFF`), `{A}` est le camp le **plus nombreux**, parce que ces
+> phrases mettent `{A}` au pluriel.
+
 | Pool | Rôle | Codes autorisés |
 |---|---|---|
 | `APPROACH.{melee,ranged,ambush,hunt,flight}` | comment ça commence (pas d'arme, pas d'issue) | `{A}` `{B}` |
 | `APPROACH_GROUP` | idem, un camp est un groupe. `{A}` = le plus nombreux (pluriel) | `{A}` `{B}` `{DEUX}` |
-| `NUMBERS_WIN` | le nombre a tranché (le camp majoritaire l'emporte + il y a une mort) | `{BIG}` `{SMALL}` `{nbig}` `{nsmall}` |
+| `NUMBERS_WIN` | l'alliance a tranché : le camp le plus nombreux gagne et quelqu'un meurt. **`{SMALL}` y est toujours UN seul tribut** | `{BIG}` `{SMALL}` `{nbig}` `{nsmall}` |
+| `NUMBERS_WIN_MANY` | pareil, mais les DEUX camps sont des groupes : **aucun verbe ne porte sur `{SMALL}`** | `{BIG}` `{SMALL}` `{nbig}` `{nsmall}` |
 | `WEAPON_WIN` / `WEAPON_LOSE` | l'arme a tranché. **Jamais d'adjectif accordé sur `{w}`** | `{who}` `{w}` `{foe}` |
-| `EXCHANGE` / `GROUP_MID` | échange neutre (repli ou petite victoire) | `{A}` `{B}` |
+| `EXCHANGE` / `GROUP_MID` | échange neutre (repli ou petite victoire) | `{A}` `{B}` `{tB}` |
 | `TIGHT` | combat très serré (3e ligne, rare) | `{A}` `{B}` `{DEUX}` |
 | `STANDOFF` / `GROUP_STANDOFF` | fin sans mort | `{A}` `{B}` `{DEUX}` |
 | `DRY_LINES` | manche qui se termine sans un canon | — |
@@ -92,7 +106,27 @@ quand un camp est un groupe) · `{na}` / `{nb}` = effectifs · `{BIG}` /
 `{SMALL}` / `{nbig}` / `{nsmall}` = camp majoritaire / minoritaire et leurs
 effectifs · `{who}` / `{w}` (arme au **singulier** : « l'arc », « la lance ») /
 `{foe}`. La 1re lettre est mise en majuscule automatiquement ; « à/de le/les »
-deviennent « au/aux/du/des » automatiquement dans les phrases d'arme.
+deviennent « au/aux/du/des » automatiquement dans les phrases d'arme et de
+nombre.
+
+**`{tB}` — accord des verbes sur `{B}`.** Dans les pools de groupe, `{B}` peut
+désigner un tribut **ou plusieurs**. Colle `{tB}` à la fin du verbe : il devient
+`« »` au singulier et `« nt »` au pluriel. Comme le procédé n'ajoute que
+« nt », **n'utilise que des verbes du 1er groupe** sur `{B}` (recule/reculent,
+compte/comptent, tombe/tombent…) — jamais « met », « sent », « disparaît ».
+
+```js
+"{A} avancent en ligne, méthodiques. {B} recule{tB} sans trouver d'ouverture.",
+```
+
+### Alliances et trahisons à l'écran
+
+Un « beat » peut encadrer ses portraits par camp — on voit alors **qui se bat
+avec qui**. Côté code : `camps: true` sur le beat, et `camp: "a" | "b" |
+"traitor" | "victim"` sur chaque portrait (`campPorts()` s'en charge, avec une
+pastille « +N » au-delà de 3). `stamp: { text: "Trahison", kind: "betray" }`
+pose le grand bandeau rouge, et `betray: true` sur un beat de mort change
+l'étiquette en « ◆ TRAHI ».
 
 ## 5. Armes — [`src/engine/weapons.js`](src/engine/weapons.js)
 

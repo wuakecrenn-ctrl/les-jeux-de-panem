@@ -124,7 +124,7 @@
       id: "wolf_pack", title: "Loups des Juges", phase: "night", weight: 5, minAlive: 3,
       exposure: 0.35, envDeath: 0.12, envWound: 0.4, kind: "flight",
       announce: [
-        "Des hurlements encerclent l'arène. Les Juges ont faim de spectacle et lâchent la meute.",
+        "Des hurlements encerclent l'arène. Les Juges veulent du spectacle et lâchent la meute.",
         "Six paires d'yeux jaunes avancent en ligne dans les fougères."
       ]
     },
@@ -209,7 +209,7 @@
       hitsPack: true, kind: "hunt", encounterMul: 1.1,
       announce: [
         "Une déflagration secoue le camp de la Corne : la pyramide de vivres des Carrières part en fumée.",
-        "Quelqu'un a déclenché les mines autour du butin. La meute est furieuse — et affamée."
+        "Quelqu'un a déclenché les mines autour du butin. La meute est furieuse — et à sec."
       ]
     },
     {
@@ -240,7 +240,7 @@
     },
     {
       id: "bad_water", title: "Eau saumâtre", phase: "day", weight: 5,
-      incidentRate: 0.4, incidentTypes: ["drown", "berries", "starvation"], exposure: 0.4, envWound: 0.3,
+      incidentRate: 0.4, incidentTypes: ["drown", "berries", "dehydration"], exposure: 0.4, envWound: 0.3,
       announce: [
         "Les seuls points d'eau sont troubles et amers. Boire est un pari.",
         "Les Juges ont empoisonné la moitié des sources. Reste à deviner lesquelles."
@@ -248,9 +248,9 @@
     },
     {
       id: "long_march", title: "Journée d'usure", phase: "day", weight: 6,
-      incidentRate: 0.4, incidentTypes: ["exhaustion", "starvation", "infection"], quiet: true,
+      incidentRate: 0.4, incidentTypes: ["exhaustion", "dehydration", "infection"], quiet: true,
       announce: [
-        "Rien ne bouge dans l'arène — sauf la faim, la soif et la fatigue qui gagnent du terrain.",
+        "Rien ne bouge dans l'arène — sauf la soif et la fatigue, qui gagnent du terrain heure après heure.",
         "Une longue journée sans affrontement. Les corps, eux, continuent de lâcher."
       ]
     }
