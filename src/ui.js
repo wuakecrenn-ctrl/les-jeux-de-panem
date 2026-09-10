@@ -169,7 +169,7 @@
     var video = null, started = false, startGuard = null, watchdog = null;
     if (!reduce) {
       video = el("video", { id: "cd-video", preload: "auto", playsinline: "" });
-      video.muted = false;
+      video.muted = !(HG.audio && HG.audio.isEnabled());
       video.setAttribute("playsinline", "");
       video.appendChild(el("source", { src: "assets/video/countdown.mp4", type: "video/mp4" }));
       video.addEventListener("playing", function () { started = true; });
@@ -377,15 +377,21 @@
       if (HG.voice) { HG.voice.resume(); var on = HG.voice.toggle(); if (on) HG.voice.speak("Bonjour à tous.", "caesar"); }
       paintVoice();
     });
-    // L'icône doit dire dans quel sens on va : 🗖 pour agrandir, 🗗 pour réduire
-    // (les diagonales ⤢/⤡ se ressemblaient trop et disaient toutes « agrandir »).
+    // Icônes SVG (les glyphes 🗖/🗗 ne s'affichent pas sur beaucoup de systèmes) :
+    // crochets vers les coins = agrandir, crochets repliés vers le centre = réduire.
+    var ICON_EXPAND = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" ' +
+      'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ' +
+      'aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>';
+    var ICON_COLLAPSE = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" ' +
+      'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ' +
+      'aria-hidden="true"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg>';
     function isFull() {
       return !!(document.fullscreenElement || document.webkitFullscreenElement ||
                 document.mozFullScreenElement || document.msFullscreenElement);
     }
     function paintFull() {
       var on = isFull();
-      fb.textContent = on ? "🗗" : "🗖";
+      fb.innerHTML = on ? ICON_COLLAPSE : ICON_EXPAND;
       fb.classList.toggle("on", on);
       fb.title = on ? "Quitter le plein écran" : "Plein écran";
       fb.setAttribute("aria-label", fb.title);

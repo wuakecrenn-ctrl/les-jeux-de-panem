@@ -264,8 +264,8 @@ button.big     { font-size: 1.05rem; padding: 0.95em 2em; }
    ACCUEIL — ambiance et mise en page (tout ici est propre à l'accueil)
    ========================================================================= */
 
-.home { position: relative; }
-.home > * + * { margin-top: clamp(1.4rem, 4vh, 2.6rem); }
+.home { position: relative; padding-block: clamp(0.5rem, 3vh, 2rem); }
+.home > * + * { margin-top: clamp(2.2rem, 6.5vh, 4rem); }
 .home > .home-fx + * { margin-top: 0; }   /* l'ambiance est hors flux */
 
 /* ---- Couche d'ambiance (décorative, accueil uniquement) ---- */
@@ -334,7 +334,7 @@ button.big     { font-size: 1.05rem; padding: 0.95em 2em; }
 /* sur l'accueil le sceau reste un emblème, pas un mur : les deux boutons de
    lancement doivent rester visibles sans défiler sur un écran de portable */
 .home-hero .capitol-seal { width: clamp(112px, 15vw, 186px); }
-.home-hero > * + * { margin-top: 0.85rem; }
+.home-hero > * + * { margin-top: 1.15rem; }
 
 .kicker.live { display: inline-flex; align-items: center; gap: 0.55rem; }
 .kicker.live::before {
@@ -387,8 +387,8 @@ h1.home-title {
   border: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(22,21,26,0.82), rgba(12,11,15,0.82));
   backdrop-filter: blur(2px);
-  padding: clamp(16px, 2.6vw, 26px);
-  display: flex; flex-direction: column; gap: 1.15rem;
+  padding: clamp(20px, 3vw, 32px);
+  display: flex; flex-direction: column; gap: 1.7rem;
 }
 .home-panel > * { margin: 0; }
 
@@ -491,7 +491,9 @@ body.has-playbar:not(.has-actions) #toolbar { bottom: calc(var(--h-playbar) + 10
   font-size: 1.15rem;
   letter-spacing: 0;
   background: rgba(12, 11, 15, 0.82);
+  display: inline-flex; align-items: center; justify-content: center;
 }
+#toolbar button svg { display: block; }
 #toolbar button.off { color: var(--ink-dim); border-color: var(--line); }
 
 /* ---------- District / tributs : palette ---------- */
