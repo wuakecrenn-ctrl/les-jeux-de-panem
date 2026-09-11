@@ -1,7 +1,9 @@
 /* =========================================================================
    screens/fallen.js — « Ceux qui sont tombés » : projection dans le ciel
-   nocturne, un coup de canon (avec son) par tribut, portraits en noir et
-   blanc. Après le dernier canon : tous les disparus du jour à l'écran.
+   nocturne, portraits en noir et blanc qui s'enchaînent sur « The Fallen »
+   (assets/sounds/fallen.mp3) — plus de coup de canon ici : le canon, c'est
+   pour l'instant de la mort EN JEU (voir ui.js). Après le dernier portrait :
+   tous les disparus du jour à l'écran.
    ========================================================================= */
 (function (HG) {
   "use strict";
@@ -30,7 +32,7 @@
 
     var idx = 0, stopped = false, showedAll = false;
     var reduce = HG.ui.prefersReducedMotion();
-    // Coups de canon plus rapprochés que le reste du jeu, mais pas stroboscopiques.
+    // Portraits plus rapprochés que le reste du jeu, mais pas stroboscopiques.
     var per = reduce ? 900 : HG._clamp(Math.round(HG.ui.dwellMs() * 0.5), 2400, 3600);
     var timer = null;
 
@@ -40,7 +42,7 @@
       document.removeEventListener("click", onDocClick);
       HG.flow.afterFallen();
     }
-    function skipCannons() {
+    function skipAll() {
       if (showedAll) return;
       if (timer) clearTimeout(timer);
       idx = queue.length;
@@ -49,7 +51,7 @@
     function paintActions() {
       HG.ui.setActions({
         extra: (queue.length && !showedAll)
-          ? [el("button", { class: "ghost", onclick: skipCannons }, ["⏭ Passer les canons"])]
+          ? [el("button", { class: "ghost", onclick: skipAll }, ["⏭ Tout afficher"])]
           : [],
         next: { label: "Poursuivre les Jeux", prominent: true, onClick: finish }
       });
@@ -60,6 +62,11 @@
       stageBox.appendChild(el("p", { class: "muted center", text: "Aucun canon aujourd'hui. Le ciel reste vide — pour cette fois." }));
       return root;
     }
+
+    // « The Fallen » accompagne toute la cérémonie (en boucle : le nombre de
+    // portraits varie selon le jour). Elle s'arrête d'elle-même en quittant
+    // la phase (voir setPhase dans ui.js).
+    HG.audio.music("fallen", { volume: 0.4, loop: true, fadeIn: 1100 });
 
     // Clic n'importe où (hors barre du bas) = portrait suivant.
     function onDocClick(e) {
@@ -78,7 +85,7 @@
       if (idx >= queue.length) { showAll(); return; }
       var t = HG.byId(queue[idx]); idx++;
       HG.ui.clear(stageBox);
-      HG.ui.cannonFX(true);           // cérémonie : éclair + SON du canon
+      HG.ui.cannonFX(false);          // cérémonie : juste l'éclair, plus de bruit — « The Fallen » joue déjà
       var src = t.photo || t.portrait || HG.portraitPath(t.id);
       stageBox.appendChild(el("div", { class: "fallen-portrait " + (reduce ? "fade-in" : "fallen-rise") }, [
         (t.emoji && !t.portrait && !t.photo)

@@ -275,11 +275,28 @@
     hidePlaybar();
     setActions(null);
     current = name;
+    // Hors de l'accueil, la partie n'est sauvegardée nulle part : le bouton
+    // « précédent » (souris ou navigateur) quitterait tout sans prévenir.
+    // On ne laisse partir qu'après confirmation (voir guardLeave, plus bas).
+    guardLeave(name !== "home");
     clear(app);
     var node = screens[name](data || {});
     if (node) app.appendChild(node);
     window.scrollTo(0, 0);
   }
+
+  // ---- Confirmation avant de quitter (retour souris/navigateur, fermeture,
+  //      rechargement…) tant qu'une partie est en cours. Les navigateurs
+  //      modernes n'affichent plus de message personnalisé : la boîte de
+  //      dialogue générique du navigateur suffit à demander confirmation.
+  var leaveGuarded = false;
+  function guardLeave(on) { leaveGuarded = on; }
+  window.addEventListener("beforeunload", function (e) {
+    if (!leaveGuarded) return;
+    e.preventDefault();
+    e.returnValue = "";
+    return "";
+  });
 
   // ---- Modale --------------------------------------------------
   function openModal(contentNode) {
@@ -318,15 +335,25 @@
     var canvas = document.getElementById("ember-field");
     if (!canvas || prefersReducedMotion()) return;
     var ctx = canvas.getContext("2d");
-    var W, H, parts;
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    var W, H, parts = [];
+    // Densité constante plutôt que nombre fixe : sur une grande TV, l'écran
+    // couvre bien plus de pixels qu'un portable — sans ça, les mêmes 55
+    // braises s'y retrouvent noyées et l'arrière-plan paraît vide.
+    function targetCount() {
+      return Math.max(55, Math.min(300, Math.round((W * H) / 14000)));
+    }
     function spawn() {
       return { x: Math.random() * W, y: H + Math.random() * 40, r: 0.6 + Math.random() * 1.8,
         vy: -(0.15 + Math.random() * 0.55), vx: (Math.random() - 0.5) * 0.25,
         life: 0, max: 300 + Math.random() * 500, hue: 28 + Math.random() * 18 };
     }
-    resize(); parts = [];
-    for (var i = 0; i < 55; i++) { var p = spawn(); p.y = Math.random() * H; parts.push(p); }
+    function resize() {
+      W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight;
+      var target = targetCount();
+      while (parts.length < target) { var p = spawn(); p.y = Math.random() * H; parts.push(p); }
+      if (parts.length > target) parts.length = target;
+    }
+    resize();
     window.addEventListener("resize", resize);
     (function frame() {
       ctx.clearRect(0, 0, W, H);
@@ -516,14 +543,23 @@
   // =========================================================
   // beat : { kicker, portraits:[{id,dead,cap,big,camp,campLabel,more}], camps,
   //          text | lines:[...], cls, cause, killer, betray,
-  //          stamp:{text,kind}, cannon, ceremonyCannon, voice:{who}, hold,
-  //          music, stopMusic }
+  //          stamp:{text,kind}, cannon, voice:{who}, hold, music, stopMusic }
   //   camps + portraits[].camp : chaque camp est encadré à l'écran — on voit
   //   qui se bat AVEC qui (alliances) et qui trahit qui.
   //   stamp : gros bandeau d'un mot (« Trahison ») posé au-dessus du texte.
   //   lines[] : plusieurs phrases sur le même « plan » (mêmes portraits) qui
   //   s'accumulent une à une dans la même fenêtre. Un dénouement (mort /
   //   blessure) reste un beat distinct poussé APRÈS.
+  //   cannon : un tribut vient de tomber EN JEU (bain de sang, manches,
+  //   duel) → flash + VRAI coup de canon. La cérémonie des disparus, elle,
+  //   n'utilise plus le canon : voir fallen.js (musique dédiée).
+  //   voice : narrateur qui lit le beat. Si absent, la narration lit quand
+  //   même le texte (voix « announcer » par défaut) dès qu'elle est activée
+  //   — c'est le comportement voulu pour que tout ce qui concerne le jeu
+  //   soit lu. Mettre explicitement `voice: null` (ou `false`) pour un beat
+  //   qu'on NE VEUT PAS lire (ex. présentation/défilé/interviews des
+  //   tributs non incarnés par un joueur — sinon lire les 24 tributs prend
+  //   un temps fou).
   // Libellés de camp affichés au-dessus des cadres groupés.
   var CAMP_LABEL = { traitor: "Traître", victim: "Trahi(e)" };
 
@@ -554,6 +590,15 @@
 
     function linesOf(b) { return (b && b.lines && b.lines.length) ? b.lines : [(b && b.text) || ""]; }
     function moreLines() { var b = beats[i]; return !!b && lineShown < linesOf(b).length; }
+    // Narrateur du beat : la narration doit lire TOUT ce qui concerne le
+    // jeu, donc par défaut on lit avec la voix de l'annonceur — même si le
+    // beat n'a jamais explicitement demandé de voix. Seul un `voice` posé
+    // à `null`/`false` (présentation/défilé/interviews des tributs non
+    // incarnés, pour ne pas lire les 24 à la suite) coupe la lecture.
+    function voiceWho(b) {
+      if (b.voice) return b.voice.who;
+      return ("voice" in b) ? null : "announcer";
+    }
 
     function clearTimer() { if (timer) { clearTimeout(timer); timer = null; } }
     function paintProgress() { setStageProgress(beats.length ? (i + 1) / beats.length : 1); }
@@ -712,18 +757,18 @@
 
       if (b.music) HG.audio.music(b.music, { volume: 0.3, loop: true, fadeIn: 900 });
       if (b.stopMusic) HG.audio.stopMusic(700);
-      if (b.cannon) cannonFX(false);
-      if (b.ceremonyCannon) cannonFX(true);
+      if (b.cannon) cannonFX(true);   // mort EN JEU : flash + vrai coup de canon
 
       paintProgress();
       paintHint();
       scrollBeatIntoView(kill);
 
       voiceWait = false;
-      if (b.voice && HG.voice && HG.voice.isEnabled()) {
+      var vWho0 = voiceWho(b);
+      if (vWho0 && HG.voice && HG.voice.isEnabled()) {
         voiceWait = true;
         var spoken = revealAll ? linesOf(b).join(" ") : linesOf(b)[0];
-        HG.voice.speak(spoken, b.voice.who, { onDone: function () {
+        HG.voice.speak(spoken, vWho0, { onDone: function () {
           voiceWait = false;
           if (!paused && !destroyed) scheduleNext(450);
         }});
@@ -740,9 +785,10 @@
       paintHint();
       keepInView(ln || textEl);   // suit la phrase qui vient d'apparaître
       voiceWait = false;
-      if (b.voice && HG.voice && HG.voice.isEnabled() && ln) {
+      var vWho1 = voiceWho(b);
+      if (vWho1 && HG.voice && HG.voice.isEnabled() && ln) {
         voiceWait = true;
-        HG.voice.speak(linesOf(b)[lineShown - 1], b.voice.who, { onDone: function () {
+        HG.voice.speak(linesOf(b)[lineShown - 1], vWho1, { onDone: function () {
           voiceWait = false; if (!paused && !destroyed) scheduleNext(450);
         }});
       }

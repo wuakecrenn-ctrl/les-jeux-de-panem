@@ -46,7 +46,7 @@
   }
 
   // --- Musique de fond (fichiers locaux) -------------------------------
-  var MUSIC_SRC = { caesar: "assets/sounds/caesar-theme.mp3" };
+  var MUSIC_SRC = { caesar: "assets/sounds/caesar-theme.mp3", fallen: "assets/sounds/fallen.mp3" };
   var musicEl = null;
   var musicFade = null;
 

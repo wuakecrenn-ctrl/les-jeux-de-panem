@@ -20,8 +20,8 @@ Le jeu est 100 % local, sans build ni installation.
 
   puis ouvrez `http://localhost:4202`. (Configuration déjà prête dans `.claude/launch.json`.)
 
-> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "25"`) et les
-> `?v=25` des feuilles de style, pour forcer le navigateur à recharger.
+> Après une modification du code, incrémentez `V` dans `index.html` (`var V = "28"`) et les
+> `?v=28` des feuilles de style, pour forcer le navigateur à recharger.
 >
 > Pour **ajouter vos propres répliques** (Caesar, annonceur, événements, morts) :
 > voir [`TEXTES.md`](TEXTES.md).
@@ -83,15 +83,17 @@ Plein écran (bouton 🗖 en bas à droite, ou F11) pour l'affichage sur une TV.
    dit (tenaille, arrières couverts, un contre trois). La meute des Carrières, des trahisons.
    À chaque mort : gros plan du tribut **en noir et blanc**, tampon rouge **◆ ÉLIMINÉ ·
    par X**, la **façon dont il tombe** (transpercé par une lance, coup de couteau, hache,
-   faucille, flèche, piège à contrepoids…) et la **cause exacte**. Aucun son de canon
-   pendant les manches — seulement un bref halo. L'un des événements des Juges est la
-   **Pluie de sang** : une averse écarlate qui ne tue pas mais brise le moral et pousse les
-   tributs les uns vers les autres. Après chaque manche, le salon vote (à main
-   levée) pour envoyer un **parachute** à un tribut : un clic sur sa carte, un parachute
-   descend, et **l'avantage du cadeau** (soin, +Force, +Survie…) s'affiche en clair.
-8. **Ceux qui sont tombés** — chaque nuit, portraits des disparus dans le ciel nocturne, un
-   **coup de canon (avec son)** par tribut, rapprochés. Bouton **« Passer les canons »**
-   pour aller droit au tableau de tous les disparus du jour.
+   faucille, flèche, piège à contrepoids…) et la **cause exacte**, avec **le vrai coup de
+   canon** (flash + son) à chaque mort en jeu — bain de sang, manches de jour comme de
+   nuit, dernier duel. L'un des événements des Juges est la **Pluie de sang** : une averse
+   écarlate qui ne tue pas mais brise le moral et pousse les tributs les uns vers les
+   autres. Après chaque manche, le salon vote (à main levée) pour envoyer un
+   **parachute** à un tribut : un clic sur sa carte, un parachute descend, et
+   **l'avantage du cadeau** (soin, +Force, +Survie…) s'affiche en clair.
+8. **Ceux qui sont tombés** — chaque nuit, portraits des disparus dans le ciel nocturne,
+   au son de **« The Fallen »** (thème du film) plutôt que du canon — la solennité de la
+   cérémonie plutôt qu'une salve. Bouton **« Tout afficher »** pour aller droit au
+   tableau de tous les disparus du jour.
 9. **Le dénouement** — dernier tribut, ou **double victoire des amants maudits** (une paire
    de joueurs ou du District 12, du même district, alliée — la règle est annoncée en cours
    de partie et se joue si les deux sont les derniers). **Une partie ne dépasse jamais
@@ -119,6 +121,9 @@ bouton du bas.
   elle ne se décale jamais avec le texte.
 - Le bouton **plein écran** (en bas à droite) change de sens selon l'état : 🗖 pour
   entrer, 🗗 pour sortir.
+- **Retour navigateur / souris** — la partie n'est sauvegardée nulle part tant qu'elle
+  n'est pas finie : dès qu'on a quitté l'accueil, un retour (bouton du navigateur, bouton
+  souris, fermer l'onglet) demande confirmation avant de tout perdre.
 
 ## L'accueil
 
@@ -138,18 +143,27 @@ Chaque étape a sa propre couleur d'ambiance et un rideau de transition qui l'an
 Moisson (acier), Présentation (violet), Défilé (or), Plateau de Caesar (magenta), Séances
 (turquoise), Bain de sang (rouge), Arène de jour (or), Arène de nuit (bleu froid),
 Cérémonie (bleu pâle), Sacre (or). Pendant l'arène, la barre du bas et les boutons son/voix
-s'effacent pour ne pas casser l'ambiance.
+s'effacent pour ne pas casser l'ambiance. Un fond de braises flottantes teinté selon la
+phase reste visible partout ; sa densité s'adapte à la taille de l'écran (bien plus
+fourni sur une grande TV que sur un portable, pour qu'il reste visible d'un canapé).
 
 ## Réglages (boutons en bas à droite)
 
-- **♪ Son** — sons et musique. Canon, **sifflet du geai moqueur** (seule annonce du
-  vainqueur — pas de fanfare) et **corne de brume** (*War Horn*, fin du compte à rebours)
-  = fichiers de `assets/sounds/` ; thème de Caesar = `assets/sounds/caesar-theme.mp3` ;
-  compte à rebours = `assets/video/countdown.mp4` ; parachute, gong (doux) et un **clic
-  d'interface discret et moderne** = synthétisés (Web Audio). Repli automatique si un
-  fichier manque (le compte à rebours devient un décompte animé).
-- **🗣 Voix** — synthèse vocale du navigateur (voix françaises de Windows) pour Caesar et
-  l'annonceur. Se coupe d'un clic.
+- **♪ Son** — sons et musique. **Coup de canon** à chaque mort en jeu (bain de sang,
+  manches, duel), **sifflet du geai moqueur** (seule annonce du vainqueur — pas de
+  fanfare) et **corne de brume** (*War Horn*, fin du compte à rebours) = fichiers de
+  `assets/sounds/` ; thème de Caesar = `assets/sounds/caesar-theme.mp3` ; **« The
+  Fallen »** = `assets/sounds/fallen.mp3`, pendant toute la cérémonie des disparus
+  (remplace le canon, pour la solennité) ; compte à rebours = `assets/video/countdown.mp4`
+  ; parachute, gong (doux) et un **clic d'interface discret et moderne** = synthétisés
+  (Web Audio). Repli automatique si un fichier manque (le compte à rebours devient un
+  décompte animé).
+- **🗣 Voix** — synthèse vocale du navigateur (voix françaises de Windows). Lit
+  **tout ce qui concerne le jeu** par défaut (combats, morts, événements, alliances,
+  trahisons…) avec la voix de l'annonceur, Caesar et Claudius (le porte-parole des
+  Juges) pour leurs répliques propres. Seules les présentations / défilés / interviews
+  des tributs **non incarnés par un joueur** restent muets, pour ne pas lire les
+  vingt-quatre à la suite. Se coupe d'un clic.
 - **🗖 Plein écran.** `prefers-reduced-motion` est respecté.
 
 Le jeu est **fidèle à l'esprit du film** (PG-13) — pas de réglage de ton.
@@ -186,7 +200,7 @@ src/
     simulation.js           orchestration : bain de sang + manches (produit des « beats »)
   screens/                  home, roster, prelude, bloodbath, round, fallen, victory
 assets/tributes/            les 24 portraits (d1m.png … d12f.png)
-assets/sounds/              canon, geai moqueur, corne de brume, thème de Caesar (mp3)
+assets/sounds/              canon, geai moqueur, corne de brume, thème de Caesar, « The Fallen » (mp3)
 assets/video/               compte à rebours de la Corne d'abondance (mp4)
 assets/capitole-seal.png    sceau officiel du Capitole (accueil) — recoloré en or
 

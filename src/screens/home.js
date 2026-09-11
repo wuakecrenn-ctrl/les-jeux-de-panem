@@ -16,11 +16,15 @@
   // et se coupe si le système demande moins d'animations.
   function atmosphere() {
     var motes = el("div", { class: "fx-motes" });
-    for (var i = 0; i < 14; i++) {
+    // Densité constante plutôt que nombre fixe : sur une grande TV, 14
+    // poussières éparpillées sur tout l'écran se voient à peine.
+    var area = (window.innerWidth || 1280) * (window.innerHeight || 720);
+    var n = Math.max(14, Math.min(42, Math.round(area / 65000)));
+    for (var i = 0; i < n; i++) {
       motes.appendChild(el("i", { style: {
-        left: (3 + i * 7 + (i % 3) * 2) + "%",
-        animationDelay: (-i * 1.7).toFixed(1) + "s",
-        animationDuration: (13 + (i % 5) * 3.5).toFixed(1) + "s"
+        left: (2 + Math.random() * 96).toFixed(1) + "%",
+        animationDelay: (-Math.random() * 22).toFixed(1) + "s",
+        animationDuration: (13 + Math.random() * 14.5).toFixed(1) + "s"
       }}));
     }
     return el("div", { class: "home-fx", "aria-hidden": "true" }, [
