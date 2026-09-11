@@ -183,7 +183,8 @@
           who(t) + " évite le pire mais y laisse quelques forces.",
           who(t) + " s'en sort avec une frayeur et une entaille.",
           who(t) + " frôle l'accident, blêmit, et reprend sa route plus prudemment.",
-          who(t) + " paie l'inattention d'une mauvaise chute — rien de cassé, mais ça compte."
+          who(t) + " paie l'inattention d'une mauvaise chute — rien de cassé, mais ça compte.",
+          who(t) + " reste assis(e) un long moment après coup, le temps que les mains arrêtent de trembler."
         ]) });
       }
     });
@@ -209,7 +210,8 @@
           "Un guérisseur s'active : " + names(uniq.slice(0, 3)) + " repart" + (plural ? "ent" : "") + " en meilleure forme.",
           names(uniq.slice(0, 3)) + " met" + (plural ? "tent" : "") + " à profit la nuit pour nettoyer et recoudre les plaies.",
           "Cataplasme d'écorce, fil et aiguille : " + names(uniq.slice(0, 3)) + " soigne" + (plural ? "nt" : "") + " ce qui peut l'être.",
-          "L'alliance a son guérisseur. " + names(uniq.slice(0, 3)) + " repart" + (plural ? "ent" : "") + " la fièvre tombée."
+          "L'alliance a son guérisseur. " + names(uniq.slice(0, 3)) + " repart" + (plural ? "ent" : "") + " la fièvre tombée.",
+          names(uniq.slice(0, 3)) + " profite" + (plural ? "nt" : "") + " d'une accalmie pour reprendre des forces."
         ]) });
     }
   }
@@ -247,7 +249,9 @@
       "{A} entend {B} approcher sans le voir, et se plaque contre un tronc. Trop tard, {B} l'a vu aussi.",
       "Une clairière, deux entrées, deux tributs qui arrivent en même temps. {A} et {B}.",
       "{A} cherchait de l'eau. {B} cherchait de l'eau. Il n'y en a que pour un.",
-      "{A} et {B} tournent le même rocher, l'un vers la droite, l'autre vers la gauche."
+      "{A} et {B} tournent le même rocher, l'un vers la droite, l'autre vers la gauche.",
+      "{A} suit le même filet d'eau que {B}, en sens inverse, jusqu'à ce qu'il n'y ait plus de distance entre eux.",
+      "{A} et {B} sortent du couvert au même instant, sur la même clairière, sans s'y attendre."
     ],
     ranged: [
       "{A} repère {B} à découvert dans la plaine et prend ses distances.",
@@ -263,7 +267,8 @@
       "{B} s'arrête pour reprendre son souffle en terrain découvert. Mauvaise idée : {A} le tient.",
       "{A} suit {B} du regard depuis un promontoire, sans se presser d'agir.",
       "{B} traverse le pont de pierre. {A} attend l'autre rive, calé sur un genou.",
-      "{A} a repéré {B} bien avant que {B} ne soupçonne quoi que ce soit."
+      "{A} a repéré {B} bien avant que {B} ne soupçonne quoi que ce soit.",
+      "{A} règle sa visée pendant que {B} traverse tranquillement le champ de vision."
     ],
     ambush: [
       "{A} a repéré la fumée du feu de {B} et s'en approche sans un bruit.",
@@ -279,7 +284,8 @@
       "{B} s'assoit pour souffler, dos à un buisson. {A} est dans le buisson.",
       "{A} a suivi les corbeaux jusqu'au campement de {B}, et attendu la nuit.",
       "{B} pousse une branche pour passer. {A} tenait l'autre bout depuis un moment.",
-      "{A} laisse tomber une pierre plus loin ; {B} tourne la tête ; {A} bouge."
+      "{A} laisse tomber une pierre plus loin ; {B} tourne la tête ; {A} bouge.",
+      "{B} s'arrête pour resserrer un lacet. {A} n'attendait qu'une pause comme celle-là."
     ],
     hunt: [
       "{A} pistait {B} depuis l'aube, lisant chaque brindille. La traque touche à sa fin.",
@@ -294,7 +300,8 @@
       "{A} connaît ce coin de l'arène mieux que {B}. Ça finit toujours pareil.",
       "{B} croise trois fois la même souche : il tourne en rond, et {A} le sait.",
       "{A} coupe par la crête pendant que {B} contourne la colline. {A} arrive premier.",
-      "{B} a semé son poursuivant, croit-il. {A} n'a jamais été derrière — il était devant."
+      "{B} a semé son poursuivant, croit-il. {A} n'a jamais été derrière — il était devant.",
+      "{A} suit l'odeur du feu de {B} depuis la nuit dernière, sans jamais la perdre."
     ],
     flight: [
       "{A} et {B} manquent de se percuter en pleine fuite dans le brouillard.",
@@ -304,7 +311,8 @@
       "L'arène rétrécit : {A} et {B} sont poussés l'un vers l'autre, sans autre issue.",
       "{A} et {B} courent devant la même nappe de brouillard et débouchent sur le même surplomb.",
       "Le mur invisible de l'arène coupe la fuite de {A} et {B} au même endroit.",
-      "Fuyant les loups des Juges, {A} et {B} se jettent dans le même abri. Il n'y a de place que pour un."
+      "Fuyant les loups des Juges, {A} et {B} se jettent dans le même abri. Il n'y a de place que pour un.",
+      "Le même danger pousse {A} et {B} dans le même goulet, sans autre issue de secours."
     ]
   };
   // APPROACH_GROUP — au moins un camp est une alliance. narrateClash oriente
@@ -322,7 +330,9 @@
     "Face au groupe de {A}, {B} calcule{tB} ses chances.",
     "{A} laissent l'un des leurs se montrer comme appât ; les autres sont déjà en position.",
     "{A} arrivent en marchant, presque tranquilles. À plusieurs, on ne se presse pas.",
-    "{DEUX} s'arrêtent à vingt pas. On compte les silhouettes des deux côtés."
+    "{DEUX} s'arrêtent à vingt pas. On compte les silhouettes des deux côtés.",
+    "{A} avancent au pas, sans un mot de trop. En face, {B} recule{tB} d'instinct.",
+    "Le nombre parle avant même le premier coup : {DEUX} le savent tous les deux."
   ];
 
   // NUMBERS_WIN — le camp majoritaire {BIG} l'emporte sur {SMALL}.
@@ -342,7 +352,9 @@
     "{SMALL} en met un à terre — il en reste toujours autant debout en face.",
     "{SMALL} se bat pour deux, vise juste, tient bon. À {nbig} contre {nsmall}, ça ne suffit pas.",
     "{SMALL} fonce sur un seul adversaire pour briser le groupe. Le groupe ne se brise pas.",
-    "Le courage de {SMALL} ne rattrape pas l'arithmétique."
+    "Le courage de {SMALL} ne rattrape pas l'arithmétique.",
+    "{BIG} referment le cercle un peu plus à chaque pas. {SMALL} n'a bientôt plus où reculer.",
+    "Un contre plusieurs, ça se joue rarement longtemps. {BIG} le savent, et ne se pressent pas."
   ];
 
   // NUMBERS_WIN_MANY — même idée, mais les DEUX camps sont des groupes :
@@ -354,7 +366,8 @@
     "Chaque erreur coûte double quand on est moins nombreux, et il en vient une du côté de {SMALL}.",
     "{BIG} gardent la formation. En face, la ligne se troue, puis cède d'un coup.",
     "À {nbig} contre {nsmall}, {BIG} n'ont qu'à garder la pression et laisser le temps faire le reste.",
-    "Le surnombre de {BIG} finit par ouvrir une brèche que rien, en face, ne vient refermer."
+    "Le surnombre de {BIG} finit par ouvrir une brèche que rien, en face, ne vient refermer.",
+    "{BIG} n'ont qu'à tenir la ligne. Le nombre fait le reste, lentement mais sûrement."
   ];
 
   // WEAPON_WIN / WEAPON_LOSE — une arme a fait la différence.
@@ -373,7 +386,9 @@
     "{who} a attendu le bon moment pour que {w} donne son plein effet. {foe} n'a rien à répondre.",
     "Le terrain va à {w} de {who} comme un gant. {foe} l'a compris une seconde trop tard.",
     "{who} n'a même pas besoin de bien viser : à cette portée, {w} suffit.",
-    "{foe} sait dès le premier échange que c'est mal engagé face à {w}."
+    "{foe} sait dès le premier échange que c'est mal engagé face à {w}.",
+    "{who} n'a rien d'autre à faire que ce que {w} fait le mieux, et ça suffit largement.",
+    "Face à {w}, {foe} ne trouve jamais l'angle qu'il faudrait."
   ];
   var WEAPON_LOSE = [
     "{w} n'est pas l'arme de cette rencontre, et {who} le paie cher.",
@@ -385,7 +400,9 @@
     "{who} n'arrive jamais à mettre {w} à distance utile. {foe} reste toujours du mauvais côté.",
     "Chaque fois que {who} arme un coup avec {w}, {foe} a déjà bougé.",
     "{who} lâche {w} en cours de combat pour se battre autrement. Trop tard.",
-    "Mauvaise arme, mauvais endroit : {who} ne peut rien tirer de {w} contre {foe}."
+    "Mauvaise arme, mauvais endroit : {who} ne peut rien tirer de {w} contre {foe}.",
+    "{who} compense comme il peut, mais {w} n'a jamais été fait pour ce genre de combat.",
+    "Face à {foe}, {w} devient un poids mort dans les mains de {who}."
   ];
 
   // EXCHANGE — échange de coups générique. Codes : {A} {B} uniquement.
@@ -424,7 +441,9 @@
     "Ça se joue au souffle : {A} respire encore, {B} beaucoup moins.",
     "{A} recule vers l'eau, {B} le pousse — et se retrouve à découvert sur les galets.",
     "{B} fait tomber {A}, se jette dessus. {A} avait gardé une main libre pour ça.",
-    "Un échange trop rapide pour l'œil. Quand ça ralentit, {A} est encore debout."
+    "Un échange trop rapide pour l'œil. Quand ça ralentit, {A} est encore debout.",
+    "{A} garde son calme malgré les coups. {B} commence à en manquer.",
+    "{B} cherche à gagner du temps ; {A} ne lui en laisse pas."
   ];
 
   // GROUP_MID — 2e ligne neutre quand au moins un camp est un GROUPE et que
@@ -436,7 +455,8 @@
     "{A} ne se pressent pas. Le temps joue contre {B}, pas contre eux.",
     "{B} touche{tB} un des alliés de {A}. Deux autres comblent le trou aussitôt.",
     "{A} resserrent le cercle d'un pas. En face, on le sent se refermer.",
-    "{B} cherche{tB} la faille dans le groupe de {A}. Il n'y en a pas encore."
+    "{B} cherche{tB} la faille dans le groupe de {A}. Il n'y en a pas encore.",
+    "{A} tiennent la position sans s'exposer. Rien ne force encore la décision."
   ];
   // GROUP_STANDOFF — fin sans mort, camp = groupe. {A} = plus nombreux.
   var GROUP_STANDOFF = [
@@ -444,7 +464,8 @@
     "Un canon ailleurs dans l'arène disperse tout le monde avant l'assaut de {A}.",
     "{B} se glisse{tB} entre deux alliés de {A} et file{tB} dans le couvert.",
     "{A} rompent d'eux-mêmes : pas la peine de risquer un des leurs pour si peu.",
-    "Le brouillard des Juges avale la clairière. {A} et {B} décrochent."
+    "Le brouillard des Juges avale la clairière. {A} et {B} décrochent.",
+    "{A} jugent que le risque ne vaut pas la prise. Ils laissent filer {B}."
   ];
 
   // TIGHT — combat vraiment serré, ajouté en 3e ligne quand res.margin est minuscule.
@@ -457,7 +478,8 @@
     "{DEUX} se regardent, essoufflés, et repartent quand même.",
     "Une rencontre qui aurait dû finir en dix secondes en dure cent.",
     "Le premier à faiblir est mort, et {DEUX} le savent. L'un des deux va faiblir.",
-    "Coup pour coup, chute pour chute. Il faut un rien pour que ça bascule."
+    "Coup pour coup, chute pour chute. Il faut un rien pour que ça bascule.",
+    "{DEUX} tiennent debout par pure volonté. Le corps voudrait déjà céder."
   ];
 
   // STANDOFF — fin SANS mort. Codes : {A} {B} {DEUX}.
@@ -476,7 +498,9 @@
     "Blessés et méfiants, {DEUX} reculent sans se quitter des yeux.",
     "Un grondement de séisme ouvre une crevasse au milieu du combat. La suite attendra.",
     "{A} lève une main : trêve. {B} accepte, sans baisser sa garde.",
-    "Ni {A} ni {B} ne veut mourir pour un combat que personne ne regarde vraiment."
+    "Ni {A} ni {B} ne veut mourir pour un combat que personne ne regarde vraiment.",
+    "{DEUX} s'écartent d'un même mouvement, comme d'un commun accord tacite.",
+    "La nuit tombe entre {A} et {B}. Ni l'un ni l'autre ne tient à se battre dans le noir."
   ];
 
   function names(list) { return list.map(who).join(" & "); }
@@ -890,7 +914,8 @@
         "Les vivres manquent. " + who(killer) + " décide qu'il y a une bouche de trop : " + who(victim) + ".",
         who(killer) + " et " + who(victim) + " se disputent le butin. Ça tourne mal.",
         "L'alliance des Carrières n'était bonne que tant qu'il restait des proies dehors. Il n'en reste plus assez : " + who(killer) + " le comprend le premier.",
-        who(killer) + " n'attend pas d'être le suivant sur la liste. " + who(victim) + " est plus lent(e) à s'en rendre compte."
+        who(killer) + " n'attend pas d'être le suivant sur la liste. " + who(victim) + " est plus lent(e) à s'en rendre compte.",
+        who(killer) + " a fait le compte des vivres et des bouches à nourrir. " + who(victim) + " est en trop."
       ])], cls: "event"
     });
     var l = applyOutcome({ tribute: victim, result: "death", killerId: killer.id, kind: "pack_turn" }, null);
@@ -901,7 +926,8 @@
       beats.push({ text: line(rng, [
         "Ce qui restait de la meute vole en éclats. Désormais, chacun pour soi.",
         "Plus de meute, plus d'alliance : les derniers Carrières partent chacun de leur côté, sur leurs gardes.",
-        "L'alliance qui faisait peur à toute l'arène n'existe plus. Reste des tributs seuls, armés et méfiants."
+        "L'alliance qui faisait peur à toute l'arène n'existe plus. Reste des tributs seuls, armés et méfiants.",
+        "La meute des Carrières, si redoutée au premier jour, se disperse dans l'arène comme n'importe quel groupe de survivants."
       ]), cls: "" });
     }
   }
@@ -929,7 +955,8 @@
           who(traitor) + " attend que le feu baisse et que " + who(victim) + " ferme les yeux.",
           "Il ne reste plus assez de place pour deux. " + who(traitor) + " le sait avant " + who(victim) + ".",
           who(traitor) + " a compté les vivres, compté les tributs restants, et pris sa décision.",
-          "Un allié de moins, c'est un adversaire de moins plus tard. " + who(traitor) + " y pense fort en regardant " + who(victim) + " dormir."
+          "Un allié de moins, c'est un adversaire de moins plus tard. " + who(traitor) + " y pense fort en regardant " + who(victim) + " dormir.",
+          who(traitor) + " a fini par se lasser de partager. " + who(victim) + " n'a rien vu venir."
         ])], cls: "event"
       };
       beats.push(setup);
@@ -939,7 +966,8 @@
       if (!died) setup.lines.push(line(rng, [
         who(victim) + " a senti le coup venir. Les deux se séparent, à vif.",
         who(victim) + " se réveille une seconde trop tôt. L'alliance est finie, mais pas " + who(victim) + ".",
-        "La lame de " + who(traitor) + " ne trouve que le sac de couchage. " + who(victim) + " est déjà debout, arme au poing."
+        "La lame de " + who(traitor) + " ne trouve que le sac de couchage. " + who(victim) + " est déjà debout, arme au poing.",
+        who(victim) + " avait toujours gardé un œil ouvert. " + who(traitor) + " le comprend un peu tard."
       ]));
     });
   }
@@ -959,7 +987,8 @@
         "Un parachute argenté descend en silence vers " + who(winner) + " : <b>" + g.label + "</b> — " + g.blurb + ".",
         "Les sponsors de " + who(winner) + " se manifestent : <b>" + g.label + "</b>, " + g.blurb + ".",
         who(winner) + " lève les yeux : un parachute, et au bout <b>" + g.label + "</b> — " + g.blurb + ".",
-        "Cadeau du Capitole pour " + who(winner) + " : <b>" + g.label + "</b>. De quoi " + g.blurb + "."
+        "Cadeau du Capitole pour " + who(winner) + " : <b>" + g.label + "</b>. De quoi " + g.blurb + "." ,
+        "Un parachute se pose près de " + who(winner) + " : <b>" + g.label + "</b>, " + g.blurb + "."
       ])];
       if (g._newWeapon) gl.push(who(winner) + " abandonne " + g._oldWeapon + " pour " + HG.WEAPONS[g._newWeapon].name + " : " + HG.WEAPONS[g._newWeapon].tag + ".");
       beats.push({ portraits: [port(winner)], lines: gl, cls: "gift" });
@@ -1206,14 +1235,16 @@
         beats.push({ text: line(rng, [
           "Dernier jour. Les Juges l'ont annoncé : ces Jeux se terminent aujourd'hui, d'une manière ou d'une autre.",
           "Les Juges ont fixé la fin à aujourd'hui. Il y aura un vainqueur avant la nuit.",
-          "Plus de lendemain dans l'arène. Ce qui doit se régler se règle maintenant."
+          "Plus de lendemain dans l'arène. Ce qui doit se régler se règle maintenant.",
+          "Les Juges l'ont décidé : il y aura un vainqueur avant que le soleil ne se couche."
         ]), cls: "event", voice: { who: "claudius" } });
       } else if (daysLeft <= 2 && aliveBefore > 3 && !st._closingSaid) {
         st._closingSaid = true;
         beats.push({ text: line(rng, [
           "L'arène se referme jour après jour. Il ne reste que peu de temps avant le dénouement.",
           "Les murs de l'arène avancent. Le territoire jouable fond à vue d'œil.",
-          "Les Juges resserrent les Jeux. Bientôt, il n'y aura plus où se cacher."
+          "Les Juges resserrent les Jeux. Bientôt, il n'y aura plus où se cacher.",
+          "L'arène rétrécit un peu plus chaque jour. Les Juges veulent que ça se termine, et bientôt."
         ]), cls: "event" });
       }
       if (forceConverge && !lastDay) {
@@ -1296,7 +1327,8 @@
             "Chaque coup pèse une tonne. " + who(loser) + " en manque un.",
             "Ils tombent tous les deux dans la poussière ; " + who(winner) + " se relève.",
             who(winner) + " trouve l'ouverture au moment où " + who(loser) + " n'en peut plus.",
-            "Plus de plan, plus de ruse : celui qui veut le plus fort gagne. C'est " + who(winner) + "."
+            "Plus de plan, plus de ruse : celui qui veut le plus fort gagne. C'est " + who(winner) + ".",
+            "C'est fini en un instant, comme tout le reste depuis le premier jour. " + who(winner) + " reste seul(e) debout."
           ])
         ]
       });
@@ -1340,7 +1372,8 @@
         text: line(rng, [
           "Acculés au même rocher, les alliés se regardent enfin en face. " + who(killer) + " frappe le premier.",
           "L'alliance a tenu jusqu'ici parce qu'elle servait tout le monde. Elle ne sert plus personne. " + who(killer) + " tranche.",
-          "Les Juges resserrent l'arène sur les derniers alliés. À la fin, il n'y a de place que pour un : " + who(killer) + " s'en assure."
+          "Les Juges resserrent l'arène sur les derniers alliés. À la fin, il n'y a de place que pour un : " + who(killer) + " s'en assure.",
+          "Il ne reste presque plus personne dans l'arène, et encore moins de raisons de rester alliés. " + who(killer) + " le règle."
         ]),
         cls: "event" });
       var lx = applyOutcome({ tribute: victim, result: "death", killerId: killer.id, kind: "betrayal" }, null);
@@ -1372,7 +1405,8 @@
       text: subCamps(line(rng, [
         "Les Juges resserrent l'arène : {A} et {B} n'ont plus nulle part où se cacher.",
         "Le territoire jouable vient de fondre de moitié. {A} et {B} se retrouvent forcément.",
-        "Plus de forêt, plus de crêtes : les Juges rabattent {DEUX} sur la même trouée."
+        "Plus de forêt, plus de crêtes : les Juges rabattent {DEUX} sur la même trouée.",
+        "Le décor de l'arène a fondu jusqu'à ne plus laisser le choix : {A} et {B} se retrouvent face à face."
       ]), a, b),
       cls: "event"
     });
@@ -1409,7 +1443,11 @@
     "Une alliance monte la garde à tour de rôle. Celui qui dort ne dort que d'un œil.",
     "Un tribut escalade un arbre pour repérer les fumées des autres, mémorise, redescend sans un bruit.",
     "L'eau d'une gourde est comptée en gorgées. Chaque gorgée est une décision.",
-    "Deux tributs se suivent à distance depuis le matin. Aucun des deux ne veut engager le premier."
+    "Deux tributs se suivent à distance depuis le matin. Aucun des deux ne veut engager le premier.",
+    "Un tribut compte les jours sur une écorce entaillée d'un couteau. Le compte n'est pas rassurant.",
+    "Un troupeau de cerfs mutants traverse l'arène sans s'arrêter. Personne n'ose bouger avant qu'il ne soit loin.",
+    "La caméra s'attarde sur un campement vide. Celui qui l'a quitté n'est pas allé bien loin.",
+    "Un tribut trace une carte grossière dans la terre, l'efface aussitôt du talon."
   ];
   function dryRoundFlavor(beats) {
     var rng = S().rng;
@@ -1419,7 +1457,8 @@
     beats.push({ cls: "", lines: picked.concat([line(rng, [
       "La manche s'achève sans un canon. Les parieurs du Capitole s'agacent.",
       "Aucune mort aujourd'hui. Quelque part, un Juge note qu'il faudra corriger ça.",
-      "Le ciel reste vide ce soir. Le Capitole n'aime pas les soirées vides."
+      "Le ciel reste vide ce soir. Le Capitole n'aime pas les soirées vides.",
+      "Zéro canon aujourd'hui. Les Juges griffonnent déjà des idées pour demain."
     ])]) });
   }
 

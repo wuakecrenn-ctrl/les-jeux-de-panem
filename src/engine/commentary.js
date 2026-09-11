@@ -51,7 +51,11 @@
     "Personne ne veut manquer celui-ci —",
     "Droit dans les cœurs du Capitole :",
     "On garde un œil sur celui-là. Voici",
-    "Les caméras ne le lâchent plus :"
+    "Les caméras ne le lâchent plus :",
+    "Le Capitole retient son souffle pour",
+    "Un tonnerre d'applaudissements attend déjà",
+    "On ne parle que de lui — ou d'elle — dans les gradins :",
+    "Voici, pour la première fois sous ces projecteurs,"
   ];
 
   var CAESAR_BY_PROFILE = {
@@ -62,49 +66,63 @@
       "{name} sourit à peine. C'est peut-être ça, le plus inquiétant.",
       "{name} a été élevé pour ces Jeux. On le voit à chaque geste.",
       "Les autres Carrières regardent {name} du coin de l'œil. Ça en dit long.",
-      "{name} promet du spectacle. Le Capitole ne demande que ça."
+      "{name} promet du spectacle. Le Capitole ne demande que ça.",
+      "On a formé {name} pour gagner, pas pour plaire. Les deux, apparemment, ne s'excluent pas.",
+      "{name} parle de l'arène comme d'un terrain de jeu. Ça devrait inquiéter les autres."
     ],
     strong: [
       "{name} pourrait soulever un char à mains nues. Le Capitole adore.",
       "Ne cherchez pas la finesse chez {name} — cherchez la puissance.",
       "{name} a serré la main de Caesar… et Caesar a eu peur pour ses doigts.",
       "Une poignée de main de {name} et l'on comprend pourquoi les cotes montent.",
-      "{name} n'a pas dit trois mots, mais on a compté les muscles."
+      "{name} n'a pas dit trois mots, mais on a compté les muscles.",
+      "{name} soulève la chaise pour la reposer plus près de Caesar. Personne n'a rien demandé.",
+      "On raconte que {name} s'entraîne avec des sacs de sable doublés. Ça se voit."
     ],
     cunning: [
       "{name} a ce regard qui calcule tout. Méfiez-vous de l'eau qui dort.",
       "Pas un mot de trop. {name} garde ses cartes contre sa poitrine.",
       "{name} n'a rien promis, rien juré. C'est peut-être une tactique.",
       "{name} répond à côté de chaque question, avec le sourire. Brillant.",
-      "On ne sait rien de plus sur {name} qu'avant l'interview. C'est sans doute voulu."
+      "On ne sait rien de plus sur {name} qu'avant l'interview. C'est sans doute voulu.",
+      "{name} répond à Caesar par une question. Caesar rit, mais n'obtient pas de réponse.",
+      "{name} sourit à la caméra sans jamais la regarder vraiment. Un détail qui en dit long."
     ],
     charming: [
       "{name} a fait pleurer trois stylistes et rire toute la salle. Un phénomène.",
       "Le Capitole est déjà amoureux de {name}. Les parachutes vont pleuvoir.",
       "{name} raconte une histoire et l'avenue entière se penche pour écouter.",
       "{name} repart sous une ovation. Les sponsors font déjà la queue.",
-      "Trois minutes avec {name} et on oublie que c'est une arène qui attend."
+      "Trois minutes avec {name} et on oublie que c'est une arène qui attend.",
+      "{name} fait rire Caesar aux larmes. Le Capitole entier voudrait l'adopter.",
+      "Un mot de {name} et toute la salle se penche en avant. C'est un don, pas un hasard."
     ],
     small: [
       "{name} est menu, oui — mais on ne gagne pas les Jeux au poids.",
       "Ne sous-estimez jamais {name}. Les discrets savent se faire oublier.",
       "{name} tient dans un creux de rocher. Bonne chance pour l'y trouver.",
       "{name} sourit poliment. Dans l'arène, ce sourire aura disparu — et {name} aussi, des radars.",
-      "Petit gabarit, grand cerveau : {name} n'a pas dit son dernier mot."
+      "Petit gabarit, grand cerveau : {name} n'a pas dit son dernier mot.",
+      "{name} disparaît presque dans le fauteuil de l'interview. Dans l'arène, ce sera un avantage.",
+      "On sous-estime toujours les plus légers. {name} compte bien s'en servir."
     ],
     survivor: [
       "{name} connaît la faim, le froid, les bois. L'arène, c'est presque chez lui.",
       "{name} tiendra quand les autres flancheront. Notez-le.",
       "{name} a déjà passé des nuits dehors sans feu. Ça compte, dans une arène.",
       "Pendant que d'autres cherchent une arme, {name} cherchera de l'eau. Et il la trouvera.",
-      "{name} parle de plantes comestibles comme d'autres parlent d'épées. Malin."
+      "{name} parle de plantes comestibles comme d'autres parlent d'épées. Malin.",
+      "{name} a grandi dehors, sans filet. L'arène ne sera qu'un hiver de plus.",
+      "Les mains de {name} racontent une vie de travail, pas de tournois. Ça compte, dans les bois."
     ],
     plain: [
       "{name} avance masqué. On n'a rien pu lui tirer — surprise garantie.",
       "Discret, {name}. Le genre à créer la sensation au douzième jour.",
       "{name} observe, jauge, attend. Un outsider comme le Capitole les aime.",
       "{name} n'a pas fait de vagues ce soir. Les vagues, ce sera pour l'arène.",
-      "On n'a pas de case pour {name}. C'est peut-être son meilleur atout."
+      "On n'a pas de case pour {name}. C'est peut-être son meilleur atout.",
+      "{name} répond poliment, sourit au bon moment, et ne laisse rien filtrer de plus.",
+      "Personne ne mise gros sur {name} ce soir. C'est peut-être une erreur."
     ]
   };
 
@@ -116,7 +134,9 @@
     "<span class='who'>{name}</span> envoie un baiser à la foule et les gradins explosent.",
     "Les paris se rouvrent en direct : après ce défilé, la cote de <span class='who'>{name}</span> grimpe en flèche.",
     "<span class='who'>{name}</span> tient la pose une seconde de trop, juste ce qu'il faut. La foule adore.",
-    "On n'avait pas vu un char faire cet effet depuis des années. <span class='who'>{name}</span> restera dans les mémoires."
+    "On n'avait pas vu un char faire cet effet depuis des années. <span class='who'>{name}</span> restera dans les mémoires.",
+    "Le nom de <span class='who'>{name}</span> se répète déjà dans toute la Grande Avenue.",
+    "Les stylistes du District {d} viennent de gagner leur pari : <span class='who'>{name}</span> éclipse tous les autres chars."
   ];
   var CHARIOT_MID = [
     "<span class='who'>{name}</span> salue la foule ; des applaudissements nourris montent des gradins.",
@@ -126,7 +146,9 @@
     "Quelques sifflets admiratifs pour <span class='who'>{name}</span> au passage du char.",
     "<span class='who'>{name}</span> fixe les caméras droit dans l'objectif. Le message est passé.",
     "Pas d'éclat, pas de faute : <span class='who'>{name}</span> passe l'épreuve du défilé sans trembler.",
-    "<span class='who'>{name}</span> cherche un visage dans la foule, ne le trouve pas, et se redresse quand même."
+    "<span class='who'>{name}</span> cherche un visage dans la foule, ne le trouve pas, et se redresse quand même.",
+    "Le District {d} fait son effet, sans plus. <span class='who'>{name}</span> passe, correct, oublié dans une heure.",
+    "<span class='who'>{name}</span> lève la main, timide, et récolte quelques applaudissements polis."
   ];
   var CHARIOT_COLD = [
     "Le char du District {d} passe presque inaperçu. <span class='who'>{name}</span> devra se faire remarquer autrement.",
@@ -136,7 +158,9 @@
     "<span class='who'>{name}</span> trébuche légèrement sur la plateforme. Le Capitole retient un rire.",
     "Silence poli au passage de <span class='who'>{name}</span>. Il faudra convaincre à l'entraînement.",
     "<span class='who'>{name}</span> oublie de saluer, se reprend trop tard. Le char est déjà loin.",
-    "Le District {d} n'a pas eu de budget costume, et ça se voit. <span class='who'>{name}</span> fait ce qu'il peut."
+    "Le District {d} n'a pas eu de budget costume, et ça se voit. <span class='who'>{name}</span> fait ce qu'il peut.",
+    "<span class='who'>{name}</span> garde les yeux baissés tout le long de l'avenue. La foule passe déjà au char suivant.",
+    "Un char sans éclat, un costume sans idée : <span class='who'>{name}</span> n'a rien pour retenir l'attention ce soir."
   ];
 
   HG.commentary = {
@@ -166,12 +190,14 @@
         "Cette année encore, les Juges ont préparé quelque chose de… mémorable.",
         "Vous les avez vus au tirage, vous allez apprendre à les connaître : voici les tributs.",
         "Chaque district envoie un garçon et une fille. Certains sont nés pour ça. D'autres l'apprennent ce soir.",
-        "Comme chaque année, le Capitole vous offre le spectacle. Et que le sort — vous le savez — vous soit éternellement favorable."
+        "Comme chaque année, le Capitole vous offre le spectacle. Et que le sort — vous le savez — vous soit éternellement favorable.",
+        "Douze districts, deux tributs chacun — et un seul rentrera chez lui."
       ],
       rosterCall: [
         "Voici, district par district, les vingt-quatre visages de ces Jeux.",
         "Regardez-les bien. Dans quelques jours, il n'en restera qu'un.",
-        "Le Capitole vous présente vos tributs."
+        "Le Capitole vous présente vos tributs.",
+        "Souvenez-vous bien de ces visages."
       ],
       open: "Que les soixante-quatorzièmes Hunger Games commencent. Et que le sort vous soit — <em class='q'>éternellement</em> — favorable.",
       feast: "Votre attention. Un festin sera servi à la Corne d'abondance. Chacun y trouvera ce dont il a désespérément besoin. Refuser l'invitation serait… imprudent.",

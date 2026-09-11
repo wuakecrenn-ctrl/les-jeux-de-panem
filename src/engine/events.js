@@ -26,7 +26,8 @@
       announce: [
         "Rien à signaler dans l'arène. Le Capitole s'ennuie ferme — profitez-en, tributs, cela ne durera pas.",
         "Une matinée sans un cri. Les caméras cherchent l'action et ne trouvent que des feuilles qui bougent.",
-        "Le soleil monte sur une arène immobile. Quelque part, un Juge tapote son pupitre."
+        "Le soleil monte sur une arène immobile. Quelque part, un Juge tapote son pupitre.",
+        "Les micros du Capitole ne captent que le vent. Ennuyeux, pour tout le monde sauf pour vous."
       ]
     },
     {
@@ -34,14 +35,16 @@
       announce: [
         "La nuit tombe sans un cri. Les feux de camp s'éteignent un à un ; chacun serre son arme un peu plus fort.",
         "Une nuit claire et froide. On entend les tributs respirer d'un bout à l'autre de l'arène.",
-        "Pas un canon cette nuit. Seulement le vent dans les cimes et des yeux qui ne se ferment pas."
+        "Pas un canon cette nuit. Seulement le vent dans les cimes et des yeux qui ne se ferment pas.",
+        "Aucune alarme, aucun cri. Juste la nuit, longue, et l'attente de ce qu'elle cache peut-être."
       ]
     },
     {
       id: "quiet_alliance", title: "Trêve tacite", phase: "night", weight: 5, quiet: true, bonding: true,
       announce: [
         "Nul mouvement cette nuit. Autour des feux, on partage un peu d'eau, on monte la garde à tour de rôle.",
-        "Les alliances se resserrent dans le noir : on se raconte le district, la maison, ce qu'on fera après."
+        "Les alliances se resserrent dans le noir : on se raconte le district, la maison, ce qu'on fera après.",
+        "Personne n'attaque cette nuit. On préfère, pour une fois, croire que demain existera."
       ]
     },
     {
@@ -50,7 +53,8 @@
       announce: [
         "Les Juges ouvrent les vannes : une pluie tiède et rouge s'abat sur l'arène. Ce n'est pas de l'eau, et chacun le comprend vite.",
         "Le ciel de l'arène vire au rouge et se met à pleuvoir du sang. On cherche un abri en glissant sur les feuilles poisseuses.",
-        "Une averse écarlate tambourine sur la canopée. Le Capitole veut voir les nerfs lâcher — et les tributs se rapprocher."
+        "Une averse écarlate tambourine sur la canopée. Le Capitole veut voir les nerfs lâcher — et les tributs se rapprocher.",
+        "L'eau qui tombe n'est pas de l'eau. Chacun se demande, en l'essuyant, à qui elle a appartenu."
       ]
     },
     {
@@ -58,7 +62,8 @@
       kind: "ambush", mockingjay: true,
       announce: [
         "Les geais moqueurs reprennent un air entendu quelque part dans l'arène. Un signal, ou un piège.",
-        "Quatre notes voyagent d'arbre en arbre. Certains tributs y voient un message ; d'autres, un appât."
+        "Quatre notes voyagent d'arbre en arbre. Certains tributs y voient un message ; d'autres, un appât.",
+        "Le même motif revient, encore, comme un rappel qu'on n'est jamais vraiment seul dans cette arène."
       ]
     },
 
@@ -68,7 +73,8 @@
       exposure: 0.55, envDeath: 0.14, envWound: 0.4, encounterMul: 1.1, kind: "flight",
       announce: [
         "Les Juges allument la forêt. Un mur de feu pousse les tributs vers le centre — et les uns vers les autres.",
-        "Des boules de feu tombent des arbres. L'arène rétrécit dans la fumée."
+        "Des boules de feu tombent des arbres. L'arène rétrécit dans la fumée.",
+        "L'air devient irrespirable en quelques minutes. Il faut choisir vite : la fumée, ou ce qu'elle cache."
       ]
     },
     {
@@ -76,7 +82,8 @@
       exposure: 0.55, envDeath: 0.09, envWound: 0.45, kind: "melee",
       announce: [
         "Le soleil de l'arène double d'intensité. L'ombre devient un territoire qu'on se dispute.",
-        "La plaine tremble de chaleur. Les gourdes se vident, les nerfs lâchent."
+        "La plaine tremble de chaleur. Les gourdes se vident, les nerfs lâchent.",
+        "Pas un souffle d'air. Le moindre effort coûte cher, et l'ombre se fait payer plus cher encore."
       ]
     },
     {
@@ -84,7 +91,8 @@
       exposure: 0.6, envDeath: 0.08, envWound: 0.4, kind: "melee",
       announce: [
         "Les Juges assèchent l'arène. La seule eau restante coule près de la Corne — sous les yeux de la meute.",
-        "Les ruisseaux ne sont plus que des lits de galets. Tout le monde converge vers le même point d'eau."
+        "Les ruisseaux ne sont plus que des lits de galets. Tout le monde converge vers le même point d'eau.",
+        "Les Juges ont un plan simple : il n'y a plus qu'une source, et tout le monde le sait."
       ]
     },
     {
@@ -92,7 +100,8 @@
       exposure: 0.4, envDeath: 0.12, envWound: 0.35, kind: "flight",
       announce: [
         "Un orage sans pluie roule sur l'arène. La foudre choisit les arbres les plus hauts — et ce qui s'abrite dessous.",
-        "Le ciel de l'arène vire au violet. Chaque éclair éclaire des silhouettes qui courent."
+        "Le ciel de l'arène vire au violet. Chaque éclair éclaire des silhouettes qui courent.",
+        "Aucune goutte de pluie, seulement la foudre, frappant où bon lui semble."
       ]
     },
 
@@ -102,7 +111,8 @@
       exposure: 0.3, envDeath: 0.16, envWound: 0.45, kind: "ambush",
       announce: [
         "Un nid de guêpes tueuses éclate au-dessus d'un campement. Le venin fait délirer ; certains ne se réveilleront pas.",
-        "Un bourdonnement grave monte des broussailles. Puis les cris."
+        "Un bourdonnement grave monte des broussailles. Puis les cris.",
+        "Les Juges ont réveillé le nid depuis longtemps. Ce soir, ils le lâchent sur les tributs les plus proches."
       ]
     },
     {
@@ -110,7 +120,8 @@
       encounterMul: 1.4, kind: "flight", mutts: true, exposure: 0.4, envDeath: 0.12,
       announce: [
         "Les Juges lâchent les mutations. Elles ont les yeux — et parfois le visage — des tributs déjà tombés.",
-        "Des formes basses et rapides sortent du bois. Elles ne grognent pas ; elles appellent par leur nom."
+        "Des formes basses et rapides sortent du bois. Elles ne grognent pas ; elles appellent par leur nom.",
+        "Les Juges ont travaillé longtemps sur ces créatures. Ce soir, elles sortent de leurs cages."
       ]
     },
     {
@@ -118,7 +129,8 @@
       encounterMul: 1.3, kind: "ambush", exposure: 0.3, envWound: 0.4,
       announce: [
         "Une nuée de singes aux crocs d'ivoire dévale la canopée. Ils ne cherchent pas à manger — seulement à tuer.",
-        "La cime des arbres s'agite d'un coup. Trop tard pour comprendre pourquoi."
+        "La cime des arbres s'agite d'un coup. Trop tard pour comprendre pourquoi.",
+        "Des cris aigus dévalent la canopée. En bas, personne n'a le temps de lever les yeux."
       ]
     },
     {
@@ -126,7 +138,8 @@
       exposure: 0.35, envDeath: 0.12, envWound: 0.4, kind: "flight",
       announce: [
         "Des hurlements encerclent l'arène. Les Juges veulent du spectacle et lâchent la meute.",
-        "Six paires d'yeux jaunes avancent en ligne dans les fougères."
+        "Six paires d'yeux jaunes avancent en ligne dans les fougères.",
+        "Un grondement roule sur toute l'arène. Les Juges rappellent que la nuit leur appartient."
       ]
     },
 
@@ -136,7 +149,8 @@
       exposure: 0.45, envDeath: 0.11, envWound: 0.35, encounterMul: 1.1,
       announce: [
         "Le sol de l'arène se fend. Des ravins s'ouvrent, des arbres centenaires s'effondrent.",
-        "Une secousse profonde. L'abri d'hier devient le piège d'aujourd'hui."
+        "Une secousse profonde. L'abri d'hier devient le piège d'aujourd'hui.",
+        "La terre gronde sous les pieds des tributs. Nul endroit de l'arène n'est vraiment stable ce soir."
       ]
     },
     {
@@ -144,7 +158,8 @@
       exposure: 0.5, envDeath: 0.12, envWound: 0.4, kind: "flight",
       announce: [
         "Une vague brune dévale le versant est. En quelques minutes, la moitié basse de l'arène disparaît sous l'eau.",
-        "Le barrage des Juges cède « accidentellement ». Les tributs des bas-fonds courent vers les crêtes."
+        "Le barrage des Juges cède « accidentellement ». Les tributs des bas-fonds courent vers les crêtes.",
+        "L'eau monte plus vite que quiconque ne l'imaginait. Le bas de l'arène n'existera bientôt plus."
       ]
     },
     {
@@ -152,7 +167,8 @@
       exposure: 0.4, envDeath: 0.12, envWound: 0.4, kind: "flight",
       announce: [
         "Tout un pan de la montagne artificielle lâche. Un grondement, puis la poussière.",
-        "Les Juges déclenchent la pente : des tonnes de roche cherchent le point bas."
+        "Les Juges déclenchent la pente : des tonnes de roche cherchent le point bas.",
+        "Le relief change en quelques secondes. Ce qui était un abri devient une trajectoire de pierres."
       ]
     },
     {
@@ -160,7 +176,8 @@
       exposure: 0.5, envDeath: 0.13, envWound: 0.5, kind: "flight",
       announce: [
         "Un brouillard épais et jaune roule entre les arbres. Au contact, la peau brûle. Courez.",
-        "Le brouillard des Juges descend des crêtes. Il ne fait pas de bruit et il ne s'arrête pas."
+        "Le brouillard des Juges descend des crêtes. Il ne fait pas de bruit et il ne s'arrête pas.",
+        "Une nappe jaune avance sans se presser. Elle a tout son temps ; les tributs, beaucoup moins."
       ]
     },
     {
@@ -168,7 +185,8 @@
       exposure: 0.35, envDeath: 0.1, envWound: 0.4, encounterMul: 1.2, kind: "ambush",
       announce: [
         "Des haies d'épines jaillissent du sol et redessinent l'arène en labyrinthe. Les couloirs mènent tous au même endroit.",
-        "L'arène devient un dédale. Au bout de chaque impasse, quelqu'un attend."
+        "L'arène devient un dédale. Au bout de chaque impasse, quelqu'un attend.",
+        "Le terrain change de forme sous les pieds des tributs. Impossible désormais de savoir où mène le sentier."
       ]
     },
     {
@@ -176,7 +194,8 @@
       exposure: 0.5, envDeath: 0.1, envWound: 0.35,
       announce: [
         "La température chute d'un coup. Sans couverture ni feu, la nuit elle-même devient une arme.",
-        "Le givre monte sur les fougères. Ceux qui n'ont pas de feu ne dormiront pas."
+        "Le givre monte sur les fougères. Ceux qui n'ont pas de feu ne dormiront pas.",
+        "Les Juges retirent quelques degrés à l'arène, un par un, jusqu'à ce que ça devienne dangereux."
       ]
     },
     {
@@ -184,7 +203,8 @@
       exposure: 0.25, envDeath: 0.1, envWound: 0.15, kind: "ambush",
       announce: [
         "Des buissons couverts de baies noires apparaissent près des points d'eau. Sucrées, luisantes… et mortelles en une bouchée.",
-        "Les Juges sèment le nightlock sur les sentiers les plus fréquentés."
+        "Les Juges sèment le nightlock sur les sentiers les plus fréquentés.",
+        "De jolies baies noires apparaissent là où la soif est la plus grande. Ce n'est pas un hasard."
       ]
     },
 
@@ -194,7 +214,8 @@
       encounterMul: 2.1, kind: "melee", forcesGather: true, giftDrop: true,
       announce: [
         "Votre attention. Un festin sera servi à la Corne d'abondance. Chacun y trouvera ce dont il a désespérément besoin. Refuser l'invitation serait… imprudent.",
-        "Un sac par district, marqué à votre nom, vous attend sur la table de la Corne. Venez le chercher."
+        "Un sac par district, marqué à votre nom, vous attend sur la table de la Corne. Venez le chercher.",
+        "Ce qu'il vous manque le plus se trouve à la Corne. Tout le monde y pensera au même moment."
       ]
     },
     {
@@ -202,7 +223,8 @@
       encounterMul: 1.6, kind: "hunt", packHunts: true,
       announce: [
         "Torches à la main, la meute des Carrières ratisse les fourrés. On entend rire dans le noir.",
-        "Les Carrières partent en chasse, en file, méthodiques. Cette nuit, ils veulent un canon."
+        "Les Carrières partent en chasse, en file, méthodiques. Cette nuit, ils veulent un canon.",
+        "Des rires, des torches, des pas assurés. La meute sait exactement ce qu'elle cherche ce soir."
       ]
     },
     {
@@ -210,7 +232,8 @@
       hitsPack: true, kind: "hunt", encounterMul: 1.1,
       announce: [
         "Une déflagration secoue le camp de la Corne : la pyramide de vivres des Carrières part en fumée.",
-        "Quelqu'un a déclenché les mines autour du butin. La meute est furieuse — et à sec."
+        "Quelqu'un a déclenché les mines autour du butin. La meute est furieuse — et à sec.",
+        "Ce qui restait des provisions des Carrières part en fumée. La chasse va devenir une question de survie, même pour eux."
       ]
     },
     {
@@ -218,7 +241,8 @@
       encounterMul: 1.4, kind: "melee",
       announce: [
         "Sans explication, les murs de l'arène se resserrent. Le territoire jouable vient de fondre de moitié.",
-        "Les Juges déplacent le décor. Deux tributs qui se croyaient loin l'un de l'autre se retrouvent nez à nez."
+        "Les Juges déplacent le décor. Deux tributs qui se croyaient loin l'un de l'autre se retrouvent nez à nez.",
+        "Sans prévenir, l'arène change de forme. Les distances de sécurité de ce matin ne veulent plus rien dire."
       ]
     },
 
@@ -228,7 +252,8 @@
       incidentRate: 0.5, incidentTypes: ["fall", "snake", "quicksand"], kind: "flight",
       announce: [
         "L'arène du jour est un chaos de gorges et d'éboulis. Un pas de travers ne pardonne pas.",
-        "Les Juges ont choisi le décor : falaises, corniches, ponts de pierre. Regardez où vous marchez."
+        "Les Juges ont choisi le décor : falaises, corniches, ponts de pierre. Regardez où vous marchez.",
+        "Le sol de l'arène se dérobe par endroits. Un pas de trop, et il n'y a personne pour rattraper la chute."
       ]
     },
     {
@@ -236,7 +261,8 @@
       incidentRate: 0.45, incidentTypes: ["infection", "snake", "berries"], envWound: 0.35, exposure: 0.3,
       announce: [
         "Une odeur de pourriture monte des sous-bois. Les blessures s'infectent vite, ici.",
-        "Moustiques, ronces, eau croupie : la nuit, la forêt travaille contre les tributs."
+        "Moustiques, ronces, eau croupie : la nuit, la forêt travaille contre les tributs.",
+        "Rien ne cicatrise vraiment, ici. La moindre égratignure devient un risque qu'on traîne des jours."
       ]
     },
     {
@@ -244,7 +270,8 @@
       incidentRate: 0.4, incidentTypes: ["drown", "berries", "dehydration"], exposure: 0.4, envWound: 0.3,
       announce: [
         "Les seuls points d'eau sont troubles et amers. Boire est un pari.",
-        "Les Juges ont empoisonné la moitié des sources. Reste à deviner lesquelles."
+        "Les Juges ont empoisonné la moitié des sources. Reste à deviner lesquelles.",
+        "Aucune source de l'arène n'est vraiment sûre ce jour-là. Boire devient un choix, pas un réflexe."
       ]
     },
     {
@@ -252,7 +279,8 @@
       incidentRate: 0.4, incidentTypes: ["exhaustion", "dehydration", "infection"], quiet: true,
       announce: [
         "Rien ne bouge dans l'arène — sauf la soif et la fatigue, qui gagnent du terrain heure après heure.",
-        "Une longue journée sans affrontement. Les corps, eux, continuent de lâcher."
+        "Une longue journée sans affrontement. Les corps, eux, continuent de lâcher.",
+        "Pas un cri, pas un canon — juste l'arène qui use les tributs un peu plus, heure après heure."
       ]
     }
   ];

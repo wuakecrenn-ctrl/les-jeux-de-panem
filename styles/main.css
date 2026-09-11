@@ -267,6 +267,9 @@ button.big     { font-size: 1.05rem; padding: 0.95em 2em; }
 .home { position: relative; padding-block: clamp(0.5rem, 3vh, 2rem); }
 .home > * + * { margin-top: clamp(2.2rem, 6.5vh, 4rem); }
 .home > .home-fx + * { margin-top: 0; }   /* l'ambiance est hors flux */
+/* un peu plus d'air entre le fil d'Ariane (jalons de la partie) et le
+   conteneur de boutons juste en dessous */
+.home-hero + .home-panel { margin-top: clamp(3.2rem, 9vh, 5.5rem); }
 
 /* ---- Couche d'ambiance (décorative, accueil uniquement) ---- */
 .home-fx {
